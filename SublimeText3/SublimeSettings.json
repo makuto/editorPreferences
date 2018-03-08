@@ -1,0 +1,24 @@
+{
+    "added_words":
+    [
+        "Macoy"
+    ],
+    "auto_match_enabled": false,
+    "caret_extra_width": 1,
+    "color_scheme": "Packages/User/Color Highlighter/themes/laravel.tmTheme",
+    "enable_tab_scrolling": false,
+    "font_face": "Consolas",
+    "font_size": 10,
+    "ignored_packages":
+    [
+        "Vintage"
+    ],
+    "predawn_tabs_active_underline": true,
+    "predawn_tabs_small": true,
+    "rulers":
+    [
+        100
+    ],
+    "theme": "Adaptive.sublime-theme",
+    "word_wrap": "false"
+}

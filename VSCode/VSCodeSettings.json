@@ -1,0 +1,25 @@
+{
+    "workbench.colorTheme": "Kimbie Dark",
+
+    "workbench.colorCustomizations": {
+        "statusBar.background" : "#1A1A1A",
+        "statusBar.noFolderBackground" : "#212121",
+        "statusBar.debuggingBackground": "#263238",
+
+        // Remove when theme changes
+        "editorIndentGuide.background": "#442323"
+    },
+    "clang-format.executable": "C:/clang-format.exe",
+    "workbench.iconTheme": "vscode-icons",
+    "window.zoomLevel": 0,
+    "sublimeTextKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.snippetSuggestions": "top",
+    "editor.formatOnPaste": true,
+    
+    // Don't close my damn files
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+
+    "workbench.editor.tabSizing": "shrink",
+}

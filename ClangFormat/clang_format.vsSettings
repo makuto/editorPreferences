@@ -1,0 +1,17 @@
+// Remove me and name file '.clang-format', put in top level source
+BasedOnStyle: Google
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: false
+ColumnLimit: 100
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+IndentWidth: 4
+Standard: Cpp03
+TabWidth: 4
+UseTab: ForIndentation
+DerivePointerAlignment: false
+PointerAlignment: Left
