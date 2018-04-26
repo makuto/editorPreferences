@@ -1,0 +1,9 @@
+[
+	{ "keys": ["ctrl+m", "ctrl+l"], "command": "fold_by_level", "args": {"level": 1} },
+	{ "keys": ["ctrl+m", "ctrl+m"], "command": "unfold_all" },
+	{ "keys": ["ctrl+shift+alt+a"], "command": "alignment" },
+	{ "keys": ["ctrl+alt+p"],       "command": "prompt_select_workspace"},
+	{ "keys": ["ctrl+j"],           "command": "ace_jump_word"},
+	{ "keys": ["ctrl+shift+j"],     "command": "ace_jump_char"},
+	{ "keys": ["ctrl+shift+g"],     "command": "ace_jump_line"}
+]
