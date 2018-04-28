@@ -8,17 +8,17 @@
 ;;
 ;; Added by Macoy
 ;;
-;; (require 'package)
-;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-;;                     (not (gnutls-available-p))))
-;;        (proto (if no-ssl "http" "https")))
-;;   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-;;   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-;;   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-;;   (when (< emacs-major-version 24)
-;;     ;; For important compatibility libraries like cl-lib
-;;     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
-;; (package-initialize)
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+(package-initialize)
 
 ;; Some settings from http://ergoemacs.org/emacs/emacs_make_modern.html
 
@@ -149,18 +149,18 @@
 
 ;;
 ;; Macoy's keybinds which require better override
-;;(defvar my-keys-minor-mode-map
-;;  (let ((map (make-sparse-keymap)))
-;;    (define-key map (kbd "C-d") 'mc/mark-next-like-this)
-;;    map)
-;;  "my-keys-minor-mode keymap.")
-;;
-;;(define-minor-mode my-keys-minor-mode
-;;  "A minor mode so that my key settings override annoying major modes."
-;;  :init-value t
-;;  :lighter " my-keys")
-;;
-;;(my-keys-minor-mode 1)
+(defvar my-keys-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-d") 'mc/mark-next-like-this)
+    map)
+  "my-keys-minor-mode keymap.")
+
+(define-minor-mode my-keys-minor-mode
+  "A minor mode so that my key settings override annoying major modes."
+  :init-value t
+  :lighter " my-keys")
+
+(my-keys-minor-mode 1)
 
 ;;
 ;; Macoy's Keybind overrides
