@@ -206,6 +206,9 @@
 ;; Find file in project (via projectile) was previous-line
 (global-set-key (kbd "C-p") 'projectile-find-file)
 
+;; Revert buffer
+(global-set-key (kbd "<f5>") 'revert-buffer)
+
 ;;
 ;; Hand-written by Macoy end
 ;;
