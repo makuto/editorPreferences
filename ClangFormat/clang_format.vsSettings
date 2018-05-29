@@ -1,5 +1,6 @@
 // Remove me and name file '.clang-format', put in top level source
 BasedOnStyle: Google
+AccessModifierOffset: -4
 AllowShortBlocksOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
