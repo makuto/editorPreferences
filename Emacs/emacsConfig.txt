@@ -358,6 +358,7 @@
 	(define-key map (kbd "C-S-c") 'kill-ring-save)
 	(define-key map (kbd "C-S-v") 'yank)
 	(define-key map (kbd "C-S-x") 'kill-region)
+	(define-key map (kbd "M-a") 'tags-query-replace)
 	;; Overrides c-indent-line-or-region (this should be in C mode only, plus <tab>)
 	;;(define-key map (kbd "C-i") 'clang-format)
     map)
@@ -456,27 +457,32 @@
 ;; Go back (unfortunately no forward yet)
 (global-set-key (kbd "S-<backspace>") 'pop-global-mark)
 
+;; Replace all of a tag in all files
+(global-set-key (kbd "M-a") 'tags-query-replace)
+
 ;; Make bindings work with org-mode
-(define-key org-mode-map (kbd "C-<tab>") nil)
-(define-key org-mode-map (kbd "C-j") nil)
-(define-key org-mode-map (kbd "C") nil)
-;; Don't mess with my arrow keys. I use them a lot
-(define-key org-mode-map (kbd "C-S-<down>")  nil)
-(define-key org-mode-map (kbd "C-S-<left>")  nil)
-(define-key org-mode-map (kbd "C-S-<right>") nil)
-(define-key org-mode-map (kbd "C-S-<up>")	 nil)
-(define-key org-mode-map (kbd "M-S-<down>")  nil)
-(define-key org-mode-map (kbd "M-S-<left>")  nil)
-(define-key org-mode-map (kbd "M-S-<right>") nil)
-(define-key org-mode-map (kbd "M-S-<up>")	 nil)
-(define-key org-mode-map (kbd "M-<down>")	 nil)
-(define-key org-mode-map (kbd "M-<left>")	 nil)
-(define-key org-mode-map (kbd "M-<right>")   nil)
-(define-key org-mode-map (kbd "M-<up>")	     nil)
-(define-key org-mode-map (kbd "S-<down>")	 nil)
-(define-key org-mode-map (kbd "S-<left>")    nil)
-(define-key org-mode-map (kbd "S-<right>")   nil)
-(define-key org-mode-map (kbd "S-<up>")      nil)
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-<tab>") nil)
+  (define-key org-mode-map (kbd "C-j") nil)
+  (define-key org-mode-map (kbd "C") nil)
+  ;; Don't mess with my arrow keys. I use them a lot
+  (define-key org-mode-map (kbd "C-S-<down>")  nil)
+  (define-key org-mode-map (kbd "C-S-<left>")  nil)
+  (define-key org-mode-map (kbd "C-S-<right>") nil)
+  (define-key org-mode-map (kbd "C-S-<up>")	 nil)
+  (define-key org-mode-map (kbd "M-S-<down>")  nil)
+  (define-key org-mode-map (kbd "M-S-<left>")  nil)
+  (define-key org-mode-map (kbd "M-S-<right>") nil)
+  (define-key org-mode-map (kbd "M-S-<up>")	 nil)
+  (define-key org-mode-map (kbd "M-<down>")	 nil)
+  (define-key org-mode-map (kbd "M-<left>")	 nil)
+  (define-key org-mode-map (kbd "M-<right>")   nil)
+  (define-key org-mode-map (kbd "M-<up>")	     nil)
+  (define-key org-mode-map (kbd "S-<down>")	 nil)
+  (define-key org-mode-map (kbd "S-<left>")    nil)
+  (define-key org-mode-map (kbd "S-<right>")   nil)
+  (define-key org-mode-map (kbd "S-<up>")      nil)
+  )
 
 ;;
 ;; Hand-written by Macoy end
