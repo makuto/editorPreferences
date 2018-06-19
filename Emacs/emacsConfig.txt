@@ -80,6 +80,9 @@
 ;; stop creating those #auto-save# files
 (setq auto-save-default nil)
 
+;; Don't create lock files
+(setq create-lockfiles nil)
+
 ;; save/restore opened files
 (desktop-save-mode 1)
 
@@ -225,8 +228,7 @@
 				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
 				 ;;  not on Windows)
 				 "--exclude=F:/CJUNCTIONS/src/Utilities\\Bin"
-				 ;; The actual folders we're looking in
-                 "F:/CJUNCTIONS/src/Utilities")
+                 "F:/CJUNCTIONS/src/Core")
 )
 
 (defun loadTagsFromParent ()
@@ -284,13 +286,6 @@
 ;;(require 'cquery)
 ;;(setq cquery-executable "F:/gitRepos/cquery/cmakeBuild/x64/Debug/cquery.exe")
 
-;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
-(global-set-key (kbd "C-f") 'swiper)
-
-;; "Desktops" replace sublime workspaces. This makes it easier to switch desktops
-;; This causes an annoying "desktop already registered" prompt. Fucking stupid
-;;(desktop-registry-auto-register 1)
-
 ;; Etags select is supposed to let you select from multiple tags with the same name.
 ;; It doesn't work unfortunately
 ;; (load-file "~/.emacs.d/etags-select.el")
@@ -306,6 +301,52 @@
 ;;     (etags-select-find (ido-completing-read "Tag: " tag-names))))
 ;; (global-set-key (kbd "M-.") 'my-ido-find-tag)
 
+;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
+(global-set-key (kbd "C-f") 'swiper)
+
+;; "Desktops" replace sublime workspaces. This makes it easier to switch desktops
+;; This causes an annoying "desktop already registered" prompt. Fucking stupid
+;;(desktop-registry-auto-register 1)
+
+;; Open file in explorer
+(defun browse-file-directory ()
+  "Open the current file's directory however the OS would."
+  (interactive)
+  (if default-directory
+      (browse-url-of-file (expand-file-name default-directory))
+    (error "No `default-directory' to open")))
+
+;;
+;; Source control
+;;
+
+(defun svn-check-for-modifications-src ()
+  "Open the TortoiseSVN Check for Modifications window"
+  (interactive)
+  (message "Checking for modifications")
+  (start-process "CheckForModifications" nil
+				 "tortoiseproc" "/command:repostatus" "/path:F:\\CJUNCTIONS\\src"))
+
+(defun svn-show-log-src ()
+  "Open the TortoiseSVN Log window"
+  (interactive)
+  (message "SVN Log")
+  (start-process "SVNLog" nil
+				 "tortoiseproc" "/command:log" "/path:F:\\CJUNCTIONS\\src"))
+
+(defun svn-update-src ()
+  "Open the TortoiseSVN Update window"
+  (interactive)
+  (message "SVN Update")
+  (start-process "SVNUpdate" nil
+				 "tortoiseproc" "/command:update" "/path:F:\\CJUNCTIONS\\src"))
+
+(defun macoy-morning-update ()
+  "Update Magic and Src"
+  (interactive)
+  (message "Updating Magic and Src")
+  (call-interactively 'svn-update-src))
+
 ;;
 ;; Build systems
 ;;
@@ -316,10 +357,7 @@
   (start-process "Build" "*Build-out*" "BuildConsole.exe"
 				 "/Stop")
   )
-;; cxbuild Magic FD
 
-;;(global-set-key (kbd "<f7>") (lambda () (interactive) (buildSolution)))
-;;(global-set-key (kbd "S-<f7>") (lambda () (interactive) (buildProject)))
 (global-set-key (kbd "M-<f7>") (lambda () (interactive) (buildStop)))
 
 ;;
@@ -359,6 +397,7 @@
 	(define-key map (kbd "C-S-v") 'yank)
 	(define-key map (kbd "C-S-x") 'kill-region)
 	(define-key map (kbd "M-a") 'tags-query-replace)
+	(define-key map (kbd "M-j") 'pop-global-mark)
 	;; Overrides c-indent-line-or-region (this should be in C mode only, plus <tab>)
 	;;(define-key map (kbd "C-i") 'clang-format)
     map)
@@ -455,7 +494,7 @@
 (global-set-key (kbd "C-S-w") 'delete-window)
 
 ;; Go back (unfortunately no forward yet)
-(global-set-key (kbd "S-<backspace>") 'pop-global-mark)
+(global-set-key (kbd "M-j") 'pop-global-mark)
 
 ;; Replace all of a tag in all files
 (global-set-key (kbd "M-a") 'tags-query-replace)
