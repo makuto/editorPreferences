@@ -479,7 +479,7 @@
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
 ;; Kill line like Sublime
-(global-set-key (kbd "C-S-k") 'kill-line)
+(global-set-key (kbd "C-S-k") 'kill-whole-line)
 
 ;; Go to first character of line, not beginning of line. Was move-beginning-of-line
 (global-set-key (kbd "<home>") 'back-to-indentation)
