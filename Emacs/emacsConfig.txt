@@ -38,6 +38,7 @@
 ;; - Tab key behavior confuses me especially in plaintext files
 ;; - Get back and forward working (currently only back is working; back-button didn't work well)
 ;; - Clang-format buffer if nothing marked
+;; - Compilation-* commands for jumping between errors
 
 ;; Notes
 ;; C-h k <the keybind> to find what a key does
@@ -246,7 +247,7 @@
 (global-set-key (kbd "<f12>") 'xref-find-definitions)
 (global-set-key (kbd "M-g") 'xref-find-definitions-other-window)
 (global-set-key (kbd "S-<f12>") 'xref-find-apropos)
-(global-set-key (kbd "C-<f12>") 'xref-find-apropos)
+(global-set-key (kbd "C-S-d") 'macoy-ido-find-tag)
 
 ;; Auto-complete
 ;; This will at least work for local completions
@@ -277,6 +278,29 @@
                            ac-source-yasnippet
                            ac-source-words-in-same-mode-buffers
                            ))
+
+;; Custom fuzzy completion stuff
+(defun macoy-ido-example ()
+  "Test ido custom"
+  (interactive)
+  (setq mylist (list "red" "blue" "yellow" "clear" "i-dont-know"))
+  (ido-completing-read "What, ... is your favorite color? " mylist))
+
+;; Fuzzy find tag like Sublime's C-S-r
+(setq macoy-tag-names (list "empty (run macoy-ido-find-tag-refresh"))
+(defun macoy-ido-find-tag-refresh ()
+  "Refresh ido tag list"
+  (interactive)
+  (tags-completion-table)
+  (setq macoy-tag-names nil)
+  (mapcar (lambda (x)
+			(push (prin1-to-string x t) macoy-tag-names))
+		  tags-completion-table))
+
+(defun macoy-ido-find-tag ()
+    "Find a tag using ido"
+    (interactive)
+	(find-tag (ido-completing-read "Tag: " macoy-tag-names)))
 
 ;; Templates/Snippets
 (yas-global-mode 1)
@@ -340,12 +364,6 @@
   (message "SVN Update")
   (start-process "SVNUpdate" nil
 				 "tortoiseproc" "/command:update" "/path:F:\\CJUNCTIONS\\src"))
-
-(defun macoy-morning-update ()
-  "Update Magic and Src"
-  (interactive)
-  (message "Updating Magic and Src")
-  (call-interactively 'svn-update-src))
 
 ;;
 ;; Build systems
@@ -549,9 +567,6 @@
  '(desktop-registry-registry
    (quote
 	((".emacs.d" . "c:/Users/mmadson/AppData/Roaming/.emacs.d")
-	 ("navMeshIslandFinding" . "c:/SublimeProjects/emacsDesktops/navMeshIslandFinding")
-	 ("behaviorTreeEditor" . "c:/SublimeProjects/emacsDesktops/behaviorTreeEditor")
-	 ("starterSrc" . "c:/SublimeProjects/emacsDesktops/starterSrc"))))
  '(diary-entry-marker (quote font-lock-variable-name-face))
  '(emms-mode-line-icon-image-cache
    (quote
@@ -614,7 +629,7 @@ static char *gnus-pointer[] = {
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
    (quote
-	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen" "obj140" "Utilities/Bin" "Magic/bin" "Magic/CoherentData/Builder/node_modules" "3rdparty/Node" "3rdparty/3dsMax" "CrossRoads/GameClientLib/AutoGen" "CrossRoads/GameServerLib/AutoGen" "CrossRoads/AppServerLib/AutoGen" "CrossRoads/Common/AutoGen" "Core/bin")))
+	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen")))
  '(projectile-indexing-method (quote native))
  '(simpleclip-copy-keystrokes (quote ("C-c" "C-<insert>" "C-<insertchar>")))
  '(simpleclip-cut-keystrokes (quote ("C-x" "C-S-<insert>")))
