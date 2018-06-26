@@ -11,15 +11,15 @@
 
 ;; Macoy's .emacs
 ;; Goal: Make a dev environment with Sublime Text 3-like keybindings and features:
-;; - Code completion
-;; - Goto definition
-;; - Multiple cursors
-;; - Templates
-;; - Workspaces ("desktops" by emacs terminology)
-;; - Build systems
-;; - Fuzzy file opening
-;; - Fuzzy editor command execution
-;; - Standard clipboard behavior (no copy on mark, no copy on kill etc., only on C-c!)
+;; - [Done] Code completion
+;; - [Done] Goto definition
+;; - [Done] Multiple cursors
+;; - [Done] Templates
+;; - [Done] Workspaces ("desktops" by emacs terminology)
+;; - [Done] Build systems
+;; - [Done] Fuzzy file opening
+;; - [Done] Fuzzy editor command execution
+;; - [Done] Standard clipboard behavior (no copy on mark, no copy on kill etc., only on C-c!)
 ;;
 ;; Ways Emacs excels over Sublime:
 ;; - More keyboard-only friendly
@@ -29,18 +29,19 @@
 ;; - Built-in help (Sublime's documentation can be spotty; Emacs docs can be too complicated)
 ;;
 ;; TODO (there are more scattered around this file):
-;; - Fuzzy incremental tags/symbol search (Sublime's C-S-r or via Goto Anything # prefix)
-;; - Global code completion is too slow with 23Mb tags file
 ;; - TAGS has to be set up per-project; doesn't allow cross-repository finding afaik
 ;; - Would be nice to have buffers and files merged like Sublime's C-p (but not essential)
 ;; - Buffer reverting automatically instantly if no changes, otherwise prompt the file has
 ;;    been changed underneath and ask to reload or save over
 ;; - Tab key behavior confuses me especially in plaintext files
 ;; - Get back and forward working (currently only back is working; back-button didn't work well)
-;; - Clang-format buffer if nothing marked
 ;; - Compilation-* commands for jumping between errors
+;; - Build system selection via Ido custom list (like Sublime's C-S-b)
+;; - Make tags refresh also cause "macoy-tag-names" to refresh (used for code completion)
+;; - C-S-d fuzzy find symbols often doesn't pick the right definition for forward-declared structs
+;;       It should prompt if there are multiple options
 
-;; Notes
+;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
 										
@@ -205,9 +206,17 @@
 ;; Clang format
 ;; Looks for .clang-format in project dir
 (require 'clang-format)
-(global-set-key (kbd "C-M-a") 'clang-format-region)
-;; TODO: Do this automatically if nothing marked
-;;(global-set-key (kbd "C-M-a") 'clang-format-buffer)
+
+(defun macoy-clang-format-region-or-buffer ()
+  "Format the region if one is selected, otherwise format the buffer"
+  (interactive)
+  (if (use-region-p)
+	  (clang-format-region)
+	  (clang-format-buffer)
+	  )
+  )
+(global-set-key (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
+;; Not sure if this actually does anything
 ;; https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/
 (fset 'c-indent-region 'clang-format-region)
 
@@ -229,6 +238,7 @@
 				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
 				 ;;  not on Windows)
 				 "--exclude=F:/CJUNCTIONS/src/Utilities\\Bin"
+				 ;; The actual folders we're looking in
                  "F:/CJUNCTIONS/src/Core")
 )
 
@@ -271,14 +281,6 @@
 ;;		  (lambda ()
 ;;			(setq company-backends '(company-etags))))
 
-;; Make sure auto-complete knows about yasnippets
-;; From https://github.com/joaotavora/yasnippet/issues/336
-(require 'auto-complete-config)
-(setq-default ac-sources '(
-                           ac-source-yasnippet
-                           ac-source-words-in-same-mode-buffers
-                           ))
-
 ;; Custom fuzzy completion stuff
 (defun macoy-ido-example ()
   "Test ido custom"
@@ -287,10 +289,13 @@
   (ido-completing-read "What, ... is your favorite color? " mylist))
 
 ;; Fuzzy find tag like Sublime's C-S-r
+;; Also used for auto-completion
+;; From https://www.emacswiki.org/emacs/InteractivelyDoThings#toc11
 (setq macoy-tag-names (list "empty (run macoy-ido-find-tag-refresh"))
 (defun macoy-ido-find-tag-refresh ()
   "Refresh ido tag list"
   (interactive)
+  (message "Refreshing ido tags list")
   (tags-completion-table)
   (setq macoy-tag-names nil)
   (mapcar (lambda (x)
@@ -298,9 +303,33 @@
 		  tags-completion-table))
 
 (defun macoy-ido-find-tag ()
-    "Find a tag using ido"
-    (interactive)
-	(find-tag (ido-completing-read "Tag: " macoy-tag-names)))
+  "Find a tag using ido"
+  (interactive)
+  (find-tag (ido-completing-read "Tag: " macoy-tag-names)))
+
+;; For reference (see https://github.com/auto-complete/auto-complete/blob/master/doc/manual.md)
+;; (defun mysource2-candidates ()
+;;   '("Foo" "Bar" "Baz" "macoyTest2" "what" "zoooo"))
+
+;; (defvar ac-source-mysource2
+;;   '((candidates . mysource2-candidates)))
+
+(defvar ac-source-macoy-ido-tags
+  '(;;(init . macoy-ido-find-tag-refresh) ;; Commented because it runs every time (unnecessary)
+	(candidates . macoy-tag-names)
+    (cache)))
+
+(setq-default ac-sources '(ac-source-macoy-ido-tags))
+
+;; Autocomplete from precompiled tags list (normal tags source is too slow)
+;; Make sure auto-complete knows about yasnippets
+;; From https://github.com/joaotavora/yasnippet/issues/336
+(require 'auto-complete-config)
+(setq-default ac-sources '(
+                           ac-source-yasnippet
+                           ac-source-words-in-same-mode-buffers
+						   ac-source-macoy-ido-tags
+                           ))
 
 ;; Templates/Snippets
 (yas-global-mode 1)
@@ -309,21 +338,6 @@
 ;; Doesn't work
 ;;(require 'cquery)
 ;;(setq cquery-executable "F:/gitRepos/cquery/cmakeBuild/x64/Debug/cquery.exe")
-
-;; Etags select is supposed to let you select from multiple tags with the same name.
-;; It doesn't work unfortunately
-;; (load-file "~/.emacs.d/etags-select.el")
-;; ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
-;; (defun my-ido-find-tag ()
-;;   "Find a tag using ido"
-;;   (interactive)
-;;   (tags-completion-table)
-;;   (let (tag-names)
-;;     (mapatoms (lambda (x)
-;;                 (push (prin1-to-string x t) tag-names))
-;;               tags-completion-table)
-;;     (etags-select-find (ido-completing-read "Tag: " tag-names))))
-;; (global-set-key (kbd "M-.") 'my-ido-find-tag)
 
 ;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
 (global-set-key (kbd "C-f") 'swiper)
@@ -375,6 +389,7 @@
   (start-process "Build" "*Build-out*" "BuildConsole.exe"
 				 "/Stop")
   )
+;; Jason's tool: cxbuild.exe Magic FD
 
 (global-set-key (kbd "M-<f7>") (lambda () (interactive) (buildStop)))
 
@@ -405,7 +420,7 @@
 (defvar my-keys-minor-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-d") 'mc/mark-next-like-this)
-	(define-key map (kbd "C-M-a") 'clang-format-region)
+	(define-key map (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
 	;; Custom copy/paste functions for working with simpleclip and multiple-cursors
 	(define-key map (kbd "C-c") (lambda () (interactive) (macoyCopy)))
 	(define-key map (kbd "C-v") (lambda () (interactive) (macoyPaste)))
@@ -567,6 +582,7 @@
  '(desktop-registry-registry
    (quote
 	((".emacs.d" . "c:/Users/mmadson/AppData/Roaming/.emacs.d")
+	 ("starterSrc" . "c:/SublimeProjects/emacsDesktops/starterSrc"))))
  '(diary-entry-marker (quote font-lock-variable-name-face))
  '(emms-mode-line-icon-image-cache
    (quote
@@ -629,7 +645,7 @@ static char *gnus-pointer[] = {
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
    (quote
-	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen")))
+	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen" "obj140" "Core/bin")))
  '(projectile-indexing-method (quote native))
  '(simpleclip-copy-keystrokes (quote ("C-c" "C-<insert>" "C-<insertchar>")))
  '(simpleclip-cut-keystrokes (quote ("C-x" "C-S-<insert>")))
