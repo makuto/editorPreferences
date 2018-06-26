@@ -211,8 +211,8 @@
   "Format the region if one is selected, otherwise format the buffer"
   (interactive)
   (if (use-region-p)
-	  (clang-format-region)
-	  (clang-format-buffer)
+	  (call-interactively 'clang-format-region)
+	  (call-interactively 'clang-format-buffer)
 	  )
   )
 (global-set-key (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
