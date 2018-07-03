@@ -16,7 +16,10 @@
 ;; - [Done] Multiple cursors
 ;; - [Done] Templates
 ;; - [Done] Workspaces ("desktops" by emacs terminology)
-;; - [Done] Build systems
+;; - [WIP] Build systems
+;;   - [Done] One keypress builds
+;;   - [WIP] Quick jump to compilation error
+;;   - Easy add build system
 ;; - [Done] Fuzzy file opening
 ;; - [Done] Fuzzy editor command execution
 ;; - [Done] Standard clipboard behavior (no copy on mark, no copy on kill etc., only on C-c!)
@@ -30,16 +33,22 @@
 ;;
 ;; TODO (there are more scattered around this file):
 ;; - TAGS has to be set up per-project; doesn't allow cross-repository finding afaik
+;;       It does, you just need to set tags-table-list.
+;;       See https://www.gnu.org/software/emacs/manual/html_node/emacs/Select-Tags-Table.html
 ;; - Would be nice to have buffers and files merged like Sublime's C-p (but not essential)
 ;; - Buffer reverting automatically instantly if no changes, otherwise prompt the file has
 ;;    been changed underneath and ask to reload or save over
 ;; - Tab key behavior confuses me especially in plaintext files
-;; - Get back and forward working (currently only back is working; back-button didn't work well)
+;; - Get back and forward working (back doesn't work too well)
 ;; - Compilation-* commands for jumping between errors
+;;       These do exist already, but you need to use emacs compile
 ;; - Build system selection via Ido custom list (like Sublime's C-S-b)
-;; - Make tags refresh also cause "macoy-tag-names" to refresh (used for code completion)
-;; - C-S-d fuzzy find symbols often doesn't pick the right definition for forward-declared structs
-;;       It should prompt if there are multiple options
+;; - macoy-tag-names doesn't always have every tag (emNewDocFromStruct). Is TAGS being reloaded?
+;;       It looks like tags is reloaded but macoy-tag-names doesn't have new stuff in it, even after clear
+;; - Ag filter files
+;; - Determine what smooth-scrolling actually does (if anything)
+;; - Copy line when nothing is marked
+;; - Ido jump to file anywhere does more harm than good (especially when creating new files)
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
@@ -220,6 +229,9 @@
 ;; https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/
 (fset 'c-indent-region 'clang-format-region)
 
+;; Don't prompt me to load tags
+(setq tags-revert-without-query 1)
+
 ;; Refresh and load tags
 ;; TODO: Use projectile refresh ctags instead
 (setq ctags-path "C:/programsMacoy/ctags58/ctags.exe")
@@ -233,13 +245,15 @@
   ;; Doesn't do anything for start-process
   ;;(let ((default-directory "F:/CJUNCTIONS/src/")))
   (message "Running CTags")
-  (start-process "CTags" "*CTags-out*" ctags-path "-e" "-f" "F:/CJUNCTIONS/src/TAGS"
+  (let ((ctagsProc (start-process "CTags" "*CTags-out*" ctags-path "-e" "-f" "F:/CJUNCTIONS/src/TAGS"
 				 "--verbose" "--recurse=yes" "--languages=C,C++"
 				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
 				 ;;  not on Windows)
 				 "--exclude=F:/CJUNCTIONS/src/Utilities\\Bin"
-				 ;; The actual folders we're looking in
-                 "F:/CJUNCTIONS/src/Core")
+                 "F:/CJUNCTIONS/src/Core")))
+	(set-process-sentinel ctagsProc
+						  (lambda (ctagsProc _string)
+							(call-interactively 'macoy-ido-find-tag-refresh))))
 )
 
 (defun loadTagsFromParent ()
@@ -262,6 +276,11 @@
 ;; Auto-complete
 ;; This will at least work for local completions
 (global-auto-complete-mode)
+;; Don't start auto-completion until three characters have been typed
+;; Performance becomes problematic with as many tags as I have so this is necessary
+;; See https://github.com/auto-complete/auto-complete/blob/master/doc/manual.md
+(setq ac-auto-start 3)
+
 ;; Auto-complete using etags
 ;; Doesn't work because codebase is too big :(
 ;;(custom-set-variables
@@ -305,7 +324,7 @@
 (defun macoy-ido-find-tag ()
   "Find a tag using ido"
   (interactive)
-  (find-tag (ido-completing-read "Tag: " macoy-tag-names)))
+  (xref-find-definitions (ido-completing-read "Tag: " macoy-tag-names)))
 
 ;; For reference (see https://github.com/auto-complete/auto-complete/blob/master/doc/manual.md)
 ;; (defun mysource2-candidates ()
@@ -339,8 +358,19 @@
 ;;(require 'cquery)
 ;;(setq cquery-executable "F:/gitRepos/cquery/cmakeBuild/x64/Debug/cquery.exe")
 
+;; If marked, use swiper to search mark
+(defun macoy-swiper-search-mark ()
+  "If marked, use swiper to search mark. Otherwise, open swiper normally"
+  (interactive)
+  ;; This isn't sufficient for my purposes; it's nice to search e.g. thing->thing
+  ;;(swiper (thing-at-point 'symbol))
+  (if (use-region-p)
+	  (swiper (buffer-substring (region-beginning) (region-end)))
+	(swiper)
+  ))
+
 ;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
-(global-set-key (kbd "C-f") 'swiper)
+(global-set-key (kbd "C-f") 'macoy-swiper-search-mark)
 
 ;; "Desktops" replace sublime workspaces. This makes it easier to switch desktops
 ;; This causes an annoying "desktop already registered" prompt. Fucking stupid
@@ -389,7 +419,6 @@
   (start-process "Build" "*Build-out*" "BuildConsole.exe"
 				 "/Stop")
   )
-;; Jason's tool: cxbuild.exe Magic FD
 
 (global-set-key (kbd "M-<f7>") (lambda () (interactive) (buildStop)))
 
@@ -645,7 +674,7 @@ static char *gnus-pointer[] = {
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
    (quote
-	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen" "obj140" "Core/bin")))
+	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Core/bin")))
  '(projectile-indexing-method (quote native))
  '(simpleclip-copy-keystrokes (quote ("C-c" "C-<insert>" "C-<insertchar>")))
  '(simpleclip-cut-keystrokes (quote ("C-x" "C-S-<insert>")))
