@@ -43,12 +43,11 @@
 ;; - Compilation-* commands for jumping between errors
 ;;       These do exist already, but you need to use emacs compile
 ;; - Build system selection via Ido custom list (like Sublime's C-S-b)
-;; - macoy-tag-names doesn't always have every tag (emNewDocFromStruct). Is TAGS being reloaded?
-;;       It looks like tags is reloaded but macoy-tag-names doesn't have new stuff in it, even after clear
 ;; - Ag filter files
 ;; - Determine what smooth-scrolling actually does (if anything)
 ;; - Copy line when nothing is marked
 ;; - Ido jump to file anywhere does more harm than good (especially when creating new files)
+;; - Python indentation is godawful
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
@@ -149,12 +148,11 @@
 ;; powerline-vim-theme
 ;; powerline-nano-theme
 
-;; Set tab width (Doesn't work)
-(setq tab-width 4) ; or any other preferred value
-;; Set to use tabs (doesn't work)
-(setq-default indent-tabs-mode t)
-(defvaralias 'c-basic-offset 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
+;; C indentation settings
+;; bsd AKA Allman https://www.emacswiki.org/emacs/IndentingC
+(setq c-default-style "bsd"
+	  c-basic-offset 4)
+
 ;; Detect which indentation style a file is using and use that (doesn't work)
 (setq dtrt-indent-mode 1)
 
@@ -250,7 +248,8 @@
 				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
 				 ;;  not on Windows)
 				 "--exclude=F:/CJUNCTIONS/src/Utilities\\Bin"
-                 "F:/CJUNCTIONS/src/Core")))
+                  "F:/CJUNCTIONS/src/Core"
+				 )))
 	(set-process-sentinel ctagsProc
 						  (lambda (ctagsProc _string)
 							(call-interactively 'macoy-ido-find-tag-refresh))))
@@ -309,17 +308,23 @@
 
 ;; Fuzzy find tag like Sublime's C-S-r
 ;; Also used for auto-completion
-;; From https://www.emacswiki.org/emacs/InteractivelyDoThings#toc11
+;; From https://www.emacswiki.org/emacs/InteractivelyDoThings#CompleteFindTagUsingIdo
 (setq macoy-tag-names (list "empty (run macoy-ido-find-tag-refresh"))
 (defun macoy-ido-find-tag-refresh ()
   "Refresh ido tag list"
   (interactive)
   (message "Refreshing ido tags list")
+  ;; tags-completion-table() early-outs if the table has already been created
+  ;; This is problematic if TAGS has changed
+  ;; Clearing it here ensures the table won't get out of sync
+  (setq tags-completion-table nil)
   (tags-completion-table)
+  ;; Reset to remove "empty" value as well as avoid duplicates
   (setq macoy-tag-names nil)
   (mapcar (lambda (x)
 			(push (prin1-to-string x t) macoy-tag-names))
-		  tags-completion-table))
+		  tags-completion-table)
+  (message "Refreshing ido tags list done"))
 
 (defun macoy-ido-find-tag ()
   "Find a tag using ido"
@@ -659,7 +664,7 @@ static char *gnus-pointer[] = {
 \"###....####.######\",
 \"###..######.######\",
 \"###########.######\" };")) t)
- '(large-file-warning-threshold 30000000)
+ '(large-file-warning-threshold 40000000)
  '(linum-format " %7i ")
  '(org-support-shift-select t)
  '(package-archives
@@ -674,7 +679,7 @@ static char *gnus-pointer[] = {
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
    (quote
-	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Core/bin")))
+	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen" "obj140")))
  '(projectile-indexing-method (quote native))
  '(simpleclip-copy-keystrokes (quote ("C-c" "C-<insert>" "C-<insertchar>")))
  '(simpleclip-cut-keystrokes (quote ("C-x" "C-S-<insert>")))
