@@ -232,7 +232,10 @@
 
 ;; Refresh and load tags
 ;; TODO: Use projectile refresh ctags instead
-(setq ctags-path "C:/programsMacoy/ctags58/ctags.exe")
+(if (eq system-type 'gnu/linux)
+	(setq ctags-path "ctags")
+	(setq ctags-path "C:/programsMacoy/ctags58/ctags.exe")
+	)
 ;;(setq ctags-path "C:/Program Files/Git/usr/bin/echo.exe")
 ;;(setq ctags-directories (list ))
 ;;(setq ctags-args
@@ -243,12 +246,21 @@
   ;; Doesn't do anything for start-process
   ;;(let ((default-directory "F:/CJUNCTIONS/src/")))
   (message "Running CTags")
-  (let ((ctagsProc (start-process "CTags" "*CTags-out*" ctags-path "-e" "-f" "F:/CJUNCTIONS/src/TAGS"
+  (let ((ctagsProc (start-process "CTags" "*CTags-out*" ctags-path "-e" "-f"
+				 ;; Output location
+				 "F:/CJUNCTIONS/src/TAGS"
+				 ;; (concat (projectile-project-root) "TAGS")
+
+				 ;; Additional arguments
 				 "--verbose" "--recurse=yes" "--languages=C,C++"
+				 
 				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
 				 ;;  not on Windows)
 				 "--exclude=F:/CJUNCTIONS/src/Utilities\\Bin"
-                  "F:/CJUNCTIONS/src/Core"
+
+				 ;; Includes
+				 ;; (projectile-project-root) ;; HOME_ONLY
+				 "F:/CJUNCTIONS/src/Core"
 				 )))
 	(set-process-sentinel ctagsProc
 						  (lambda (ctagsProc _string)
