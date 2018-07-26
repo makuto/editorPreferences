@@ -52,7 +52,7 @@
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
-										
+;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting <tab>										
 
 ;; Enable MELPA
 (require 'package)
@@ -148,10 +148,42 @@
 ;; powerline-vim-theme
 ;; powerline-nano-theme
 
+;; Instead of wrapping at character, wrap at word. This slightly improves readability
+(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+(global-visual-line-mode 1)
+
+;; After wrapping, try to line up the text with the wrapped line column
+(define-globalized-minor-mode my-global-adaptive-wrap-mode adaptive-wrap-prefix-mode
+  (lambda () (adaptive-wrap-prefix-mode 1)))
+(my-global-adaptive-wrap-mode 1)
+
 ;; C indentation settings
 ;; bsd AKA Allman https://www.emacswiki.org/emacs/IndentingC
 (setq c-default-style "bsd"
-	  c-basic-offset 4)
+	  c-basic-offset 4
+	  tab-width 4
+      indent-tabs-mode t)
+
+;; Doesn't quite work
+;; (defun infer-indentation-style ()
+;;   ;; if our source file uses tabs, we use tabs, if spaces spaces, and if        
+;;   ;; neither, we use the current indent-tabs-mode
+;;   (let ((space-count (how-many "^  " (point-min) (point-max)))
+;;         (tab-count (how-many "^\t" (point-min) (point-max))))
+;;     (if (> space-count tab-count)
+;; 		;; ((message "Indent using space")
+;; 		 (setq indent-tabs-mode nil))
+;;     (if (> tab-count space-count)
+;; 		;; ((message "Indent using tab")
+;; 		 (setq indent-tabs-mode t))))
+
+;; (add-hook 'c-mode-common-hook
+;;           (lambda () (setq indent-tabs-mode nil)
+;;             (infer-indentation-style)))
+
+;; (add-hook 'lisp-mode-hook
+;;           (lambda () (setq indent-tabs-mode nil)
+;; 			(infer-indentation-style)))
 
 ;; Detect which indentation style a file is using and use that (doesn't work)
 (setq dtrt-indent-mode 1)
