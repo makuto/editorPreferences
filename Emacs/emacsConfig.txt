@@ -581,6 +581,12 @@
 ;; Switch buffers. Was backward-char
 (global-set-key (kbd "C-b") 'ido-switch-buffer)
 
+;; Switch desktops
+(global-set-key (kbd "C-S-b") 'macoy-switch-desktop)
+
+;; Create desktop
+(global-set-key (kbd "M-d") 'macoy-save-desktop)
+
 ;; Switch windows via ctrl-page up and down
 (global-set-key (kbd "C-<next>") 'other-window)
 (global-set-key (kbd "C-<prior>") 'previous-multiframe-window)
