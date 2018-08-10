@@ -53,11 +53,14 @@
 ;; - Ido jump to file anywhere does more harm than good (especially when creating new files)
 ;; - Python indentation is godawful
 ;; - Multiple cursors copy and cut when whole line selected
+;; - TAGS for Python projects
+;; - Make C-g quit selection and multiple cursors if mc is active
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
-;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting <tab>										
+;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting <tab>
+										
 
 ;; Enable MELPA
 (require 'package)
@@ -146,6 +149,10 @@
 
 ;; Powerline: nicer status bar
 (require 'powerline)
+(setq powerline-default-separator 'butt)
+(setq powerline-display-hud nil)
+(setq powerline-display-buffer-size nil)
+(setq powerline-display-mule-info nil)
 (powerline-default-theme)
 ;; powerline-default-theme
 ;; powerline-center-theme
@@ -189,9 +196,6 @@
 ;; (add-hook 'lisp-mode-hook
 ;;           (lambda () (setq indent-tabs-mode nil)
 ;; 			(infer-indentation-style)))
-
-;; Detect which indentation style a file is using and use that (doesn't work)
-(setq dtrt-indent-mode 1)
 
 ;; https://www.emacswiki.org/emacs/SmoothScrolling
  ;; scroll one line at a time (less "jumpy" than defaults)
@@ -392,8 +396,6 @@
   '(;;(init . macoy-ido-find-tag-refresh) ;; Commented because it runs every time (unnecessary)
 	(candidates . macoy-tag-names)
     (cache)))
-
-(setq-default ac-sources '(ac-source-macoy-ido-tags))
 
 ;; Autocomplete from precompiled tags list (normal tags source is too slow)
 ;; Make sure auto-complete knows about yasnippets
@@ -892,3 +894,19 @@ static char *gnus-pointer[] = {
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Ubuntu Mono" :foundry "outline" :slant normal :weight normal :height 120 :width normal)))))
+
+;;
+;; Macoy's custom theme overrides
+;; These give emacs a more minimal, less contrast-y appearance
+;; I put it down here so it happens after custom-set-variables sets the theme
+
+;; Set the border color to the fringe to have less contrast-y line (generally; will vary per theme)
+(set-face-background 'vertical-border (face-background 'fringe))
+(set-face-foreground 'vertical-border (face-background 'vertical-border))
+
+;; Make fringe same color as background. We still want fringe for wrap indicators
+;; If you change your theme you should run this code again
+;; Note that the vertical border uses the fringe color before we set it to default
+(set-face-background 'fringe (face-background 'default))
+;; We don't want to change the color of the fringe indicators
+;; (set-face-foreground 'fringe (face-background 'fringe))
