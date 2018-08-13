@@ -160,6 +160,11 @@
 ;; powerline-vim-theme
 ;; powerline-nano-theme
 
+;; Make some modes have shorter names in the mode line
+(require 'delight)
+(delight 'abbrev-mode " Abv" "Abbrev")
+(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+
 ;; Instead of wrapping at character, wrap at word. This slightly improves readability
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 (global-visual-line-mode 1)
@@ -648,7 +653,7 @@
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
   :init-value t
-  :lighter " my-keys")
+  :lighter " M")
 
 (my-keys-minor-mode 1)
 
@@ -855,7 +860,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(delight adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
@@ -910,3 +915,8 @@ static char *gnus-pointer[] = {
 (set-face-background 'fringe (face-background 'default))
 ;; We don't want to change the color of the fringe indicators
 ;; (set-face-foreground 'fringe (face-background 'fringe))
+
+;;
+;; Macoy custom overrides end
+;;
+(put 'upcase-region 'disabled nil)
