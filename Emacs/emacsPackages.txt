@@ -29,3 +29,5 @@ ac-etags           20161001.807  installed             etags/ctags completion so
   zenburn-theme      2.1           installed             A low contrast color theme for Emacs.
   adaptive-wrap
   delight
+  dsvn
+  magit

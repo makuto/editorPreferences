@@ -55,6 +55,7 @@
 ;; - Multiple cursors copy and cut when whole line selected
 ;; - TAGS for Python projects
 ;; - Make C-g quit selection and multiple cursors if mc is active
+;; - Auto-install packages just by loading .emacs (use-package?)
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
@@ -281,8 +282,8 @@
 ;; TODO: Use projectile refresh ctags instead
 (if (eq system-type 'gnu/linux)
 	(setq ctags-path "ctags")
-	(setq ctags-path "C:/programsMacoy/ctags58/ctags.exe")
-	)
+  (setq ctags-path "C:/programsMacoy/ctags58/ctags.exe")
+  )
 ;;(setq ctags-path "C:/Program Files/Git/usr/bin/echo.exe")
 ;;(setq ctags-directories (list ))
 ;;(setq ctags-args
@@ -429,10 +430,22 @@
   (if (use-region-p)
 	  (swiper (buffer-substring (region-beginning) (region-end)))
 	(swiper)
+	))
+
+;; If marked, use swiper to search mark
+(defun macoy-swiper-all-search-mark ()
+  "If marked, use swiper-all to search mark. Otherwise, open swiper-all normally"
+  (interactive)
+  ;; This isn't sufficient for my purposes; it's nice to search e.g. thing->thing
+  ;;(swiper (thing-at-point 'symbol))
+  (if (use-region-p)
+	  (swiper-all (buffer-substring (region-beginning) (region-end)))
+	(swiper-all)
   ))
 
 ;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
 (global-set-key (kbd "C-f") 'macoy-swiper-search-mark)
+(global-set-key (kbd "M-f") 'macoy-swiper-all-search-mark)
 
 ;;
 ;; Faster desktop creation/switching
@@ -473,26 +486,37 @@
 ;; Source control
 ;;
 
-(defun svn-check-for-modifications-src ()
+(defun tortoise-svn-check-for-modifications-src ()
   "Open the TortoiseSVN Check for Modifications window"
   (interactive)
   (message "Checking for modifications")
   (start-process "CheckForModifications" nil
 				 "tortoiseproc" "/command:repostatus" "/path:F:\\CJUNCTIONS\\src"))
 
-(defun svn-show-log-src ()
+(defun tortoise-svn-show-log-src ()
   "Open the TortoiseSVN Log window"
   (interactive)
   (message "SVN Log")
   (start-process "SVNLog" nil
 				 "tortoiseproc" "/command:log" "/path:F:\\CJUNCTIONS\\src"))
 
-(defun svn-update-src ()
+(defun tortoise-svn-update-src ()
   "Open the TortoiseSVN Update window"
   (interactive)
   (message "SVN Update")
   (start-process "SVNUpdate" nil
 				 "tortoiseproc" "/command:update" "/path:F:\\CJUNCTIONS\\src"))
+
+(defun tortoise-svn-create-patch-src ()
+  "Open the TortoiseSVN Create Patch window"
+  (interactive)
+  (message "SVN Create Patch")
+  (start-process "SVNCreatePatch" nil
+				 "tortoiseproc" "/command:createpatch" "/noview" "/path:F:\\CJUNCTIONS\\src"))
+
+;; dsvn SVN frontend
+(autoload 'svn-status "dsvn" "Run `svn status'." t)
+(autoload 'svn-update "dsvn" "Run `svn update'." t)
 
 ;;
 ;; Build systems
@@ -700,9 +724,6 @@
 ;; Create desktop
 (global-set-key (kbd "M-d") 'macoy-save-desktop)
 
-;; Switch windows via ctrl-page up and down
-(global-set-key (kbd "C-<next>") 'other-window)
-(global-set-key (kbd "C-<prior>") 'previous-multiframe-window)
 ;; Switch windows via ctrl tab
 (global-set-key (kbd "C-<tab>") 'other-window)
 (global-set-key (kbd "C-S-<tab>") 'previous-multiframe-window)
@@ -739,6 +760,8 @@
 ;; Move to beginning/end of function
 (global-set-key (kbd "M-<up>") 'c-beginning-of-defun)
 (global-set-key (kbd "M-<down>") 'c-end-of-defun)
+(global-set-key (kbd "C-<prior>") 'c-beginning-of-defun)
+(global-set-key (kbd "C-<next>") 'c-end-of-defun)
 
 ;; Window management
 ;; Split horizonal (was transpose-chars)
@@ -860,7 +883,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(delight adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(dsvn delight adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
