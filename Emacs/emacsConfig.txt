@@ -34,6 +34,10 @@
 ;; Setup
 ;; 1. Install all packages in emacsPackages.txt
 ;; 2. Add macoyCopy, macoyCut, and macoyPaste to mc/cmds-to-run-once and restart Emacs
+;; 3. For magit on windows, fix credentials for server folder:
+;;        https://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
+;; 4. Setup magit credentials:
+;;        https://stackoverflow.com/questions/22580873/how-can-i-configure-magit-to-use-my-github-user-name
 ;;
 ;; TODO (there are more scattered around this file):
 ;; - TAGS has to be set up per-project; doesn't allow cross-repository finding afaik
@@ -108,6 +112,9 @@
 ;; Set cursor to I-beam
 (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 2))))
 
+;; Org: indent nested things
+(setq org-startup-indented t)
+
 ;; Smex: Smart M-x completion
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
@@ -177,10 +184,10 @@
 
 ;; C indentation settings
 ;; bsd AKA Allman https://www.emacswiki.org/emacs/IndentingC
-(setq c-default-style "bsd"
-	  c-basic-offset 4
-	  tab-width 4
-      indent-tabs-mode t)
+(setq-default c-default-style "bsd"
+			  c-basic-offset 4
+			  tab-width 4
+			  indent-tabs-mode t)
 
 ;; Doesn't quite work
 ;; (defun infer-indentation-style ()
@@ -799,6 +806,10 @@
   (define-key org-mode-map (kbd "S-<up>")      nil)
   )
 
+;; Make bindings work with magit
+(with-eval-after-load 'magit
+  (define-key magit-mode-map (kbd "C-<tab>") nil))
+
 ;;
 ;; Hand-written by Macoy end
 ;;
@@ -883,7 +894,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(dsvn delight adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(magit dsvn delight adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
@@ -932,12 +943,15 @@ static char *gnus-pointer[] = {
 (set-face-background 'vertical-border (face-background 'fringe))
 (set-face-foreground 'vertical-border (face-background 'vertical-border))
 
+;; Make the fringe indicators a little more subdued. This might be too much if I start
+;; using the fringe for anything more than wrapping indicators, but for now it is fine
+;; Commented because it's a little too tough to see the indicators on many themes
+;; (set-face-foreground 'fringe (face-background 'fringe))
+
 ;; Make fringe same color as background. We still want fringe for wrap indicators
 ;; If you change your theme you should run this code again
 ;; Note that the vertical border uses the fringe color before we set it to default
 (set-face-background 'fringe (face-background 'default))
-;; We don't want to change the color of the fringe indicators
-;; (set-face-foreground 'fringe (face-background 'fringe))
 
 ;;
 ;; Macoy custom overrides end
