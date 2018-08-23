@@ -48,8 +48,6 @@
 ;;    been changed underneath and ask to reload or save over
 ;; - Tab key behavior confuses me especially in plaintext files
 ;; - Get back and forward working (back doesn't work too well)
-;; - Compilation-* commands for jumping between errors
-;;       These do exist already, but you need to use emacs compile
 ;; - Build system selection via Ido custom list (like Sublime's C-S-b)
 ;; - Ag filter files
 ;; - Determine what smooth-scrolling actually does (if anything)
@@ -60,12 +58,15 @@
 ;; - TAGS for Python projects
 ;; - Make C-g quit selection and multiple cursors if mc is active
 ;; - Auto-install packages just by loading .emacs (use-package?)
+;; - Shortcuts:
+;;    Toggle whitespace mode
+;;    Swap windows
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
-;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting <tab>
-										
+;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting a tab
+
 
 ;; Enable MELPA
 (require 'package)
@@ -277,10 +278,36 @@
 	  (call-interactively 'clang-format-buffer)
 	  )
   )
+
+(defun macoy-clang-format-paragraph ()
+  "Format the block/paragraph"
+  (interactive)
+  (unless (use-region-p)
+	(mark-paragraph)
+	)
+  (when (use-region-p)
+	(call-interactively 'clang-format-region)
+	)
+  )
+
+(defun macoy-clang-format-function ()
+  "Format the function"
+  (interactive)
+  (unless (use-region-p)
+	(mark-defun)
+	)
+  (when (use-region-p)
+	(call-interactively 'clang-format-region)
+	)
+  )
+
 (global-set-key (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
+(global-set-key (kbd "C-.") 'macoy-clang-format-paragraph)
+(global-set-key (kbd "C->") 'macoy-clang-format-function)
+
 ;; Not sure if this actually does anything
 ;; https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/
-(fset 'c-indent-region 'clang-format-region)
+;; (fset 'c-indent-region 'clang-format-region)
 
 ;; Don't prompt me to load tags
 (setq tags-revert-without-query 1)
@@ -529,6 +556,16 @@
 ;; Build systems
 ;;
 
+;; An example build command
+;; (defun build-MasterSolution-MsBuild-CompileCommand ()
+  ;; "Run MSBuild on MasterSolution via compile-command"
+  ;; (interactive)
+  ;; (message "Building MasterSolution")
+  ;; (let ((default-directory "F:/CJUNCTIONS/src/"))
+	;; (compile "MSBuild.exe /p:Configuration=FullDebug /p:Platform=x86 /maxcpucount:4 MyThing/MasterSolution.sln")
+	;; )
+  ;; )
+
 (defun buildStop ()
   "Stop Incredibuild"
   (message "Stopping build")
@@ -693,8 +730,19 @@
 ;;
 ;; Many come from http://ergoemacs.org/emacs/emacs_make_modern.html
 
+;; Make it possible to easily input raw tabs instead of having to do C-q <tab>
+(defun macoy-insert-tab ()
+  "Make it possible to easily input raw tabs instead of having to do C-q <tab>"
+  (interactive)
+  (insert "	")
+  )
+
+;; Backtab is the same as S-<tab>
+(global-set-key (kbd "<backtab>") 'macoy-insert-tab)
+
 ;; make {copy, cut, paste, undo} have {C-c, C-x, C-v, C-z} keys
 ;;(cua-mode 1) (disabled in favor of simpleclip)
+
 (global-set-key (kbd "C-z") 'undo)
 
 ;; Ctrl shift P like sublime for commands
