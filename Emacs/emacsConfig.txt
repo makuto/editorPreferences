@@ -64,12 +64,12 @@
 ;; - Indent-tabs-mode only in C/C++
 ;; - Auto-select actual struct definition when multiple xref results
 ;; - Make sure when I say xref-other it ends up in the other window (even after multiple results)
-;; - Make clang-format region/function not affect cursor position after it's done (e.g. set then pop mark)
 ;; - If use-region, C-k should delete region instead of line
 ;; - Make git-commit-mode and with-editor-mode not use C-c (somehow raise priority of my-keys? Or rebind?)
 ;; - Powerline: Make mode colors comments so they aren't as bright (same color as percent complete)
 ;; - tags-query-replace use marked for tag to replace
 ;; - Recover from commit failed backup command
+;; - Reopen recently closed file (like C-S-w in Sublime)
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
@@ -282,31 +282,37 @@
 (defun macoy-clang-format-region-or-buffer ()
   "Format the region if one is selected, otherwise format the buffer"
   (interactive)
-  (if (use-region-p)
-	  (call-interactively 'clang-format-region)
+  (save-excursion
+	(if (use-region-p)
+		(call-interactively 'clang-format-region)
 	  (call-interactively 'clang-format-buffer)
 	  )
+	)
   )
 
 (defun macoy-clang-format-paragraph ()
   "Format the block/paragraph"
   (interactive)
-  (unless (use-region-p)
-	(mark-paragraph)
-	)
-  (when (use-region-p)
-	(call-interactively 'clang-format-region)
+  (save-excursion
+	(unless (use-region-p)
+	  (mark-paragraph)
+	  )
+	(when (use-region-p)
+	  (call-interactively 'clang-format-region)
+	  )
 	)
   )
 
 (defun macoy-clang-format-function ()
   "Format the function"
   (interactive)
-  (unless (use-region-p)
-	(mark-defun)
-	)
-  (when (use-region-p)
-	(call-interactively 'clang-format-region)
+  (save-excursion
+	(unless (use-region-p)
+	  (mark-defun)
+	  )
+	(when (use-region-p)
+	  (call-interactively 'clang-format-region)
+	  )
 	)
   )
 
@@ -595,14 +601,14 @@
 	;; )
   ;; )
 
-(defun buildStop ()
+(defun buildStopIncredibuild ()
   "Stop Incredibuild"
   (message "Stopping build")
   (start-process "Build" "*Build-out*" "BuildConsole.exe"
 				 "/Stop")
   )
 
-(global-set-key (kbd "M-<f7>") (lambda () (interactive) (buildStop)))
+(global-set-key (kbd "M-<f7>") (lambda () (interactive) (buildStopIncredibuild)))
 
 ;;
 ;; Custom multiple cursors cut/copy/paste handling
@@ -915,6 +921,7 @@
 	((".emacs.d" . "c:/Users/mmadson/AppData/Roaming/.emacs.d")
 	 ("starterSrc" . "c:/SublimeProjects/emacsDesktops/starterSrc"))))
  '(diary-entry-marker (quote font-lock-variable-name-face))
+ '(ediff-split-window-function (quote split-window-horizontally))
  '(emms-mode-line-icon-image-cache
    (quote
 	(image :type xpm :ascent center :data "/* XPM */
@@ -1003,8 +1010,7 @@ static char *gnus-pointer[] = {
 	 (320 . "#8CD0D3")
 	 (340 . "#94BFF3")
 	 (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3")
- '(ediff-split-window-function 'split-window-horizontally))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
