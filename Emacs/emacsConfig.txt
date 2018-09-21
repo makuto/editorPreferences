@@ -18,7 +18,7 @@
 ;; - [Done] Workspaces ("desktops" by emacs terminology)
 ;; - [WIP] Build systems
 ;;   - [Done] One keypress builds
-;;   - [WIP] Quick jump to compilation error
+;;   - [Done] Quick jump to compilation error
 ;;   - Easy add build system
 ;; - [Done] Fuzzy file opening
 ;; - [Done] Fuzzy editor command execution
@@ -55,21 +55,20 @@
 ;; - Ido jump to file anywhere does more harm than good (especially when creating new files)
 ;; - Python indentation is godawful
 ;; - Multiple cursors copy and cut when whole line selected
-;; - TAGS for Python projects
 ;; - Make C-g quit selection and multiple cursors if mc is active
-;; - Auto-install packages just by loading .emacs (use-package?)
+;; - Auto-install packages just by loading .emacs (use-package? https://github.com/jwiegley/use-package)
 ;; - Shortcuts:
 ;;    Toggle whitespace mode
 ;;    Swap windows
 ;; - Indent-tabs-mode only in C/C++
 ;; - Auto-select actual struct definition when multiple xref results
-;; - Make sure when I say xref-other it ends up in the other window (even after multiple results)
 ;; - If use-region, C-k should delete region instead of line
 ;; - Make git-commit-mode and with-editor-mode not use C-c (somehow raise priority of my-keys? Or rebind?)
 ;; - Powerline: Make mode colors comments so they aren't as bright (same color as percent complete)
 ;; - tags-query-replace use marked for tag to replace
 ;; - Recover from commit failed backup command
-;; - Reopen recently closed file (like C-S-w in Sublime)
+;; - Reopen recently closed file (like C-S-t in Sublime)
+;; - Fix windows OpenSSL/TLS support
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
@@ -124,6 +123,12 @@
 
 ;; Org: indent nested things
 (setq org-startup-indented t)
+
+;; My org files
+(when (string-equal (user-login-name) "mmadson")
+  (setq org-agenda-files (list "C:/Users/mmadson/Dropbox/Org/1_Calendar.org"
+							   "C:/Users/mmadson/Dropbox/Org/0_Dump.org"))
+  )
 
 ;; Smex: Smart M-x completion
 (smex-initialize)
@@ -191,6 +196,7 @@
 (define-globalized-minor-mode my-global-adaptive-wrap-mode adaptive-wrap-prefix-mode
   (lambda () (adaptive-wrap-prefix-mode 1)))
 (my-global-adaptive-wrap-mode 1)
+(setq-default adaptive-wrap-extra-indent 1)
 
 ;; C indentation settings
 ;; bsd AKA Allman https://www.emacswiki.org/emacs/IndentingC
@@ -371,6 +377,10 @@
       (visit-tags-table my-tags-file)))
   )
 
+;; Use Ivy to select xref results
+(require 'ivy-xref)
+(setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
+
 ;; This isn't really necessary because attempting a goto definition will automatically do this
 ;;(global-set-key (kbd "C-<f5>") (lambda () (interactive) (loadTagsFromParent)))
 (global-set-key (kbd "C-<f5>") (lambda () (interactive) (generateTags)))
@@ -388,25 +398,6 @@
 ;; Performance becomes problematic with as many tags as I have so this is necessary
 ;; See https://github.com/auto-complete/auto-complete/blob/master/doc/manual.md
 (setq ac-auto-start 3)
-
-;; Auto-complete using etags
-;; Doesn't work because codebase is too big :(
-;;(custom-set-variables
-;;  '(ac-etags-requires 1))
-;;
-;;(eval-after-load "etags"
-;;  '(progn
-;;      (ac-etags-setup)))
-;;
-;;(add-hook 'c-mode-common-hook 'ac-etags-ac-setup)
-
-;; Auto complete using company
-;; Doesn't work because codebase is too big
-;;(global-company-mode)
-;;'(company-global-modes '(not company-clang))
-;;(add-hook 'c-mode-common-hook
-;;		  (lambda ()
-;;			(setq company-backends '(company-etags))))
 
 ;; Custom fuzzy completion stuff
 (defun macoy-ido-example ()
@@ -506,7 +497,7 @@
 
 (defun macoy-save-desktop (new-desktop-name)
   "Save a desktop to the desktop registry for easy switching"
-  (interactive "sNew desktop name:")
+  (interactive "sNew desktop name: ")
   (let ((new-desktop (concat macoy-desktop-dir new-desktop-name)))
 	(make-directory new-desktop)
 	(desktop-save new-desktop)
@@ -518,7 +509,7 @@
   (interactive)
   (desktop-change-dir
    (concat macoy-desktop-dir
-		   (ido-completing-read "Switch Desktop:"
+		   (ido-completing-read "Switch Desktop: "
 								(remove "."
 										(remove ".."
 												(directory-files macoy-desktop-dir)))))))
@@ -916,10 +907,6 @@
  '(back-button-local-keystrokes (quote ("C-S-x <C-SPC>")))
  '(back-button-smartrep-prefix "C-S-x")
  '(custom-enabled-themes (quote (base16-ashes)))
- '(desktop-registry-registry
-   (quote
-	((".emacs.d" . "c:/Users/mmadson/AppData/Roaming/.emacs.d")
-	 ("starterSrc" . "c:/SublimeProjects/emacsDesktops/starterSrc"))))
  '(diary-entry-marker (quote font-lock-variable-name-face))
  '(ediff-split-window-function (quote split-window-horizontally))
  '(emms-mode-line-icon-image-cache
@@ -978,7 +965,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(magit dsvn delight adaptive-wrap web-beautify etags-select desktop-registry simpleclip yasnippet swiper company ac-etags auto-complete clang-format avy ace-jump-mode ag xah-find dtrt-indent flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme dumb-jump projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
@@ -1029,8 +1016,10 @@ static char *gnus-pointer[] = {
 
 ;; Make the fringe indicators a little more subdued. This might be too much if I start
 ;; using the fringe for anything more than wrapping indicators, but for now it is fine
-;; Commented because it's a little too tough to see the indicators on many themes
-;; (set-face-foreground 'fringe (face-background 'fringe))
+;; We'll use the comment colors because comments are usually high enough contrast to read
+;;  but still more subdued than regular text (and regular fringe foreground)
+;; See base16-theme.el for faces and colors and stuff
+(set-face-foreground 'fringe (face-foreground 'font-lock-comment-face))
 
 ;; Make fringe same color as background. We still want fringe for wrap indicators
 ;; If you change your theme you should run this code again
