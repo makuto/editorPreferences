@@ -9,6 +9,7 @@ clang-format       20180406.814    Format code using clang-format
 darktooth-theme    20171206.639    From the darkness... it watches
 delight
 dsvn
+expand-region
 flx-ido            20180117.719    flx integration for ido
 ido-vertical-mode  0.1.1           Makes ido-mode display vertically.
 ivy-xref

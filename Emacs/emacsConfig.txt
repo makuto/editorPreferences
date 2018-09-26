@@ -67,14 +67,23 @@
 ;; - Powerline: Make mode colors comments so they aren't as bright (same color as percent complete)
 ;; - tags-query-replace use marked for tag to replace
 ;; - Recover from commit failed backup command
-;; - Reopen recently closed file (like C-S-t in Sublime)
 ;; - Fix windows OpenSSL/TLS support
+;; - Fix multiple-cursors slow parenthesis completion (due to pause to show matching?)
+;; Criticism improvements:
+;; - [DONE] Select word at point
+;; - [DONE] Reopen closed file
+;; - [DONE-ish] Get find references working
+;; - Faster browse symbols
+;;   Separate lists by first letter for x26 speedup? (kindof defeats purpose if not knowing first letter)
+;;   Copy swiper-all requiring multiple letters?
+;; - Faster/better Ag
+;; - Autorevert if no modifications (do tell me in modeline that this happened)
+;; - Swiper is too damn slow
 
 ;; Emacs Notes
 ;; C-h k <the keybind> to find what a key does
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
 ;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting a tab
-
 
 ;; Enable MELPA
 (require 'package)
@@ -97,7 +106,7 @@
 ;; Themes are generally safe
 (setq custom-safe-themes t)
 
-;; make typing delete/overwrites selected text
+;; make typing delete/overwrite selected text
 (delete-selection-mode 1)
 
 ;; turn on highlighting current line
@@ -121,6 +130,9 @@
 ;; Set cursor to I-beam
 (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 2))))
 
+;; Templates/Snippets
+(yas-global-mode 1)
+
 ;; Org: indent nested things
 (setq org-startup-indented t)
 
@@ -129,6 +141,27 @@
   (setq org-agenda-files (list "C:/Users/mmadson/Dropbox/Org/1_Calendar.org"
 							   "C:/Users/mmadson/Dropbox/Org/0_Dump.org"))
   )
+
+;; Store recently closed files so we can easily reopen them
+(setq macoy-recently-killed-files (list))
+(defun macoy-on-kill-buffer ()
+  (when buffer-file-name
+	(push buffer-file-name macoy-recently-killed-files)
+	)
+  )
+(add-hook 'kill-buffer-hook 'macoy-on-kill-buffer)
+
+(defun macoy-reopen-last-killed-file ()
+  "Open the last killed file (stored in macoy-recently-killed-files)"
+  (interactive)
+  (unless macoy-recently-killed-files
+	(message "There are no recently closed buffers")
+	)
+  (when macoy-recently-killed-files
+	(find-file (pop macoy-recently-killed-files))
+	)
+  )
+(global-set-key (kbd "C-S-t") 'macoy-reopen-last-killed-file)
 
 ;; Smex: Smart M-x completion
 (smex-initialize)
@@ -165,10 +198,6 @@
 				  "3rdparty/Node/*")
                 projectile-globally-ignored-files))
 (projectile-mode 1)
-
-;; Dumb-jump: Goto definition https://github.com/jacktasia/dumb-jump
-;; (Doesn't work; use TAGS instead)
-;;(dumb-jump-mode)
 
 ;; Powerline: nicer status bar
 (require 'powerline)
@@ -246,10 +275,10 @@
 (global-set-key (kbd "C-j") 'avy-goto-word-or-subword-1)
 
 ;; Make garbage collection happen less often (https://github.com/lewang/flx)
-;; This probably doesn't actually do anything
 (setq gc-cons-threshold 20000000)
 
-;; Show whitespace (damnit emacs don't use spaces for indentation!) (doesn't quite work)
+;; Show whitespace
+;; Not enabled globally because it looks a bit too ugly for my tastes; I can toggle it when needed
 ;;(require 'whitespace)
 ;;(global-whitespace-mode 0)
 (setq whitespace-style '(faces tabs tabs-mark spaces space-mark))
@@ -264,6 +293,10 @@
 (global-set-key (kbd "M-<f3>") 'mc/mark-all-like-this)
 ;; Make <return> insert a newline; multiple-cursors-mode can still be disabled with C-g.
 (define-key mc/keymap (kbd "<return>") nil)
+;; Clear these so that expand-region can have them
+(define-key mc/keymap (kbd "C-'") nil)
+(define-key mc/keymap (kbd "C-\"") nil)
+(define-key mc/keymap (kbd "C-SPC") 'mc-hide-unmatched-lines-mode)
 ;; Adds one cursor to each line in the current region.
 (global-set-key (kbd "C-S-l") 'mc/edit-lines)
 ;; Note that in my-keys I define cut, copy, and paste overrides which work with simpleclip & mc
@@ -453,13 +486,35 @@
 						   ac-source-macoy-ido-tags
                            ))
 
-;; Templates/Snippets
-(yas-global-mode 1)
+;; Alternate find file in project thing using tags
+;; If projectile isn't doing the trick, use tags instead
+;; From https://www.emacswiki.org/emacs/InteractivelyDoThings#CompleteFindTagUsingIdo
+(defun macoy-ido-find-file-in-tag-files ()
+  (interactive)
+  (save-excursion
+	(let ((enable-recursive-minibuffers t))
+	  (visit-tags-table-buffer))
+	(find-file
+	 (expand-file-name
+	  (ido-completing-read
+	   "Project file: " (tags-table-files) nil t)))))
 
 ;; cquery language server
 ;; Doesn't work
 ;;(require 'cquery)
 ;;(setq cquery-executable "F:/gitRepos/cquery/cmakeBuild/x64/Debug/cquery.exe")
+
+;; Find references via tags-search. This is my find-references replacement
+(defun macoy-tags-search ()
+  "Pick tag with macoy-ido-find-tag then run tags-search (or search marked)"
+  (interactive)
+  (if (use-region-p)
+	  (tags-search (buffer-substring (region-beginning) (region-end)))
+	(tags-search (ido-completing-read "Tag: " macoy-tag-names))
+  ))
+  
+(global-set-key (kbd "C-\\") 'macoy-tags-search)
+(global-set-key (kbd "C-|") 'tags-loop-continue)
 
 ;; If marked, use swiper to search mark
 (defun macoy-swiper-search-mark ()
@@ -844,10 +899,16 @@
 (global-set-key (kbd "C-<prior>") 'c-beginning-of-defun)
 (global-set-key (kbd "C-<next>") 'c-end-of-defun)
 
+(require 'expand-region)
+;; I don't like it creating temporary binds (what if I want to type those symbols?)
+(setq expand-region-fast-keys-enabled nil)
+(global-set-key (kbd "C-'") 'er/expand-region)
+(global-set-key (kbd "C-\"") 'er/contract-region)
+
 ;; Window management
 ;; Split horizonal (was transpose-chars)
 (global-set-key (kbd "C-t") 'split-window-horizontally)
-(global-set-key (kbd "C-S-t") 'split-window-vertically)
+(global-set-key (kbd "M-t") 'split-window-vertically)
 (global-set-key (kbd "C-S-w") 'delete-window)
 
 ;; Go back (unfortunately no forward yet)
@@ -965,7 +1026,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(expand-region ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
