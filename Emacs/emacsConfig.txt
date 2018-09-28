@@ -69,13 +69,17 @@
 ;; - Recover from commit failed backup command
 ;; - Fix windows OpenSSL/TLS support
 ;; - Fix multiple-cursors slow parenthesis completion (due to pause to show matching?)
+;; - Build system management (use (funcall (intern "my-func-name")) to ido select build system?)
+;; - Reliable quick mark set and return for jumping to X from Y then going back to Y
+;;
 ;; Criticism improvements:
 ;; - [DONE] Select word at point
 ;; - [DONE] Reopen closed file
 ;; - [DONE-ish] Get find references working
-;; - Faster browse symbols
+;;   Eventually make tags-search and tags-loop-continue async and list results in a buffer
+;; - Faster browse symbols (first, figure out where most symbols come from and eliminate; then separate projects?)
 ;;   Separate lists by first letter for x26 speedup? (kindof defeats purpose if not knowing first letter)
-;;   Copy swiper-all requiring multiple letters?
+;;   Copy swiper-all requiring multiple letters? (this doesn't seem to help too much
 ;; - Faster/better Ag
 ;; - Autorevert if no modifications (do tell me in modeline that this happened)
 ;; - Swiper is too damn slow
@@ -142,6 +146,18 @@
 							   "C:/Users/mmadson/Dropbox/Org/0_Dump.org"))
   )
 
+(defun macoy-kill-transient-buffers ()
+  "Auto kill buffers which aren't important to let hang around"
+  (interactive)
+  ;; TODO: Come on Macoy, make this a loop
+  (if (get-buffer "*compilation*") (kill-buffer "*compilation*"))
+  (if (get-buffer "*xref*") (kill-buffer "*xref*"))
+  (if (get-buffer "*CTags-out*") (kill-buffer "*CTags-out*"))
+  (if (get-buffer "*ag search*") (kill-buffer "*ag search*"))
+  (if (get-buffer "*log-edit-files*") (kill-buffer "*log-edit-files*"))
+  (if (get-buffer "*svn output*") (kill-buffer "*svn output*"))
+  )
+
 ;; Store recently closed files so we can easily reopen them
 (setq macoy-recently-killed-files (list))
 (defun macoy-on-kill-buffer ()
@@ -161,7 +177,20 @@
 	(find-file (pop macoy-recently-killed-files))
 	)
   )
+
+(defun macoy-reopen-recent-killed-file ()
+  "Pick from the list of recently killed files"
+  (interactive)
+  (unless macoy-recently-killed-files
+	(message "There are no recently closed buffers")
+	)
+  (when macoy-recently-killed-files
+	(find-file (ido-completing-read "Reopen file: " macoy-recently-killed-files))
+	)
+  )
+
 (global-set-key (kbd "C-S-t") 'macoy-reopen-last-killed-file)
+(global-set-key (kbd "C-M-t") 'macoy-reopen-recent-killed-file)
 
 ;; Smex: Smart M-x completion
 (smex-initialize)
@@ -446,12 +475,14 @@
 (defun macoy-ido-find-tag-refresh ()
   "Refresh ido tag list"
   (interactive)
-  (message "Refreshing ido tags list")
+  (message "Refreshing tags table")
   ;; tags-completion-table() early-outs if the table has already been created
   ;; This is problematic if TAGS has changed
   ;; Clearing it here ensures the table won't get out of sync
   (setq tags-completion-table nil)
   (tags-completion-table)
+  
+  (message "Refreshing ido tags list")
   ;; Reset to remove "empty" value as well as avoid duplicates
   (setq macoy-tag-names nil)
   (mapcar (lambda (x)
@@ -719,7 +750,7 @@
   )
 
 (defun macoy-multiple-cursors-cut()
-  "Copy at multiple cursors using macoy-multiple-cursors-buffers"
+  "Cut at multiple cursors using macoy-multiple-cursors-buffers"
   (interactive)
   (setq macoy-multiple-cursors-buffers nil)
   (mc/for-each-cursor-ordered
@@ -777,6 +808,22 @@
 	(call-interactively 'simpleclip-paste))
   )
 
+(defun macoy-tags-query-replace-marked (replacement)
+  (interactive (list
+				(read-string (format "Replace %s with: "
+									 (buffer-substring (region-beginning) (region-end))))))
+  
+  (tags-query-replace (buffer-substring (region-beginning) (region-end)) replacement)
+  )
+
+(defun macoy-tags-query-replace ()
+  (interactive)
+  (if (use-region-p)
+	  (call-interactively 'macoy-tags-query-replace-marked (buffer-substring (region-beginning) (region-end)))
+	(call-interactively 'tags-query-replace)
+	)
+  )
+
 ;;
 ;;
 ;; Macoy's keybinds which require better override
@@ -792,7 +839,7 @@
 	(define-key map (kbd "C-S-c") 'kill-ring-save)
 	(define-key map (kbd "C-S-v") 'yank)
 	(define-key map (kbd "C-S-x") 'kill-region)
-	(define-key map (kbd "M-a") 'tags-query-replace)
+	(define-key map (kbd "M-a") 'macoy-tags-query-replace)
 	(define-key map (kbd "M-j") 'pop-global-mark)
 	;; Overrides c-indent-line-or-region (this should be in C mode only, plus <tab>)
 	;;(define-key map (kbd "C-i") 'clang-format)
@@ -904,6 +951,8 @@
 (setq expand-region-fast-keys-enabled nil)
 (global-set-key (kbd "C-'") 'er/expand-region)
 (global-set-key (kbd "C-\"") 'er/contract-region)
+(global-set-key (kbd "M-'") 'er/mark-defun)
+(global-set-key (kbd "M-\"") 'er/mark-paragraph)
 
 ;; Window management
 ;; Split horizonal (was transpose-chars)
@@ -1026,7 +1075,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(expand-region ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(ivy expand-region ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
