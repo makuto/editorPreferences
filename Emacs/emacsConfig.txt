@@ -71,6 +71,12 @@
 ;; - Fix multiple-cursors slow parenthesis completion (due to pause to show matching?)
 ;; - Build system management (use (funcall (intern "my-func-name")) to ido select build system?)
 ;; - Reliable quick mark set and return for jumping to X from Y then going back to Y
+;; - Jump copy thing at point then paste back at start
+;;   e.g. the macro would avy prompt, jump to destination, copy it, then go back and paste it at start mark
+;; - Make new line above/below and start typing
+;; - Expand-region does strange things with the region. Eg. C-s-' after moving cursor, expand region then type over (damn it; it went away after re-evaluating .emacs)
+;; - Start using Abbrev more
+;; - Create an explicit setup for jump to go back to last location (don't rely on marks; just store position)
 ;;
 ;; Criticism improvements:
 ;; - [DONE] Select word at point
@@ -147,7 +153,7 @@
   )
 
 (defun macoy-kill-transient-buffers ()
-  "Auto kill buffers which aren't important to let hang around"
+  "Auto kill buffers which aren't important to let hang around. You shouldn't run this while using things which use these buffers!"
   (interactive)
   ;; TODO: Come on Macoy, make this a loop
   (if (get-buffer "*compilation*") (kill-buffer "*compilation*"))
@@ -156,6 +162,11 @@
   (if (get-buffer "*ag search*") (kill-buffer "*ag search*"))
   (if (get-buffer "*log-edit-files*") (kill-buffer "*log-edit-files*"))
   (if (get-buffer "*svn output*") (kill-buffer "*svn output*"))
+  ;; TODO: Make sure dependent things aren't running when this happens!
+  (if (get-buffer "*Ediff Registry*") (kill-buffer "*Ediff Registry*"))
+  (if (get-buffer "*Help*") (kill-buffer "*Help*"))
+  (if (get-buffer "*Completions*") (kill-buffer "*Completions*"))
+  (if (get-buffer "*Compile-log*") (kill-buffer "*Compile-log*"))
   )
 
 ;; Store recently closed files so we can easily reopen them
@@ -191,6 +202,17 @@
 
 (global-set-key (kbd "C-S-t") 'macoy-reopen-last-killed-file)
 (global-set-key (kbd "C-M-t") 'macoy-reopen-recent-killed-file)
+
+;; Quickly search the web
+;; See https://github.com/hrs/engine-mode for more browsers
+(require 'engine-mode)
+;; (engine-mode t)
+
+(defengine duckduckgo
+  "https://duckduckgo.com/?q=%s"
+  :keybinding "d")
+
+(global-set-key (kbd "M-l") 'engine/search-duckduckgo)
 
 ;; Smex: Smart M-x completion
 (smex-initialize)
@@ -241,10 +263,21 @@
 ;; powerline-vim-theme
 ;; powerline-nano-theme
 
-;; Make some modes have shorter names in the mode line
+;; Make some modes have shorter names in the modeline
 (require 'delight)
 (delight 'abbrev-mode " Abv" "Abbrev")
 (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+
+;; Hide these modes completely (for a more minimal look)
+(require 'diminish)
+(diminish 'abbrev-mode)
+(diminish 'my-keys-minor-mode)
+(diminish 'yas-minor-mode)
+(diminish 'auto-complete-mode)
+(diminish 'visual-line-mode)
+;; The following might not do anything/are unnecessary
+(diminish 'adaptive-wrap-prefix-mode)
+(diminish 'wrap-region-mode)
 
 ;; Instead of wrapping at character, wrap at word. This slightly improves readability
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
@@ -302,6 +335,24 @@
 (global-set-key (kbd "C-S-g") 'avy-goto-line)
 (global-set-key (kbd "C-S-j") 'avy-goto-char)
 (global-set-key (kbd "C-j") 'avy-goto-word-or-subword-1)
+
+(defun macoy-quick-jump-copy-paste ()
+  "Use Avy to jump to a position, select something, then jump back and paste it"
+  (interactive)
+  (setq paste-point (point))
+  (setq copied-str "")
+  (save-excursion
+	(call-interactively 'avy-goto-word-or-subword-1)
+	;; TODO: Push a mode which lets the user select until they hit enter
+	(setq copy-start (point))
+	(right-word)
+	(setq copied-str (buffer-substring copy-start (point)))
+	)
+  (goto-char paste-point)
+  (insert copied-str)
+  )
+
+(global-set-key (kbd "M-c") 'macoy-quick-jump-copy-paste)
 
 ;; Make garbage collection happen less often (https://github.com/lewang/flx)
 (setq gc-cons-threshold 20000000)
@@ -495,6 +546,13 @@
   (interactive)
   (xref-find-definitions (ido-completing-read "Tag: " macoy-tag-names)))
 
+;; This doesn't actually help that much
+(defun macoy-ido-find-tag-default-text (start-string)
+  "Find a tag using ido"
+  (interactive "sTag: ")
+  (xref-find-definitions (ido-completing-read "Tag: " macoy-tag-names nil nil start-string)))
+
+
 ;; For reference (see https://github.com/auto-complete/auto-complete/blob/master/doc/manual.md)
 ;; (defun mysource2-candidates ()
 ;;   '("Foo" "Bar" "Baz" "macoyTest2" "what" "zoooo"))
@@ -643,6 +701,15 @@
 ;; dsvn SVN frontend
 (autoload 'svn-status "dsvn" "Run `svn status'." t)
 (autoload 'svn-update "dsvn" "Run `svn update'." t)
+
+(defun macoy-svn-status ()
+  "Run svn-status on the current projectile-root"
+  (interactive)
+  (if (projectile-project-p)
+	  (svn-status (projectile-project-root))
+	(call-interactively 'svn-status)
+	)
+  )
 
 (setq macoy-commit-message-backup "~/Macoy_Emacs_CommitMessage_Backup.txt")
 ;; SVN and Magit commit message finished
@@ -823,6 +890,27 @@
 	(call-interactively 'tags-query-replace)
 	)
   )
+
+(defun macoy-add-edit-newline-before ()
+  "Create a new line before the current line and go to it"
+  (interactive)
+  (back-to-indentation)
+  (newline)
+  (call-interactively 'indent-for-tab-command)
+  (previous-line)
+  (back-to-indentation)
+  )
+
+(defun macoy-add-edit-newline-after ()
+  "Create a new line after the current line and go to it"
+  (interactive)
+  (end-of-visual-line)
+  (newline)
+  (call-interactively 'indent-for-tab-command)
+  )
+
+(global-set-key (kbd "S-<return>") 'macoy-add-edit-newline-before)
+(global-set-key (kbd "C-S-<return>") 'macoy-add-edit-newline-after)
 
 ;;
 ;;
@@ -1075,7 +1163,7 @@ static char *gnus-pointer[] = {
 	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-	(ivy expand-region ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
+	(diminish engine-mode ivy expand-region ivy-xref everything magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-globally-ignored-directories
