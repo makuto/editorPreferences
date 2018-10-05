@@ -95,7 +95,6 @@
 ;;   Separate lists by first letter for x26 speedup? (kindof defeats purpose if not knowing first letter)
 ;;   Copy swiper-all requiring multiple letters? (this doesn't seem to help too much)
 ;; - Faster/better Ag
-;; - Autorevert if no modifications (do tell me in modeline that this happened)
 ;; - Swiper is too damn slow
 
 ;; Emacs Notes
@@ -186,6 +185,7 @@
   (if (get-buffer "*Help*") (kill-buffer "*Help*"))
   (if (get-buffer "*Completions*") (kill-buffer "*Completions*"))
   (if (get-buffer "*Compile-Log*") (kill-buffer "*Compile-Log*"))
+  (if (get-buffer "*Codesearch-Index*") (kill-buffer "*Codesearch-Index*"))
   )
 
 ;; Store recently closed files so we can easily reopen them
@@ -540,7 +540,12 @@
 
 ;; This isn't really necessary because attempting a goto definition will automatically do this
 ;;(global-set-key (kbd "C-<f5>") (lambda () (interactive) (loadTagsFromParent)))
-(global-set-key (kbd "C-<f5>") (lambda () (interactive) (generateTags)))
+(global-set-key (kbd "C-<f5>")
+				(lambda ()
+				  (interactive)
+				  ;; Note that these are both subprocesses so they will run at the same time
+				  (generateTags)
+				  (macoy-codesearch-index-src)))
 
 ;; Tags keybinding
 (global-set-key (kbd "<f12>") 'xref-find-definitions)
