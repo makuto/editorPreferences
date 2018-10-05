@@ -16,6 +16,7 @@ flx-ido            20180117.719    flx integration for ido
 ido-vertical-mode  0.1.1           Makes ido-mode display vertically.
 ivy
 ivy-xref
+iy-go-to-char
 magit
 marmalade-demo     0.0.5           a demonstration elpa package
 multiple-cursors   20180406.1350   Multiple cursors for Emacs.
