@@ -102,6 +102,23 @@
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
 ;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting a tab
 
+;; BAD THING
+;;
+;; This is the worst thing ever. Remap keys so I can use C-c and C-x how I damn well please.
+;; Subsequently, read C-u as my C-x and C-y as my C-c (yes, it sucks and is confusing as hell.
+;; I blame the developers.
+;;
+(keyboard-translate ?\C-u ?\C-x)
+(keyboard-translate ?\C-x ?\C-u)
+(keyboard-translate ?\C-y ?\C-c)
+(keyboard-translate ?\C-c ?\C-y)
+
+;; This is a stupid hack around an apparent bug in edebug.
+;; If set, don't define C-x anywhere. If C-x is defined then edebug complains about it not being a prefix key
+;; You'll need to restart in order for it to work
+;; Update: After keyboard-translate, this is no longer an issue. Leaving here in case I go back on keyboard-translate
+(setq macoy-edebug-prefix-hack nil)
+
 ;; Enable MELPA
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -114,11 +131,6 @@
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
-
-;; This is a stupid hack around an apparent bug in edebug.
-;; If set, don't define C-x anywhere. If C-x is defined then edebug complains about it not being a prefix key
-;; You'll need to restart in order for it to work
-(setq macoy-edebug-prefix-hack nil)
 
 ;; Some settings from http://ergoemacs.org/emacs/emacs_make_modern.html
 
@@ -417,7 +429,12 @@
   (setq codesearch-csearch-exe "c:/Users/mmadson/go/bin/csearch.exe")
   (setq codesearch-cindex-exe "c:/Users/mmadson/go/bin/cindex.exe")
   (setq codesearch-dir-to-index "f:/CJUNCTIONS/src")
-)
+  )
+(when (string-equal (user-login-name) "macoy")
+  (setq codesearch-csearch-exe "csearch")
+  (setq codesearch-cindex-exe "cindex")
+  (setq codesearch-dir-to-index "/home/macoy/Development/code/repositories")
+  )
 
 (defun macoy-codesearch-index-src ()
   (interactive)
@@ -512,7 +529,7 @@
 				 ;; (concat (projectile-project-root) "TAGS")
 
 				 ;; Additional arguments
-				 "--verbose" "--recurse=yes" "--languages=C,C++"
+				 "--verbose" "--recurse=yes" "--languages=C,C++,Python"
 				 
 				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
 				 ;;  not on Windows)
@@ -970,10 +987,10 @@
     (define-key map (kbd "C-d") 'mc/mark-next-like-this)
 	(define-key map (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
 	;; Custom copy/paste functions for working with simpleclip and multiple-cursors
-	(define-key map (kbd "C-c") 'macoyCopy)
+	(define-key map (kbd "C-y") 'macoyCopy) ;; Actually C-c after keyboard-translate
 	(define-key map (kbd "C-v") 'macoyPaste)
 	(unless macoy-edebug-prefix-hack
-	 (define-key map (kbd "C-x") 'macoyCut))
+	 (define-key map (kbd "C-u") 'macoyCut)) ;; Actually C-x after keyboard-translate
 	;; In case you need the dumb copy paste (or multiple cursors clipboard after exiting mc)
 	(define-key map (kbd "C-S-c") 'kill-ring-save)
 	(define-key map (kbd "C-S-v") 'yank)
@@ -1068,9 +1085,9 @@
 ;; Simpleclip cut copy paste (not sure if this is essential due to customize-group settings)
 ;; These are also set in my-keys mode with macoyCopy functions for multiple-cursors support,
 ;; overriding these defaults
-(global-set-key (kbd "C-c") 'simpleclip-copy)
+(global-set-key (kbd "C-y") 'simpleclip-copy) ;; Actually C-c after keyboard-translate
 (unless macoy-edebug-prefix-hack
-  (global-set-key (kbd "C-x") 'simpleclip-cut))
+  (global-set-key (kbd "C-u") 'simpleclip-cut)) ;; Actually C-x after keyboard-translate
 (global-set-key (kbd "C-v") 'simpleclip-paste)
 
 ;; point-to-register and jump-to-register (was reverse search)
@@ -1236,8 +1253,8 @@ static char *gnus-pointer[] = {
    (quote
 	(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "AutoGen" "obj140")))
  '(projectile-indexing-method (quote native))
- '(simpleclip-copy-keystrokes (quote ("C-c" "C-<insert>" "C-<insertchar>")))
- '(simpleclip-cut-keystrokes (quote ("C-x" "C-S-<insert>")))
+ '(simpleclip-copy-keystrokes (quote ("C-y" "C-<insert>" "C-<insertchar>")))
+ '(simpleclip-cut-keystrokes (quote ("C-u" "C-S-<insert>")))
  '(simpleclip-paste-keystrokes (quote ("C-v" "S-<insert>" "S-<insertchar>")))
  '(tab-width 4)
  '(vc-annotate-background "#2B2B2B")
@@ -1288,6 +1305,7 @@ static char *gnus-pointer[] = {
 ;; Make fringe same color as background. We still want fringe for wrap indicators
 ;; If you change your theme you should run this code again
 ;; Note that the vertical border uses the fringe color before we set it to default
+;; TODO: Should this be (setq base16-distinct-fringe-background nil) instead?
 (set-face-background 'fringe (face-background 'default))
 
 ;;
