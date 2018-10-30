@@ -55,6 +55,7 @@
 ;; - Copy line when nothing is marked
 ;; - Multiple cursors copy and cut when whole line selected
 ;; - Ido jump to file anywhere does more harm than good (especially when creating new files)
+;;   This can be disabled with (setq ido-auto-merge-work-directories-length -1)
 ;; - Python indentation is troublesome in originally poorly formatted files
 ;; - Auto-install packages just by loading .emacs
 ;;   (use-package? https://github.com/jwiegley/use-package but I don't want to get locked in)
@@ -99,6 +100,7 @@
 ;; - Isearch: If you paste a thing into isearch, then go up or down a bit, then hit backspace, it returns
 ;;    to the last search until you get to the original place, then it clears the search. This is confusing :(
 ;; - Mysterious thing which deletes the last half of the buffer (c-remove-stale-state-cache-backwards?)
+;; - Codesearch: Regex filtering doesn't work (try e.g. "myfunc(")
 ;;
 ;; Criticism improvements:
 ;; - [DONE] Select word at point
@@ -1083,7 +1085,7 @@
 ;;
 ;; Auto Theming
 ;;
-;;"c:/Users/mmadson/go/bin/schemer2.exe -format img::colors -in C:/Users/mmadson/Downloads/Wallpapers/32\ -\ fHFDkjY.jpg -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el c:/Users/mmadson/AppData/Roaming/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el"
+;;c:/Users/mmadson/go/bin/schemer2.exe -format img::colors -in C:/Users/mmadson/Downloads/Wallpapers/32\ -\ fHFDkjY.jpg -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el c:/Users/mmadson/AppData/Roaming/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el
 
 ;;
 ;;
