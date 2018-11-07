@@ -503,6 +503,7 @@
 	)
   )
 
+;; TODO: Make n and p keys for macoy-codesearch-mode if this ever becomes a package
 ;; Refer to ag.el for customization
 (define-compilation-mode macoy-codesearch-mode "Codesearch"
   "Codesearch results compilation mode"
@@ -985,6 +986,9 @@
 	)
   )
 
+(defun string-join (sl delim)
+  (mapconcat 'identity sl delim))
+
 (defun macoy-multiple-cursors-copy()
   "Copy at multiple cursors using macoy-multiple-cursors-buffers"
   (interactive)
@@ -1444,6 +1448,10 @@ static char *gnus-pointer[] = {
 (require 'dsvn)
 (set-face-foreground 'svn-mark-face (face-foreground 'region))
 (set-face-background 'svn-mark-face (face-background 'region))
+
+;; I'm not sure why I had to do this, but make 100% sure links are underlined
+(require 'org-faces)
+(set-face-underline 'org-link t)
 
 ;; Hide these modes completely (for a more minimal look)
 ;; Diminish things down here so that we're sure we catch all modes
