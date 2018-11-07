@@ -195,6 +195,7 @@
 ;; Hide toolbar (only needed on Linux?)
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
+(menu-bar-mode -1)
 
 ;; Set cursor to I-beam
 (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 2))))
@@ -455,10 +456,22 @@
 ;; Searching in files (Ag)
 ;; Make ag.el reuse the same *ag* buffer for all your searches:
 (setq ag-reuse-buffers 't)
-(setq ag-arguments '("--smart-case" "--stats" "-G"
+(setq ag-arguments '("--smart-case" "--stats"))
+
+(defun macoy-ag-with-project-filter ()
+  "Conditionally filter ag results based on whether I know I should filter certain files (i.e. I'm in a project)"
+  (interactive)
+  (if (projectile-project-p)
+	  (setq ag-arguments '("--smart-case" "--stats" "-G"
 					 "(\\.txt|\\.org|\\.cpp|\\.c|\\.h|\\.inl|\\.html|\\.css|\\.lua|\\.js|\\.py|\\.cdm|\\.el)"
 					 "--ignore" "AutoGen"))
-(global-set-key (kbd "C-M-f") 'ag)
+	(setq ag-arguments '("--smart-case" "--stats"))
+	)
+  (call-interactively 'ag)
+  )
+
+(global-set-key (kbd "C-M-f") 'macoy-ag-with-project-filter)
+;; (global-set-key (kbd "C-M-F") 'ag)
 
 ;; Codesearch: Use a pregenerated index to search files. Requires Codesearch
 (when (string-equal (user-login-name) "mmadson")
