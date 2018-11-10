@@ -120,6 +120,7 @@
 ;; C-h k <the keybind> to find what a key does
 ;; C-h b to list all bindings (should've used this more when fighting binds...)
 ;; C-q = quoted-insert "insert the next character, whatever it is" e.g. useful for inserting a tab
+;; describe-char with cursor over character will say where the font face came from (useful for theming)
 
 ;; BAD THING
 ;;
@@ -630,6 +631,11 @@ If there's a string at point, offer that as a default."
 ;; (global-set-key (kbd "C-M-F") 'ag)
 
 ;; Codesearch: Use a pregenerated index to search files. Requires Codesearch
+;;
+;; Always rescan all folders when indexing
+(setq codesearch-cindex-args "-reset")
+
+;; User-specific settings for codesearch
 (when (string-equal (user-login-name) "mmadson")
   (setq codesearch-csearch-exe "c:/Users/mmadson/go/bin/csearch.exe")
   (setq codesearch-cindex-exe "c:/Users/mmadson/go/bin/cindex.exe")
@@ -649,10 +655,11 @@ If there's a string at point, offer that as a default."
   (message "Running Codesearch index on %s" codesearch-dir-to-index)
   ;; Remove the old codesearch because for some reason it doesn't actually update
   ;; This is okay too because having an existing index doesn't speed things up all that much
-  (when (file-exists-p codesearch-index-file)
-	(delete-file codesearch-index-file)
-	)
-  (let ((codesearch-proc (start-process "CodesearchIndex" "*Codesearch-Index*" codesearch-cindex-exe codesearch-dir-to-index)))
+  ;; Commented because this is no longer needed due to using -reset
+  ;; (when (file-exists-p codesearch-index-file)
+  ;; 	(delete-file codesearch-index-file)
+  ;; 	)
+  (let ((codesearch-proc (start-process "CodesearchIndex" "*Codesearch-Index*" codesearch-cindex-exe codesearch-cindex-args codesearch-dir-to-index)))
 	(set-process-sentinel codesearch-proc
 						  (lambda (codesearch-proc _string)
 							(message "Codesearch finished building index")))
@@ -690,6 +697,8 @@ If there's a string at point, offer that as a default."
 
 (global-set-key (kbd "C-S-f") 'macoy-codesearch-search-with-filter)
 
+;;
+;;
 ;; Simpleclip makes system clipboard and emacs kill ring separate
 ;; This is sane copy paste behavior
 (require 'simpleclip)
@@ -1650,6 +1659,15 @@ static char *gnus-pointer[] = {
 (set-face-foreground 'svn-mark-face (face-foreground 'region))
 (set-face-background 'svn-mark-face (face-background 'region))
 
+;; Make sure diff-mode colors are theme-appropriate:
+;; - No stark white text for context
+;; - Make refine* backgrounds much more muted and darker. This is for style and higher contrast
+;;   between foreground and background of highlighted text
+(require 'diff-mode)
+(set-face-foreground 'diff-context (face-foreground 'font-lock-comment-face))
+(set-face-attribute 'diff-refine-added nil :background "#2c4a27")
+(set-face-attribute 'diff-refine-removed nil :background "#4a2727")
+
 ;; I'm not sure why I had to do this, but make 100% sure links are underlined
 (require 'org-faces)
 (set-face-underline 'org-link t)
@@ -1667,6 +1685,7 @@ static char *gnus-pointer[] = {
 (diminish 'adaptive-wrap-prefix-mode)
 (diminish 'wrap-region-mode)
 (diminish 'auto-revert-mode)
+;; TODO: This needs to be in a hook somewhere for org mode. It doesn't work currently
 (diminish 'org-indent-mode)
 
 ;;
