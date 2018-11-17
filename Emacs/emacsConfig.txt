@@ -666,6 +666,7 @@ If there's a string at point, offer that as a default."
   (setq codesearch-cindex-exe "c:/Users/mmadson/go/bin/cindex.exe")
   (setq codesearch-dir-to-index "f:/CJUNCTIONS/src")
   (setq codesearch-index-file "~/.csearchindex")
+  (setq codesearch-temp-file "c:/.temp-codesearch.txt")
   )
   
 (when (string-equal (user-login-name) "macoy")
@@ -673,6 +674,7 @@ If there's a string at point, offer that as a default."
   (setq codesearch-cindex-exe "cindex")
   (setq codesearch-dir-to-index "/home/macoy/Development/code/repositories")
   (setq codesearch-index-file "~/.csearchindex")
+  (setq codesearch-temp-file "~/.temp-codesearch.txt")
   )
 
 ;; TODO: Rename compilation buffer and add a finished message?
@@ -759,10 +761,14 @@ If there's a string at point, offer that as a default."
 	  (set (make-local-variable 'compilation-environment) (list (format "%s%s%s" "CSEARCHINDEX=" directory "/.csearchindex")))
 	(set (make-local-variable 'compilation-environment) nil)
 	)
-  (compilation-start (format "%s -n -i %s > .temp-codesearch.txt && grep -v %s .temp-codesearch.txt && rm .temp-codesearch.txt"
+  ;; This temp-file thing sucks but seems necessary for Windows
+  (compilation-start (format "%s -n -i %s > %s && grep -v %s %s && rm %s"
 							 codesearch-csearch-exe
 							 (regexp-quote pattern)
-							 macoy-codesearch-ignore-lines-pattern)
+							 codesearch-temp-file
+							 macoy-codesearch-ignore-lines-pattern
+							 codesearch-temp-file
+							 codesearch-temp-file)
 					 #'macoy-codesearch-mode
 					 `(lambda (mode-name) , "*Codesearch*")
 					 )
@@ -783,6 +789,17 @@ If there's a string at point, offer that as a default."
 ;; This is sane copy paste behavior
 (require 'simpleclip)
 (simpleclip-mode 1)
+
+(defun macoy-copy-buffer-filename-to-clipboard ()
+  (interactive)
+  (simpleclip-set-contents buffer-file-name)
+  )
+
+(defun macoy-create-copy-org-link-from-point (link-text)
+  "Create a link from the file and line at point and copy it to the clipboard"
+  (interactive "sLink text: ")
+  (simpleclip-set-contents (format "[[%s::%d][%s]]" buffer-file-name (line-number-at-pos) link-text))
+  )
 
 ;; Clang format
 ;; Looks for .clang-format in project dir
@@ -1633,20 +1650,22 @@ If there's a string at point, offer that as a default."
   (define-key org-mode-map (kbd "C-S-<down>")  nil)
   (define-key org-mode-map (kbd "C-S-<left>")  nil)
   (define-key org-mode-map (kbd "C-S-<right>") nil)
-  (define-key org-mode-map (kbd "C-S-<up>")	 nil)
+  (define-key org-mode-map (kbd "C-S-<up>")    nil)
   (define-key org-mode-map (kbd "M-S-<down>")  nil)
   (define-key org-mode-map (kbd "M-S-<left>")  nil)
   (define-key org-mode-map (kbd "M-S-<right>") nil)
-  (define-key org-mode-map (kbd "M-S-<up>")	 nil)
-  (define-key org-mode-map (kbd "M-<down>")	 nil)
-  (define-key org-mode-map (kbd "M-<left>")	 nil)
+  (define-key org-mode-map (kbd "M-S-<up>")    nil)
+  (define-key org-mode-map (kbd "M-<down>")    nil)
+  (define-key org-mode-map (kbd "M-<left>")    nil)
   (define-key org-mode-map (kbd "M-<right>")   nil)
-  (define-key org-mode-map (kbd "M-<up>")	     nil)
-  (define-key org-mode-map (kbd "S-<down>")	 nil)
+  (define-key org-mode-map (kbd "M-<up>")      nil)
+  (define-key org-mode-map (kbd "S-<down>")    nil)
   (define-key org-mode-map (kbd "S-<left>")    nil)
   (define-key org-mode-map (kbd "S-<right>")   nil)
   (define-key org-mode-map (kbd "S-<up>")      nil)
 
+  ;; Expand region is useful in Org too
+  (define-key org-mode-map (kbd "C-'") nil)
   ;; I already have a convention where C-Enter and C-S-Enter open up new lines; let's make org follow that
   (define-key org-mode-map (kbd "C-S-<return>") 'macoy-org-insert-heading-respect-content-before)
   )
@@ -1814,6 +1833,12 @@ static char *gnus-pointer[] = {
 (set-face-foreground 'diff-context (face-foreground 'font-lock-comment-face))
 (set-face-attribute 'diff-refine-added nil :background "#2c4a27")
 (set-face-attribute 'diff-refine-removed nil :background "#4a2727")
+
+(require 'ediff)
+(set-face-attribute 'ediff-current-diff-A nil :background "#381e1e")
+(set-face-attribute 'ediff-fine-diff-A nil :background "#4a2727")
+(set-face-attribute 'ediff-current-diff-B nil :background "#2c4a27")
+(set-face-attribute 'ediff-fine-diff-B nil :background "#21381e")
 
 ;; I'm not sure why I had to do this, but make 100% sure links are underlined
 (require 'org-faces)
