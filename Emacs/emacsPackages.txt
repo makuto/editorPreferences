@@ -27,6 +27,7 @@ smex               3.0             M-x interface with Ido-style fuzzy matching.
 smooth-scrolling   20161002.1249   Make emacs scroll smoothly
 sublime-themes     20170606.1144   A collection of themes based on Sublime Text
 swiper             20180402.1857   Isearch with an overview. Oh, man!
+web-mode
 xah-find           20180310.450    find replace in pure emacs lisp. Purpose similar to grep/sed.
 yasnippet          20180412.1548   Yet another snippet extension for Emacs.
 zenburn-theme      2.1             A low contrast color theme for Emacs.
