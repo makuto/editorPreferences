@@ -1,0 +1,19 @@
+* Macoy's Emacs Configs
+~emacsConfig.txt~ is meant to become ~/.emacs once installed. Open it for the latest instructions (below may be out of date; it's included here to give you an idea what you'll have to do).
+
+Note that I recommend you cherry pick features you want instead of trying to use the entire config. This is better because you'll know all the features available to you.
+
+** Setup
+Copy all .el files to ~~/.emacs.d/macoy/~ (make directory if necessary)
+Copy the contents of ~emacsConfig.txt~ to ~~/.emacs~
+1. Install all packages in ~emacsPackages.txt~
+2. Add macoyCopy, macoyCut, and macoyPaste to mc/cmds-to-run-once and restart Emacs
+3. For magit on windows, fix credentials for server folder:
+       https://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
+4. Setup magit credentials:
+       https://stackoverflow.com/questions/22580873/how-can-i-configure-magit-to-use-my-github-user-name
+5. If you want to use codesearch (fancy ultra fast indexed code searching), install it:
+       https://github.com/google/codesearch
+   ...then set codesearch-csearch-exe and codesearch-cindex-exe to their respective executable locations
+   Search for codesearch in this file to adjust indexing settings
+

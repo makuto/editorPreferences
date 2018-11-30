@@ -31,9 +31,9 @@
 ;; - More minimal appearance
 ;; - Built-in help (Sublime's documentation can be spotty; Emacs docs can be too complicated)
 
-;; Setup (more for my own help than anyone else's
+;; Setup (more for my own help than anyone else's)
 ;; Copy all .el files to ~/.emacs.d/macoy/ (make directory if necessary)
-;; Copy 
+;; Copy the contents of emacsConfig.txt to .emacs
 ;; 1. Install all packages in emacsPackages.txt
 ;; 2. Add macoyCopy, macoyCut, and macoyPaste to mc/cmds-to-run-once and restart Emacs
 ;; 3. For magit on windows, fix credentials for server folder:
