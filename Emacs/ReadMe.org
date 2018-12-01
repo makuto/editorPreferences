@@ -1,13 +1,13 @@
 * Macoy's Emacs Configs
-~emacsConfig.txt~ is meant to become ~\~/.emacs~ once installed. Open it for the latest instructions (below may be out of date; it's included here to give you an idea what you'll have to do).
+~dotEmacs.el~ is meant to become \~/.emacs once installed. Open it for the latest instructions (below may be out of date; it's included here to give you an idea what you'll have to do).
 
 Note that I recommend you cherry pick features you want instead of trying to use the entire config. This is better because you'll know all the features available to you.
 
 ** Setup
-Copy all .el files to ~\~/.emacs.d/macoy/~ (make directory if necessary)
-Copy the contents of ~emacsConfig.txt~ to ~\~/.emacs~
+Copy the contents of ~dotEmacs.el~ to \~/.emacs
+Set the ~user-init-dir~ in your .emacs to the directory of this ReadMe.org. This will load my config files straight from this repository.
 1. Install all packages in ~emacsPackages.txt~
-2. Add macoyCopy, macoyCut, and macoyPaste to mc/cmds-to-run-once and restart Emacs
+2. Add ~macoyCopy~, ~macoyCut~, and ~macoyPaste~ to ~mc/cmds-to-run-once~ and restart Emacs
 3. For magit on windows, fix credentials for server folder:
        https://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
 4. Setup magit credentials:

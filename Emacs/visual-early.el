@@ -1,6 +1,9 @@
 ;; Macoy's primarily visual customizations (make sure to run visual_late.el too)
 ;; Note that there's still things in custom-set-variables and custom-set-faces which affect visuals (see .emacs)
 
+;; Don't ever split horizontally automatically. I like two columns, not 2x2 (especially important on 4k screen)
+(setq split-height-threshold nil)
+
 ;; Themes are generally safe
 (setq custom-safe-themes t)
 
