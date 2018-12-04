@@ -102,6 +102,12 @@
 ;; - Treacherous: vc-annotate uses the revision which the buffer has, which if you commit from DSVN
 ;;   does not update (i.e. look at the mode line revision). You need to revert the buffer then do vc-annotate to see the true state
 ;; - Isearch: Customize colors
+;; - Search Everything/projectile-find-files which will work on non-vc dirs
+;; - Code reference to org: mark block of code, run command; command copies string to clipboard with file:line org link and code block. Good for deep dives where you have to take notes
+;;
+;; Split todo
+;; - Put all things which are user-specific at the top of respective files
+;; - Search: Make Codesearch data folder user-specific
 ;;;;
 ;; Criticism improvements:
 ;; - [DONE] Select word at point
@@ -268,9 +274,9 @@ static char *gnus-pointer[] = {
  '(linum-format " %7i ")
  '(org-support-shift-select t)
  '(package-archives
-   '(("marmalade" . "https://marmalade-repo.org/packages/")
-	 ("gnu" . "http://elpa.gnu.org/packages/")
-	 ("melpa" . "http://melpa.org/packages/")))
+   (quote
+	(("gnu" . "http://elpa.gnu.org/packages/")
+	 ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    '(web-mode rainbow-mode ivy-xref expand-region ivy engine-mode diminish iy-go-to-char magit dsvn delight adaptive-wrap web-beautify etags-select simpleclip yasnippet swiper company auto-complete clang-format avy ag xah-find flx-ido ido-vertical-mode sublime-themes smooth-scrolling alect-themes base16-theme powerline darktooth-theme projectile smex fiplr helm-dash better-defaults multiple-cursors zenburn-theme marmalade-demo))
  '(pos-tip-background-color "#36473A")

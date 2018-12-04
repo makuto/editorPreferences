@@ -50,7 +50,7 @@
 	)
 
   ;; Files to use this mode
-  '(".Layer\\'")
+  '(".ExampleExtension\\'")
   
   ;; Function list
   nil

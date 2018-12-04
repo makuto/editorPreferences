@@ -28,16 +28,20 @@
 
 ;; Scrolling
 ;; https://www.emacswiki.org/emacs/SmoothScrolling
-;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(2 ((shift) . 2))) ;; Two lines at a time    
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-;;(setq scroll-step 1) ;; keyboard scroll one line at a time
-;; (setq scroll-conservatively 10000)
-;; (setq auto-window-vscroll nil)
 
-(require 'smooth-scrolling)
-(smooth-scrolling-mode 1)
+;; When the cursor scrolls off the screen, this makes the window scroll by a dozen or so lines
+;;  instead of jumping to the top of the window
+;; Disabled because of poor performance
+;; (require 'smooth-scrolling)
+;; (smooth-scrolling-mode 0)
+
+;; Make scrolling less jumpy
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+;; This causes next-line to be ridiculously slow when turned on, so I've disabled it
+(setq auto-window-vscroll nil)
 
 ;;
 ;; Powerline: nicer status bar
