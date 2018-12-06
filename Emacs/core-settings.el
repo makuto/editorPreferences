@@ -71,6 +71,7 @@
 							   "*vc-diff*"
 							   "*xref*"
 							   "*Macoy-Select-Search*"
+							   "*Occur*"
 							   ))
   (mapcar
    (lambda (buffer-to-kill)
@@ -83,7 +84,15 @@
 
 ;; Store recently closed files so we can easily reopen them
 (recentf-mode 1)
-(global-set-key (kbd "C-S-t") 'recentf-open-files)
+
+;; Use ido for recentf file selection
+;; From https://masteringemacs.org/article/find-files-faster-recent-files-package
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (find-file (ido-completing-read "Find recent file: " recentf-list))
+  )
+(global-set-key (kbd "C-S-t") 'ido-recentf-open)
 
 ;; Smex: Smart M-x completion
 (smex-initialize)

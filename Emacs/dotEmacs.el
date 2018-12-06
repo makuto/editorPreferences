@@ -130,6 +130,7 @@
 ;; Use ediff-revision to easily manipulate working edits
 ;; Use re-builder to create a regex by seeing the results of it in the current buffer (super awesome)
 ;; Hit C-f while in ido to disable all completion (for when you're fighting it)
+;; Amazing multiline editing: C-f to isearch-forward, then C-a to see all results, then e to edit all lines
 
 ;; Used to load separate configuration files I've created. Order matters so they're scattered a bit
 (setq user-init-dir "~/.emacs.d/macoy")

@@ -19,6 +19,11 @@
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
 
+;; Don't display tooltips in separate windows; use the echo area instead.
+;; Tooltips are ugly by default and sometimes get locked displaying on Windows
+(tooltip-mode -1)
+(setq tooltip-use-echo-area t)
+
 ;; Set cursor to I-beam
 (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 2))))
 ;; 4k monitor demands extra thicc cursor
@@ -33,11 +38,32 @@
 
 ;; When the cursor scrolls off the screen, this makes the window scroll by a dozen or so lines
 ;;  instead of jumping to the top of the window
-;; Disabled because of poor performance
+;; Disabled because of poor performance in general. We will use it for isearch later
+;; so that results aren't right at the bottom of the buffer
 ;; (require 'smooth-scrolling)
-;; (smooth-scrolling-mode 0)
+;; (smooth-scrolling-mode 1)
+;; This is a hack to work around smooth scrolling only being problematic on next-line and prev-line.
+;; It's not really worth the effort, but I'm keeping this here in case I change my mind later
+;; (defun macoy-prev-line ()
+;;   (interactive)
+;;   (smooth-scrolling-mode 0)
+;;   (forward-line -1)
+;;   (smooth-scrolling-mode 1)
+;;   )
 
-;; Make scrolling less jumpy
+;; (defun macoy-next-line ()
+;;   (interactive)
+;;   (smooth-scrolling-mode 0)
+;;   (forward-line)
+;;   (smooth-scrolling-mode 1)
+;;   )
+
+;; (global-set-key (kbd "<up>") 'macoy-prev-line)
+;; (global-set-key (kbd "<down>") 'macoy-next-line)
+
+;; Make scrolling less jumpy: this makes it so emacs never centers the cursor if you go scroll off
+;;  screen, instead, it will scroll by one line. This isn't ideal (smooth-scrolling is ideal), but
+;;  performance is more important in this case
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 ;; This causes next-line to be ridiculously slow when turned on, so I've disabled it

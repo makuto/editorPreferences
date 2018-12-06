@@ -261,10 +261,34 @@ If there's a string at point, offer that as a default."
 ;; Used for expanding the search by words
 (define-key isearch-mode-map (kbd "C-'") 'isearch-yank-word-or-char)
 
+;; Make it easier to just see all results when there are too many to scroll
+(defun macoy-isearch-occur ()
+  (interactive)
+  ;; Get all results
+  (call-interactively 'isearch-occur)
+  ;; End the search
+  (isearch-done)
+  ;; Select the results list buffer
+  (switch-to-buffer-other-window "*Occur*")
+  )
+(define-key isearch-mode-map (kbd "C-a") 'macoy-isearch-occur)
+
+;; We're going to use smooth scrolling only for isearch so there's a good margin between a search
+;; result which would've ended up at the very bottom of the window without smooth scrolling
+(require 'smooth-scrolling)
+(defun macoy-isearch-end-hook ()
+  (smooth-scrolling-mode 0)
+  )
+(setq isearch-mode-end-hook 'macoy-isearch-end-hook)
+
 ;; If marked, use swiper to search mark
 (defun macoy-isearch-search-mark ()
   "If marked, use isearch to search mark. Otherwise, isearch normally"
   (interactive)
+  ;; Make sure we can see several lines below a result near the bottom
+  ;; This is then disabled in macoy-isearch-end-hook
+  (smooth-scrolling-mode 1)
+  
   (call-interactively 'isearch-forward)
   (when (use-region-p)
 	;; (isearch-search)

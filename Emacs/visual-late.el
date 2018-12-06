@@ -50,10 +50,27 @@
 (set-face-attribute 'diff-refine-removed nil :background "#4a2727")
 
 (require 'ediff)
-(set-face-attribute 'ediff-current-diff-A nil :background "#381e1e")
-(set-face-attribute 'ediff-fine-diff-A nil :background "#4a2727")
-(set-face-attribute 'ediff-current-diff-B nil :background "#2c4a27")
-(set-face-attribute 'ediff-fine-diff-B nil :background "#21381e")
+;; Added
+(set-face-attribute 'ediff-current-diff-A nil :background "#4a2727")
+(set-face-attribute 'ediff-fine-diff-A nil :background "#381e1e")
+;; Removed
+(set-face-attribute 'ediff-current-diff-B nil :background "#21381e")
+(set-face-attribute 'ediff-fine-diff-B nil :background "#2c4a27")
+
+;; Make magit's diff look similar/the same as diff-mode
+(require 'magit)
+(set-face-attribute 'magit-diff-added-highlight nil
+					:foreground (face-foreground 'diff-added)
+					:background "#2c4a27")
+(set-face-attribute 'magit-diff-removed-highlight nil
+					:foreground (face-foreground 'diff-added)
+					:background "#4a2727")
+(set-face-attribute 'magit-diff-added nil
+					:foreground (face-foreground 'diff-added)
+					:background "#21381e")
+(set-face-attribute 'magit-diff-removed nil
+					:foreground (face-foreground 'diff-added)
+					:background "#381e1e")
 
 ;; I'm not sure why I had to do this, but make 100% sure links are underlined
 (require 'org-faces)

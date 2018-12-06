@@ -109,6 +109,10 @@
 (global-set-key (kbd "M-r") 'insert-register)
 (global-set-key (kbd "M-R") 'copy-to-register)
 
+;; Occur
+(define-key occur-mode-map (kbd "n") 'occur-next)
+(define-key occur-mode-map (kbd "p") 'occur-prev)
+
 ;; Move to beginning/end of function
 (global-set-key (kbd "M-<up>") 'beginning-of-defun)
 (global-set-key (kbd "M-<down>") 'end-of-defun)
