@@ -18,6 +18,9 @@
 ;; make cursor movement stop in between camelCase words. (don't)
 (global-subword-mode 0)
 
+;; No beeping on windows
+(setq ring-bell-function 'ignore)
+
 ;; Always highlight matching parenthesis. This is a necessity when using multiple-cursors because
 ;;  if show-paren-mode is disabled, typing multiple closing parentheses takes a long time due to
 ;;  the pause to highlight after each one
@@ -132,11 +135,18 @@
                 projectile-globally-ignored-files))
 (projectile-mode 1)
 
-;; Make some modes have shorter names in the modeline (replaced by diminish)
-;; (require 'delight)
-;; This is no longer necessary because Abbrev is diminished below
-;; (delight 'abbrev-mode " Abv" "Abbrev")
-(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+;; Make projectile mode-line more minimal
+(defun macoy-projectile-mode-line ()
+  (format " [%s]" (projectile-project-name))
+  )
+(setq projectile-mode-line-function 'macoy-projectile-mode-line)
+
+;; Older version syntax
+;; (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+
+;;
+;; File-related shortcuts
+;;
 
 (defun macoy-copy-buffer-filename-to-clipboard ()
   (interactive)
