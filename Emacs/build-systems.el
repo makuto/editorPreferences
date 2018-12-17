@@ -85,3 +85,10 @@
 
 (global-set-key (kbd "<f7>") 'macoy-build-system-build)
 (global-set-key (kbd "S-<f7>") 'macoy-build-system-select-then-build)
+
+;; Doesn't work because it needs to select the buffer. This shouldn't happen for search results too, but would
+;; (defun macoy-on-compilation-mode ()
+  ;; (end-of-buffer)
+  ;; )
+
+;; (add-hook 'compilation-mode-hook 'macoy-on-compilation-mode)

@@ -94,6 +94,15 @@
 (my-global-adaptive-wrap-mode 1)
 (setq-default adaptive-wrap-extra-indent 1)
 
+;; Toggle off wrapping (useful for multiple-cursors operations)
+(defun macoy-toggle-wrapping ()
+  "Toggle line wrapping for the current buffer"
+  (interactive)
+  (toggle-truncate-lines)
+  )
+
+(global-set-key (kbd "C-<f9>") 'macoy-toggle-wrapping)
+
 ;; Show whitespace
 ;; Not enabled globally because it looks a bit too ugly for my tastes; I can toggle it when needed
 ;;(require 'whitespace)
@@ -101,6 +110,15 @@
 (setq whitespace-style '(faces tabs tabs-mark spaces space-mark))
 (setq whitespace-line-column 100)
 (setq whitespace-newline nil)
+
+(defun macoy-toggle-whitespace-mode ()
+  (interactive)
+  (if (bound-and-true-p whitespace-mode)
+	  (whitespace-mode 0)
+	(whitespace-mode)
+	)
+  )
+(global-set-key (kbd "S-<f9>") 'macoy-toggle-whitespace-mode)
 
 ;;
 ;; Auto Theming

@@ -104,11 +104,12 @@
 ;; - Isearch: Customize colors
 ;; - Search Everything/projectile-find-files which will work on non-vc dirs
 ;; - Code reference to org: mark block of code, run command; command copies string to clipboard with file:line org link and code block. Good for deep dives where you have to take notes
-;;
+;; - Quick shortcut to switch to header/source file
+
 ;; Split todo
 ;; - Put all things which are user-specific at the top of respective files
 ;; - Search: Make Codesearch data folder user-specific
-;;;;
+
 ;; Criticism improvements:
 ;; - [DONE] Select word at point
 ;; - [DONE] Reopen closed file
@@ -131,6 +132,7 @@
 ;; Use re-builder to create a regex by seeing the results of it in the current buffer (super awesome)
 ;; Hit C-f while in ido to disable all completion (for when you're fighting it)
 ;; Amazing multiline editing: C-f to isearch-forward, then C-a to see all results, then e to edit all lines
+;; diff-buffer-with-file to see a diff of current (unsaved) modifications
 
 ;; Used to load separate configuration files I've created. Order matters so they're scattered a bit
 (setq user-init-dir "~/.emacs.d/macoy")
@@ -205,7 +207,8 @@
 (load-user-file "visual-early.el")
 
 ;; Stuff unique to certain machines (mine here for reference)
-(when (string-equal (user-login-name) "macoy")
+(when (or (string-equal (user-login-name) "macoy")
+		  (string-equal (user-login-name) "mmadson"))
   (load-file "~/.emacs-this-machine-only.el")
   )
 

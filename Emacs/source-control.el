@@ -44,6 +44,8 @@
 	)
   )
 
+(global-set-key (kbd "<f6>") 'macoy-svn-status)
+
 (setq macoy-commit-message-backup "~/Macoy_Emacs_CommitMessage_Backup.txt")
 ;; SVN and Magit commit message finished
 (defun macoy-commit-message-done ()

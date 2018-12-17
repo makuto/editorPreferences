@@ -148,8 +148,9 @@
   (dired-hide-details-mode 1))
 (add-hook 'dired-mode-hook 'macoy-dired-mode-setup)
 ;; Reuse buffer (from http://ergoemacs.org/emacs/emacs_dired_tips.html)
-;; Was dired-advertised-find-file
+;; Was dired-find-file
 (define-key dired-mode-map (kbd "<return>") 'dired-find-alternate-file)
+(define-key dired-mode-map (kbd "S-<return>") 'dired-find-file)
 ;; Was dired-up-directory
 (define-key dired-mode-map (kbd "<backspace>") (lambda () (interactive) (find-alternate-file "..")))
 

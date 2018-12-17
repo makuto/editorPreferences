@@ -203,6 +203,8 @@ If there's a string at point, offer that as a default."
 ;; Refer to ag.el for customization
 (define-compilation-mode macoy-codesearch-mode "Codesearch"
   "Codesearch results compilation mode"
+  ;; This is so you can delete results with C-S-k. This doesn't break n and p which is cool
+  (read-only-mode 0)
   )
 
 (define-key macoy-codesearch-mode-map (kbd "p") #'compilation-previous-error)
@@ -215,9 +217,7 @@ If there's a string at point, offer that as a default."
 (setq macoy-codesearch-ignore-lines-pattern "_ast\.|_autogen")
 
 (defun macoy-codesearch-search-with-filter-directory (pattern directory)
-  (interactive
-   (list
-    (read-string "Search: " (thing-at-point 'symbol))))
+  (interactive (list (macoy-read-from-minibuffer "Search string")))
   ;; Use the compile command so we have nice clickable links
   ;; Note that without regexp-quote, this does support regexes. I don't want them in my case
   ;; Args explanation: -n (Line numbers) -i (ignore case)
@@ -229,7 +229,8 @@ If there's a string at point, offer that as a default."
   ;; This temp-file thing sucks but seems necessary for Windows
   (compilation-start (format "%s -n -i \"%s\" > %s && grep -i -E -v \"%s\" %s && rm %s"
 							 codesearch-csearch-exe
-							 (regexp-quote pattern)
+							 ;; (regexp-quote pattern) ;; This doesn't work because more escape(\) chars are added
+							 pattern
 							 codesearch-temp-file
 							 macoy-codesearch-ignore-lines-pattern
 							 codesearch-temp-file
@@ -240,9 +241,7 @@ If there's a string at point, offer that as a default."
   )
 
 (defun macoy-codesearch-search-src (pattern)
-  (interactive
-   (list
-    (read-string "Search: " (thing-at-point 'symbol))))
+  (interactive (list (macoy-read-from-minibuffer "Search string")))
   (macoy-codesearch-search-with-filter-directory pattern nil)
   )
 
