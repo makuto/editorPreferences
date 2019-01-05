@@ -91,6 +91,18 @@
 ;; Go to first character of line, not beginning of line. Was move-beginning-of-line
 (global-set-key (kbd "<home>") 'back-to-indentation)
 
+;; Go to end of line if multiple-cursors is active. This is important because you
+;; might be editing lines which wrap without your knowledge
+(defun macoy-end-of-line ()
+  (interactive)
+  (if (bound-and-true-p multiple-cursors-mode)
+	  (call-interactively 'end-of-line)
+	(call-interactively 'end-of-visual-line)
+	)
+  )
+
+(global-set-key (kbd "<end>") 'macoy-end-of-line)
+
 ;; Toggle comment lines (same keybind as Sublime). This also works for regions
 (global-set-key (kbd "C-/") 'comment-line)
 

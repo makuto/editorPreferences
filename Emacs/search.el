@@ -62,7 +62,7 @@ If there's a string at point, offer that as a default."
 	;; Ag with browse directory
 	(define-key map (kbd "b") (lambda () (interactive) (macoy-select-do-search
 														'ag (read-directory-name "Directory: "))))
-	;; Agg with project filter
+	;; Ag with project filter
 	(define-key map (kbd "f") (lambda () (interactive) (macoy-select-do-search
 														'macoy-ag-with-project-filter (read-directory-name "Directory: "))))
 	;; Codesearch source with filter (directory defined by `codesearch-dir-to-index', aka use ~/.csearchindex)
@@ -111,7 +111,7 @@ If there's a string at point, offer that as a default."
 	(macoy-select-search-minor-mode 1)
   ))
 
-(global-set-key (kbd "C-M-f") 'macoy-select-search)
+(global-set-key (kbd "C-e") 'macoy-select-search)
 
 ;; Searching in files (Ag)
 ;; Make ag.el reuse the same *ag* buffer for all your searches:
@@ -293,6 +293,13 @@ If there's a string at point, offer that as a default."
 	;; (isearch-search)
 	;; (call-interactively 'isearch-forward)
 	(isearch-yank-string (buffer-substring (region-beginning) (region-end)))
+	;; Clear the mark for two reasons:
+	;; 1. Occur will only search the region, but whenever I use occur I expect
+	;;    it to show me all results in the entire file
+	;; 2. I don't like how it looks visually when the mark is expanding while I'm going
+	;;    through results.
+	;; I never use isearch to change my region, so this seemed like an acceptable tradeoff
+	(setq mark-active nil)
 	)
   )
 (global-set-key (kbd "C-f") 'macoy-isearch-search-mark)
