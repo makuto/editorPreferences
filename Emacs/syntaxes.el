@@ -25,6 +25,9 @@
 	  )
   )
 
+;; Jam
+(load-user-file "jam-mode.el")
+
 ;;
 ;; Custom syntax definitions
 ;;

@@ -172,6 +172,9 @@
 ;; Various customizations for Org mode
 (load-user-file "org-customizations.el")
 
+;; Org-drill and associated customizations
+(load-user-file "drill-customizations.el")
+
 ;; Make it easier to create and switch desktops
 (load-user-file "desktop-management.el")
 
@@ -276,6 +279,8 @@ static char *gnus-pointer[] = {
 \"###########.######\" };") t)
  '(large-file-warning-threshold 60000000)
  '(linum-format " %7i ")
+ '(org-modules
+   '(org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-drill))
  '(org-support-shift-select t)
  '(package-archives
    (quote
