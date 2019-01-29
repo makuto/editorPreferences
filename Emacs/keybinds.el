@@ -170,6 +170,11 @@
 (define-key compilation-mode-map (kbd "n") 'compilation-next-error)
 (define-key compilation-mode-map (kbd "p") 'compilation-previous-error)
 
+;; Re Builder customizations
+(require 're-builder)
+(define-key reb-mode-map (kbd "C-<up>") 'reb-prev-match)
+(define-key reb-mode-map (kbd "C-<down>") 'reb-next-match)
+
 ;;
 ;; Make bindings work with org-mode
 ;;
