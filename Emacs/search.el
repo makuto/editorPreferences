@@ -305,39 +305,42 @@ If there's a string at point, offer that as a default."
 (global-set-key (kbd "C-f") 'macoy-isearch-search-mark)
 
 ;; Swiper customizations
-;; If marked, use swiper to search mark
-(defun macoy-swiper-search-mark ()
-  "If marked, use swiper to search mark. Otherwise, open swiper normally"
-  (interactive)
-  ;; This isn't sufficient for my purposes; it's nice to search e.g. thing->thing
-  ;;(swiper (thing-at-point 'symbol))
-  (if (use-region-p)
-	  (swiper (buffer-substring (region-beginning) (region-end)))
-	(swiper)
-	))
+(when (require 'swiper)
+  ;; If marked, use swiper to search mark
+  (defun macoy-swiper-search-mark ()
+	"If marked, use swiper to search mark. Otherwise, open swiper normally"
+	(interactive)
+	;; This isn't sufficient for my purposes; it's nice to search e.g. thing->thing
+	;;(swiper (thing-at-point 'symbol))
+	(if (use-region-p)
+		(swiper (buffer-substring (region-beginning) (region-end)))
+	  (swiper)
+	  ))
 
-;; If marked, use swiper to search mark
-(defun macoy-swiper-all-search-mark ()
-  "If marked, use swiper-all to search mark. Otherwise, open swiper-all normally"
-  (interactive)
-  ;; This isn't sufficient for my purposes; it's nice to search e.g. thing->thing
-  ;;(swiper (thing-at-point 'symbol))
-  (if (use-region-p)
-	  (swiper-all (buffer-substring (region-beginning) (region-end)))
-	(swiper-all)
-  ))
+  ;; If marked, use swiper to search mark
+  (defun macoy-swiper-all-search-mark ()
+	"If marked, use swiper-all to search mark. Otherwise, open swiper-all normally"
+	(interactive)
+	;; This isn't sufficient for my purposes; it's nice to search e.g. thing->thing
+	;;(swiper (thing-at-point 'symbol))
+	(if (use-region-p)
+		(swiper-all (buffer-substring (region-beginning) (region-end)))
+	  (swiper-all)
+	  ))
 
-;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
-;; (global-set-key (kbd "C-f") 'macoy-swiper-search-mark)
-(global-set-key (kbd "M-f") 'macoy-swiper-all-search-mark)
+  ;; Use swiper for search instead of isearch (use e.g. space to fuzzy search)
+  ;; (global-set-key (kbd "C-f") 'macoy-swiper-search-mark)
+  (global-set-key (kbd "M-f") 'macoy-swiper-all-search-mark)
+  )
 
 ;; Quickly search the web
 ;; See https://github.com/hrs/engine-mode for more browsers
-(require 'engine-mode)
-;; (engine-mode t)
+(when (require 'engine-mode)
+  ;; (engine-mode t)
 
-(defengine duckduckgo
-  "https://duckduckgo.com/?q=%s"
-  :keybinding "d")
+  (defengine duckduckgo
+	"https://duckduckgo.com/?q=%s"
+	:keybinding "d")
 
-(global-set-key (kbd "M-l") 'engine/search-duckduckgo)
+  (global-set-key (kbd "M-l") 'engine/search-duckduckgo)
+  )

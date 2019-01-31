@@ -161,8 +161,9 @@
 ;; Simpleclip makes system clipboard and emacs kill ring separate
 ;; This is sane copy paste behavior
 ;; I keep this near the top because many of my utilities rely on simpleclip
-(require 'simpleclip)
-(simpleclip-mode 1)
+(when (require 'simpleclip)
+  (simpleclip-mode 1)
+  )
 
 ;; Settings which affect the core behavior of Emacs as well as interface-changing things like ido
 ;; This also has random utilities for managing buffers and files

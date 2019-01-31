@@ -41,33 +41,35 @@
 
 ;; Quick jumping. Ace-jump-mode didn't work for me
 ;; Hit keybind, then type first letter of word. Type letter for correct word to jump to
-(require 'avy)
-(global-set-key (kbd "C-S-g") (lambda () (interactive) (macoy-save-place-then-call
-														'avy-goto-line)))
-(global-set-key (kbd "C-S-j") (lambda () (interactive) (macoy-save-place-then-call
-														'avy-goto-char)))
-(global-set-key (kbd "C-j") (lambda () (interactive) (macoy-save-place-then-call
-													  'avy-goto-word-or-subword-1)))
+(when (require 'avy)
+  (global-set-key (kbd "C-S-g") (lambda () (interactive) (macoy-save-place-then-call
+														  'avy-goto-line)))
+  (global-set-key (kbd "C-S-j") (lambda () (interactive) (macoy-save-place-then-call
+														  'avy-goto-char)))
+  (global-set-key (kbd "C-j") (lambda () (interactive) (macoy-save-place-then-call
+														'avy-goto-word-or-subword-1)))
 
-(defun macoy-quick-jump-copy-paste ()
-  "Use Avy to jump to a position, select something, then jump back and paste it"
-  (interactive)
-  (setq paste-point (point))
-  (setq copied-str "")
-  (save-excursion
-	(call-interactively 'avy-goto-word-or-subword-1)
-	;; TODO: Push a mode which lets the user select until they hit enter
-	(setq copy-start (point))
-	(right-word)
-	(setq copied-str (buffer-substring copy-start (point)))
+  (defun macoy-quick-jump-copy-paste ()
+	"Use Avy to jump to a position, select something, then jump back and paste it"
+	(interactive)
+	(setq paste-point (point))
+	(setq copied-str "")
+	(save-excursion
+	  (call-interactively 'avy-goto-word-or-subword-1)
+	  ;; TODO: Push a mode which lets the user select until they hit enter
+	  (setq copy-start (point))
+	  (right-word)
+	  (setq copied-str (buffer-substring copy-start (point)))
+	  )
+	(goto-char paste-point)
+	(insert copied-str)
 	)
-  (goto-char paste-point)
-  (insert copied-str)
+
+  (global-set-key (kbd "M-c") 'macoy-quick-jump-copy-paste)
   )
 
-(global-set-key (kbd "M-c") 'macoy-quick-jump-copy-paste)
-
 ;; Go to char. This is like avy quick jump but instead just goes to the next one, not any onscreen
-(require 'iy-go-to-char)
-(global-set-key (kbd "C-n") 'iy-go-to-char)
-(global-set-key (kbd "C-S-n") 'iy-go-to-char-backward)
+(when (require 'iy-go-to-char)
+  (global-set-key (kbd "C-n") 'iy-go-to-char)
+  (global-set-key (kbd "C-S-n") 'iy-go-to-char-backward)
+  )

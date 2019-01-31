@@ -29,49 +29,50 @@
 
 ;; Clang format
 ;; Looks for .clang-format in project dir
-(require 'clang-format)
+(when (require 'clang-format)
 
-(defun macoy-clang-format-region-or-buffer ()
-  "Format the region if one is selected, otherwise format the buffer"
-  (interactive)
-  (save-excursion
-	(if (use-region-p)
+  (defun macoy-clang-format-region-or-buffer ()
+	"Format the region if one is selected, otherwise format the buffer"
+	(interactive)
+	(save-excursion
+	  (if (use-region-p)
+		  (call-interactively 'clang-format-region)
+		(call-interactively 'clang-format-buffer)
+		)
+	  )
+	)
+
+  (defun macoy-clang-format-paragraph ()
+	"Format the block/paragraph"
+	(interactive)
+	(save-excursion
+	  (unless (use-region-p)
+		(mark-paragraph)
+		)
+	  (when (use-region-p)
 		(call-interactively 'clang-format-region)
-	  (call-interactively 'clang-format-buffer)
+		)
 	  )
 	)
-  )
 
-(defun macoy-clang-format-paragraph ()
-  "Format the block/paragraph"
-  (interactive)
-  (save-excursion
-	(unless (use-region-p)
-	  (mark-paragraph)
-	  )
-	(when (use-region-p)
-	  (call-interactively 'clang-format-region)
-	  )
-	)
-  )
-
-(defun macoy-clang-format-function ()
-  "Format the function"
-  (interactive)
-  (save-excursion
-	(unless (use-region-p)
-	  (mark-defun)
-	  )
-	(when (use-region-p)
-	  (call-interactively 'clang-format-region)
+  (defun macoy-clang-format-function ()
+	"Format the function"
+	(interactive)
+	(save-excursion
+	  (unless (use-region-p)
+		(mark-defun)
+		)
+	  (when (use-region-p)
+		(call-interactively 'clang-format-region)
+		)
 	  )
 	)
+
+  (global-set-key (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
+  (global-set-key (kbd "C-.") 'macoy-clang-format-paragraph)
+  (global-set-key (kbd "C->") 'macoy-clang-format-function)
+
+  ;; Not sure if this actually does anything
+  ;; https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/
+  ;; (fset 'c-indent-region 'clang-format-region)
   )
-
-(global-set-key (kbd "C-M-a") 'macoy-clang-format-region-or-buffer)
-(global-set-key (kbd "C-.") 'macoy-clang-format-paragraph)
-(global-set-key (kbd "C->") 'macoy-clang-format-function)
-
-;; Not sure if this actually does anything
-;; https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/
-;; (fset 'c-indent-region 'clang-format-region)

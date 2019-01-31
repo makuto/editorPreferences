@@ -42,7 +42,8 @@
   "Build the build system defined in `macoy-build-system-default'"
   (interactive)
   (unless macoy-build-system-default
-	(message "No default build system selected. Run macoy-build-system-select-then-build")
+	;; (message "No default build system selected. Run macoy-build-system-select-then-build")
+	(call-interactively 'macoy-build-system-select-then-build)
 	)
   (when macoy-build-system-default
 	(message "Building %s" (car macoy-build-system-default))

@@ -131,13 +131,14 @@
 (global-set-key (kbd "C-<prior>") 'beginning-of-defun)
 (global-set-key (kbd "C-<next>") 'end-of-defun)
 
-(require 'expand-region)
-;; I don't like it creating temporary binds (what if I want to type those symbols?)
-(setq expand-region-fast-keys-enabled nil)
-(global-set-key (kbd "C-'") 'er/expand-region)
-(global-set-key (kbd "C-\"") 'er/contract-region)
-(global-set-key (kbd "M-'") 'er/mark-defun)
-(global-set-key (kbd "M-\"") 'er/mark-paragraph)
+(when (require 'expand-region)
+  ;; I don't like it creating temporary binds (what if I want to type those symbols?)
+  (setq expand-region-fast-keys-enabled nil)
+  (global-set-key (kbd "C-'") 'er/expand-region)
+  (global-set-key (kbd "C-\"") 'er/contract-region)
+  (global-set-key (kbd "M-'") 'er/mark-defun)
+  (global-set-key (kbd "M-\"") 'er/mark-paragraph)
+  )
 
 ;; Window management
 ;; Split horizonal (was transpose-chars)
@@ -152,28 +153,30 @@
 (global-set-key (kbd "M-a") 'tags-query-replace)
 
 ;; Dired customizations
-(require 'dired)
-;; Hide details by default (show with '(')
-;; See http://ergoemacs.org/emacs/emacs_dired_tips.html
-(defun macoy-dired-mode-setup ()
-  "To be run as a hook for `dired-mode'."
-  (dired-hide-details-mode 1))
-(add-hook 'dired-mode-hook 'macoy-dired-mode-setup)
-;; Reuse buffer (from http://ergoemacs.org/emacs/emacs_dired_tips.html)
-;; Was dired-find-file
-(define-key dired-mode-map (kbd "<return>") 'dired-find-alternate-file)
-(define-key dired-mode-map (kbd "S-<return>") 'dired-find-file)
-;; Was dired-up-directory
-(define-key dired-mode-map (kbd "<backspace>") (lambda () (interactive) (find-alternate-file "..")))
+(when (require 'dired)
+  ;; Hide details by default (show with '(')
+  ;; See http://ergoemacs.org/emacs/emacs_dired_tips.html
+  (defun macoy-dired-mode-setup ()
+	"To be run as a hook for `dired-mode'."
+	(dired-hide-details-mode 1))
+  (add-hook 'dired-mode-hook 'macoy-dired-mode-setup)
+  ;; Reuse buffer (from http://ergoemacs.org/emacs/emacs_dired_tips.html)
+  ;; Was dired-find-file
+  (define-key dired-mode-map (kbd "<return>") 'dired-find-alternate-file)
+  (define-key dired-mode-map (kbd "S-<return>") 'dired-find-file)
+  ;; Was dired-up-directory
+  (define-key dired-mode-map (kbd "<backspace>") (lambda () (interactive) (find-alternate-file "..")))
+  )
 
 ;; Compilation mode customizations
 (define-key compilation-mode-map (kbd "n") 'compilation-next-error)
 (define-key compilation-mode-map (kbd "p") 'compilation-previous-error)
 
 ;; Re Builder customizations
-(require 're-builder)
-(define-key reb-mode-map (kbd "C-<up>") 'reb-prev-match)
-(define-key reb-mode-map (kbd "C-<down>") 'reb-next-match)
+(when (require 're-builder)
+  (define-key reb-mode-map (kbd "C-<up>") 'reb-prev-match)
+  (define-key reb-mode-map (kbd "C-<down>") 'reb-next-match)
+  )
 
 ;;
 ;; Make bindings work with org-mode
@@ -196,22 +199,21 @@
 ;;
 ;; Multiple cursors
 ;;
-(require 'multiple-cursors)
-
-;; Make sure to change this in my-keys-minor-mode-map too
-(global-set-key (kbd "C-d") 'mc/mark-next-like-this)
-;;(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "M-<f3>") 'mc/mark-all-like-this)
-;; Make <return> insert a newline; multiple-cursors-mode can still be disabled with C-g.
-(define-key mc/keymap (kbd "<return>") nil)
-;; Clear these so that expand-region can have them
-(define-key mc/keymap (kbd "C-'") nil)
-(define-key mc/keymap (kbd "C-\"") nil)
-(define-key mc/keymap (kbd "C-SPC") 'mc-hide-unmatched-lines-mode)
-;; Adds one cursor to each line in the current region.
-(global-set-key (kbd "C-S-l") 'mc/edit-lines)
-;; Note that in my-keys I define cut, copy, and paste overrides which work with simpleclip & mc
-
+(when (require 'multiple-cursors)
+  ;; Make sure to change this in my-keys-minor-mode-map too
+  (global-set-key (kbd "C-d") 'mc/mark-next-like-this)
+  ;;(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "M-<f3>") 'mc/mark-all-like-this)
+  ;; Make <return> insert a newline; multiple-cursors-mode can still be disabled with C-g.
+  (define-key mc/keymap (kbd "<return>") nil)
+  ;; Clear these so that expand-region can have them
+  (define-key mc/keymap (kbd "C-'") nil)
+  (define-key mc/keymap (kbd "C-\"") nil)
+  (define-key mc/keymap (kbd "C-SPC") 'mc-hide-unmatched-lines-mode)
+  ;; Adds one cursor to each line in the current region.
+  (global-set-key (kbd "C-S-l") 'mc/edit-lines)
+  ;; Note that in my-keys I define cut, copy, and paste overrides which work with simpleclip & mc
+  )
 ;;
 ;;
 ;; Macoy's keybinds which require better override
