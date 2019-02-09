@@ -45,6 +45,7 @@
   )
 
 (global-set-key (kbd "<f6>") 'macoy-svn-status)
+(global-set-key (kbd "S-<f6>") 'vc-print-root-log)
 
 (setq macoy-commit-message-backup "~/Macoy_Emacs_CommitMessage_Backup.txt")
 ;; SVN and Magit commit message finished

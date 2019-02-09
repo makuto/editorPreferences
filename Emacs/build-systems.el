@@ -41,15 +41,15 @@
 (defun macoy-build-system-build ()
   "Build the build system defined in `macoy-build-system-default'"
   (interactive)
-  (unless macoy-build-system-default
-	;; (message "No default build system selected. Run macoy-build-system-select-then-build")
-	(call-interactively 'macoy-build-system-select-then-build)
-	)
   (when macoy-build-system-default
 	(message "Building %s" (car macoy-build-system-default))
 	(let ((build-function (nth 1 macoy-build-system-default)))
 	  (call-interactively build-function)
 	  )
+	)
+  (unless macoy-build-system-default
+	;; (message "No default build system selected. Run macoy-build-system-select-then-build")
+	(call-interactively 'macoy-build-system-select-then-build)
 	)
   )
 
