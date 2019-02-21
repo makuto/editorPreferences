@@ -24,6 +24,12 @@
 ;; Commented because above we set base16-distinct-fringe-background to nil
 ;; (set-face-background 'fringe (face-background 'default))
 
+(when (require 'isearch)
+  ;; This is a little weird but I like the color and it should be okay
+  (set-face-foreground 'lazy-highlight (face-foreground 'region))
+  (set-face-background 'lazy-highlight (face-background 'region))
+  )
+
 ;; Make avy faces beautiful
 ;; Note that we swap foreground and background to emulate the inverse-video setting (there's probably
 ;;; a cleaner way of doing this, but oh well)
@@ -79,9 +85,17 @@
 					  :background "#381e1e")
   )
 
-;; I'm not sure why I had to do this, but make 100% sure links are underlined
+;; Org faces customization
 (when (require 'org-faces)
-  (set-face-underline 'org-link t))
+  (set-face-foreground 'org-agenda-clocking (face-foreground 'region))
+  (set-face-background 'org-agenda-clocking (face-background 'region))
+  ;; This is used for the date output in org-schedule
+  (set-face-foreground 'secondary-selection (face-foreground 'region))
+  (set-face-background 'secondary-selection (face-background 'region))
+
+  ;; I'm not sure why I had to do this, but make 100% sure links are underlined
+  (set-face-underline 'org-link t)
+  )
 
 ;; Hide these modes completely (for a more minimal look)
 ;; Diminish things down here so that we're sure we catch all modes
