@@ -50,6 +50,14 @@
   (set-face-background 'svn-mark-face (face-background 'region))
   )
 
+;; TODO: Colors to differentiate between groups
+(when (require 're-builder)
+  (set-face-background 'reb-match-0 (face-background 'region))
+  (set-face-background 'reb-match-1 (face-background 'region))
+  (set-face-background 'reb-match-2 (face-background 'region))
+  (set-face-background 'reb-match-3 (face-background 'region))
+  )
+
 ;; Make sure diff-mode colors are theme-appropriate:
 ;; - No stark white text for context
 ;; - Make refine* backgrounds much more muted and darker. This is for style and higher contrast
