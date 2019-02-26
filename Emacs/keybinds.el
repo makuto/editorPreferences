@@ -204,14 +204,17 @@
   (global-set-key (kbd "C-d") 'mc/mark-next-like-this)
   ;;(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "M-<f3>") 'mc/mark-all-like-this)
+  ;; Adds one cursor to each line in the current region.
+  (global-set-key (kbd "C-S-l") 'mc/edit-lines)
+
+  (define-key mc/keymap (kbd "C-S-d") 'mc/skip-to-next-like-this)
   ;; Make <return> insert a newline; multiple-cursors-mode can still be disabled with C-g.
   (define-key mc/keymap (kbd "<return>") nil)
   ;; Clear these so that expand-region can have them
   (define-key mc/keymap (kbd "C-'") nil)
   (define-key mc/keymap (kbd "C-\"") nil)
   (define-key mc/keymap (kbd "C-SPC") 'mc-hide-unmatched-lines-mode)
-  ;; Adds one cursor to each line in the current region.
-  (global-set-key (kbd "C-S-l") 'mc/edit-lines)
+  
   ;; Note that in my-keys I define cut, copy, and paste overrides which work with simpleclip & mc
   )
 ;;

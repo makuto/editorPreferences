@@ -4,10 +4,10 @@
 ;;
 
 ;; This is for better syntax highlighting when editing templated web files (e.g. files with Nunjucks)
-;; Only enabled at work because I don't use templates at home
-(when (string-equal (user-login-name) "mmadson")
+;; Only enabled at work because I only need web mode for template stuff
+(when (and (string-equal (user-login-name) "mmadson") (require 'web-mode))
   ;; TODO: Customize colors (see http://web-mode.org/ "Syntax highlighting")
-  (require 'web-mode)
+  
   ;; I like to manually enable rainbow-mode if I want to see colors (this might not work...)
   (setq web-mode-enable-css-colorization nil)
 
@@ -24,6 +24,15 @@
 		)
 	  )
   )
+
+;; Doesn't work because these args aren't the right command
+;; (when (require 'web-beautify)
+;;   ;; Override this function so I can customize args. Why did they make it defconst...
+;;   (defconst macoy-web-beautify-args '("-f" "-t" "-"))
+;;   (defun web-beautify-get-shell-command (program)
+;; 	"Join PROGRAM with the constant js-beautify args."
+;; 	(mapconcat 'identity (append (list program) macoy-web-beautify-args) " "))
+;;   )
 
 ;; Jam
 (load-user-file "jam-mode.el")

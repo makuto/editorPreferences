@@ -35,6 +35,7 @@
 	
 	(switch-to-buffer "*Macoy-Drill-Convert*")
 	(with-current-buffer "*Macoy-Drill-Convert*"
+	  (erase-buffer)
 	  (org-mode)
 	  ;; Override the level because we don't care about levels in drill,
 	  ;; but want to see them in non-drill notes

@@ -49,3 +49,73 @@
   (setq org-agenda-files (list "C:/Users/mmadson/Dropbox/Org/1_Calendar.org"
 							   "C:/Users/mmadson/Dropbox/Org/0_Dump.org"))
   )
+
+;; From https://orgmode.org/manual/Languages.html#Languages
+;; Because I was too lazy to find the actual internal list
+(setq macoy-org-code-block-languages (list
+									  "asymptote"
+									  "lua"
+									  "awk"
+									  "matlab"
+									  "C"
+									  "mscgen"
+									  "C++"
+									  "ocaml"
+									  "clojure"
+									  "octave"
+									  "css"
+									  "org"
+									  "D"
+									  "oz"
+									  "ditaa"
+									  "perl"
+									  "calc"
+									  "plantuml"
+									  "processing"
+									  "fortran"
+									  "python"
+									  "gnuplot"
+									  "R"
+									  "screen"
+									  "ruby"
+									  "dot"
+									  "sass"
+									  "haskell"
+									  "scheme"
+									  "java"
+									  "sed"
+									  "js"
+									  "sh"
+									  "latex"
+									  "sql"
+									  "ledger"
+									  "sqlite"
+									  "lilypond"
+									  "vala"
+									  "lisp"
+									  ))
+
+(defun macoy-org-insert-code-block ()
+  (interactive)
+  (insert (format "#+BEGIN_SRC %s\n\n#+END_SRC"
+				  (ido-completing-read "Language: " macoy-org-code-block-languages)))
+  (forward-line -1)
+  )
+
+(when (require 'simpleclip)
+  (defun macoy-org-copy-code-block ()
+	"Intended to be executed from a source file while region is active. Create a link and org code
+ block and set the clipboard to it"
+	(interactive)
+	(when (use-region-p)
+	  (simpleclip-set-contents (format "[[file:%s::%d][%s:%d]]\n#+BEGIN_SRC %s\n%s\n#+END_SRC"
+									   (buffer-file-name)
+									   (line-number-at-pos (region-beginning))
+									   (buffer-name)
+									   (line-number-at-pos (region-beginning))
+									   (ido-completing-read "Language: " macoy-org-code-block-languages)
+									   (buffer-substring (region-beginning) (region-end)))
+							   )
+	  )
+	)
+  )
