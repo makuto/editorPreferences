@@ -17,6 +17,7 @@
 ;;  but still more subdued than regular text (and regular fringe foreground)
 ;; See base16-theme.el for faces and colors and stuff
 (set-face-foreground 'fringe (face-foreground 'font-lock-comment-face))
+;; (set-face-foreground 'fringe (face-foreground 'font-lock-comment-delimiter-face)) ;; for extra subdued
 
 ;; Make fringe same color as background. We still want fringe for wrap indicators
 ;; If you change your theme you should run this code again

@@ -104,12 +104,13 @@
 (global-set-key (kbd "C-<f9>") 'macoy-toggle-wrapping)
 
 ;; Show whitespace
-;; Not enabled globally because it looks a bit too ugly for my tastes; I can toggle it when needed
-;;(require 'whitespace)
-;;(global-whitespace-mode 0)
-(setq whitespace-style '(faces tabs tabs-mark spaces space-mark))
-(setq whitespace-line-column 100)
-(setq whitespace-newline nil)
+(when (require 'whitespace)
+  ;; Not enabled globally because it looks a bit too ugly for my tastes; I can toggle it when needed
+  ;;(global-whitespace-mode 0)
+  (setq whitespace-style '(tab-mark space-mark))
+  (setq whitespace-line-column 100)
+  (setq whitespace-newline nil)
+  )
 
 (defun macoy-toggle-whitespace-mode ()
   (interactive)

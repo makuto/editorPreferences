@@ -50,8 +50,17 @@
 ;; Close. was kill-region
 (global-set-key (kbd "C-w") 'kill-buffer)
 
+(defun macoy-mark-whole-buffer ()
+  "Save a register with start position in case the user wants to go back to where they were before
+ they marked the buffer"
+  (interactive)
+  ;; From Macoy's navigation.el
+  (macoy-save-place)
+  (call-interactively 'mark-whole-buffer)
+  )
+
 ;; Select All. was move-beginning-of-line
-(global-set-key (kbd "C-a") 'mark-whole-buffer)
+(global-set-key (kbd "C-a") 'macoy-mark-whole-buffer)
 
 ;; Open. was open-line
 (global-set-key (kbd "C-o") 'ido-find-file)

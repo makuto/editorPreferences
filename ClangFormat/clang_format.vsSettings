@@ -1,3 +1,4 @@
+# http://releases.llvm.org/6.0.0/tools/clang/docs/ClangFormatStyleOptions.html
 BasedOnStyle: Google
 AccessModifierOffset: -4
 AllowShortBlocksOnASingleLine: false
@@ -5,6 +6,8 @@ AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterNamespace: false
 BreakBeforeTernaryOperators: false
 ColumnLimit: 100
 ConstructorInitializerIndentWidth: 4
@@ -15,3 +18,5 @@ TabWidth: 4
 UseTab: ForIndentation
 DerivePointerAlignment: false
 PointerAlignment: Left
+NamespaceIndentation: None
+IndentCaseLabels: true
