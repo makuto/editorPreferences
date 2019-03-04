@@ -44,22 +44,22 @@
 ;; (smooth-scrolling-mode 1)
 ;; This is a hack to work around smooth scrolling only being problematic on next-line and prev-line.
 ;; It's not really worth the effort, but I'm keeping this here in case I change my mind later
-;; (defun macoy-prev-line ()
+;; (defun macoy-prev-line-noscroll ()
 ;;   (interactive)
 ;;   (smooth-scrolling-mode 0)
 ;;   (forward-line -1)
 ;;   (smooth-scrolling-mode 1)
 ;;   )
 
-;; (defun macoy-next-line ()
+;; (defun macoy-next-line-noscroll ()
 ;;   (interactive)
 ;;   (smooth-scrolling-mode 0)
 ;;   (forward-line)
 ;;   (smooth-scrolling-mode 1)
 ;;   )
 
-;; (global-set-key (kbd "<up>") 'macoy-prev-line)
-;; (global-set-key (kbd "<down>") 'macoy-next-line)
+;; (global-set-key (kbd "<up>") 'macoy-prev-line-noscroll)
+;; (global-set-key (kbd "<down>") 'macoy-next-line-noscroll)
 
 ;; Make scrolling less jumpy: this makes it so emacs never centers the cursor if you go scroll off
 ;;  screen, instead, it will scroll by one line. This isn't ideal (smooth-scrolling is ideal), but
