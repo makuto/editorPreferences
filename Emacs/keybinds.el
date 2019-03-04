@@ -101,32 +101,34 @@
 (global-set-key (kbd "<home>") 'back-to-indentation)
 
 (when (require 'multiple-cursors)
-  ;; Go to end of line if multiple-cursors is active. This is important because you
-  ;; might be editing lines which wrap without your knowledge
   (defun macoy-end-of-line ()
+	"Go to end of line if multiple-cursors is active. This is important because you might be editing
+ lines which wrap without your knowledge"
 	(interactive)
 	(if (bound-and-true-p multiple-cursors-mode)
 		(call-interactively 'end-of-line)
 	  (call-interactively 'end-of-visual-line)
-	  )
-	)
+	  ))
 
   (global-set-key (kbd "<end>") 'macoy-end-of-line)
 
-  (defun macoy-next-line (&optional arg)
-	"Go to next logical line if multiple-cursors is active. This is important because you might be 
+  ;; Although the documentation says use `forward-line`, we want the interactive versions because
+  ;; we still want it to be "visual", and we want to be able to hold Shift to highlight when hitting S-<down>
+  (defun macoy-next-line ()
+	"Go to next logical line if `multiple-cursors` is active. This is important because you might be 
 editing lines which wrap without your knowledge"
 	(interactive)
 	(if (bound-and-true-p multiple-cursors-mode)
-		(next-logical-line arg)
-	  (next-line arg)
-	  )
-	)
+		(call-interactively 'next-logical-line)
+	  (call-interactively 'next-line)
+	  ))
 
   (defun macoy-prev-line ()
 	(interactive)
-	(macoy-next-line -1)
-	)
+	(if (bound-and-true-p multiple-cursors-mode)
+		(call-interactively 'previous-logical-line)
+	  (call-interactively 'previous-line)
+	  ))
 
   (global-set-key (kbd "<down>") 'macoy-next-line)
   (global-set-key (kbd "<up>") 'macoy-prev-line)
