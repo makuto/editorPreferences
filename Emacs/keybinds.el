@@ -100,40 +100,6 @@
 ;; Go to first character of line, not beginning of line. Was move-beginning-of-line
 (global-set-key (kbd "<home>") 'back-to-indentation)
 
-(when (require 'multiple-cursors)
-  (defun macoy-end-of-line ()
-	"Go to end of line if multiple-cursors is active. This is important because you might be editing
- lines which wrap without your knowledge"
-	(interactive)
-	(if (bound-and-true-p multiple-cursors-mode)
-		(call-interactively 'end-of-line)
-	  (call-interactively 'end-of-visual-line)
-	  ))
-
-  (global-set-key (kbd "<end>") 'macoy-end-of-line)
-
-  ;; Although the documentation says use `forward-line`, we want the interactive versions because
-  ;; we still want it to be "visual", and we want to be able to hold Shift to highlight when hitting S-<down>
-  (defun macoy-next-line ()
-	"Go to next logical line if `multiple-cursors` is active. This is important because you might be 
-editing lines which wrap without your knowledge"
-	(interactive)
-	(if (bound-and-true-p multiple-cursors-mode)
-		(call-interactively 'next-logical-line)
-	  (call-interactively 'next-line)
-	  ))
-
-  (defun macoy-prev-line ()
-	(interactive)
-	(if (bound-and-true-p multiple-cursors-mode)
-		(call-interactively 'previous-logical-line)
-	  (call-interactively 'previous-line)
-	  ))
-
-  (global-set-key (kbd "<down>") 'macoy-next-line)
-  (global-set-key (kbd "<up>") 'macoy-prev-line)
-  )
-
 ;; Toggle comment lines (same keybind as Sublime). This also works for regions
 (global-set-key (kbd "C-/") 'comment-line)
 
@@ -245,6 +211,11 @@ editing lines which wrap without your knowledge"
   (define-key mc/keymap (kbd "C-'") nil)
   (define-key mc/keymap (kbd "C-\"") nil)
   (define-key mc/keymap (kbd "C-SPC") 'mc-hide-unmatched-lines-mode)
+
+  ;; Ignore wrapping when doing motions in multiple-cursors
+  (define-key mc/keymap (kbd "<end>") 'end-of-line)
+  (define-key mc/keymap (kbd "<down>") 'next-logical-line)
+  (define-key mc/keymap (kbd "<up>") 'previous-logical-line)
   
   ;; Note that in my-keys I define cut, copy, and paste overrides which work with simpleclip & mc
   )
