@@ -1,3 +1,5 @@
+;; Imenu Ido interface (browse symbols in file)
+(load-user-file "idomenu.el")
 
 ;; Templates/Snippets
 (yas-global-mode 1)
@@ -148,9 +150,12 @@
 	   "Project file: " (tags-table-files) nil t)))))
 
 ;; cquery language server
-;; Doesn't work
-;;(require 'cquery)
-;;(setq cquery-executable "F:/gitRepos/cquery/cmakeBuild/x64/Debug/cquery.exe")
+;; See https://github.com/cquery-project/cquery/wiki
+;; Run `lsp` to enable it in a buffer
+(when (require 'cquery)
+  (setq cquery-executable "f:/gitRepos/cquery/build/Release/cquery.exe")
+  (setq cquery-project-roots '("f:/CJUNCTIONS/src" ))
+  )
 
 ;; Find references via tags-search. This is my find-references replacement
 (defun macoy-tags-search ()
