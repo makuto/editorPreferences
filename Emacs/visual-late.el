@@ -5,6 +5,16 @@
 ;; These give emacs a more minimal, less contrast-y appearance
 ;; I put it down here so it happens after custom-set-variables sets the theme
 
+;; Whole-window transparency
+;; The first number is transparency while active
+;; The second number is transparency while inactive
+(set-frame-parameter (selected-frame) 'alpha '(82 70))
+
+;; Add a slight border to give us some breathing room on the edges
+(set-frame-parameter (selected-frame) 'internal-border-width 5)
+;; Uncomment to disable the edge border
+;; (set-frame-parameter (selected-frame) 'internal-border-width 0)
+
 ;; Set the border color to the fringe to have less contrast-y line (generally; will vary per theme)
 ;; Commented versions are for when base16-distinct-fringe-background wasn't nil
 ;; (set-face-background 'vertical-border (face-background 'fringe))

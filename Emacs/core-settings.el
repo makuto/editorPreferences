@@ -33,7 +33,21 @@
 (save-place-mode 1)
 
 ;; Make garbage collection happen less often (https://github.com/lewang/flx)
-(setq gc-cons-threshold 20000000)
+;; (setq gc-cons-threshold 20000000)
+;; Another idea:
+;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+;; These are tricky: the higher, the more responsive flx ido is, but the slower it takes on minibuffer exit
+(defun my-minibuffer-setup-hook ()
+  ;; (setq gc-cons-threshold most-positive-fixnum))
+  ;; (setq gc-cons-threshold 20000000))
+  (setq gc-cons-threshold 80000000))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 800000))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
 
 ;; stop creating those backup~ files
 (setq make-backup-files nil)
