@@ -1,5 +1,6 @@
 ;; Imenu Ido interface (browse symbols in file)
 (load-user-file "idomenu.el")
+(global-set-key (kbd "C-]") 'idomenu)
 
 ;; Templates/Snippets
 (yas-global-mode 1)
@@ -149,14 +150,6 @@
 	  (ido-completing-read
 	   "Project file: " (tags-table-files) nil t)))))
 
-;; cquery language server
-;; See https://github.com/cquery-project/cquery/wiki
-;; Run `lsp` to enable it in a buffer
-(when (require 'cquery)
-  (setq cquery-executable "f:/gitRepos/cquery/build/Release/cquery.exe")
-  (setq cquery-project-roots '("f:/CJUNCTIONS/src" ))
-  )
-
 ;; Find references via tags-search. This is my find-references replacement
 (defun macoy-tags-search ()
   "Pick tag with `macoy-ido-find-tag' then run `tags-search' (or search marked)"
@@ -190,4 +183,22 @@
 	  (call-interactively 'macoy-tags-query-replace-marked (buffer-substring (region-beginning) (region-end)))
 	(call-interactively 'tags-query-replace)
 	)
+  )
+
+;;
+;; Language Servers (the nuclear option)
+;;
+
+;; cquery language server
+;; See https://github.com/cquery-project/cquery/wiki
+;; Run `lsp` to enable it in a buffer
+(when (require 'cquery)
+  (setq cquery-executable "f:/gitRepos/cquery/build/Release/cquery.exe")
+  (setq cquery-project-roots '("f:/CJUNCTIONS/src" ))
+  )
+
+;; eglot language server alternative
+(when (require 'eglot)
+  (add-to-list 'eglot-server-programs
+			   '((c++ mode c-mode) . (eglot-cquery "f:/gitRepos/cquery/build/Release/cquery.exe")))
   )

@@ -116,6 +116,8 @@
 	(setq ido-enable-flex-matching t)
 	(setq ido-use-faces nil)
 	)
+
+  (setq ido-everywhere t)
   
   ;; Use ido for recentf file selection
   ;; From https://masteringemacs.org/article/find-files-faster-recent-files-package

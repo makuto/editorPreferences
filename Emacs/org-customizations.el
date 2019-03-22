@@ -39,6 +39,13 @@
 ;; Org: indent nested things
 (setq org-startup-indented t)
 
+;; Use ido for refile (doesn't work)
+;; (setq org-refile-targets '((nil :maxlevel . 6)
+                           ;; (org-agenda-files :maxlevel . 6)))
+;; (setq org-refile-use-outline-path nil)
+(setq org-completion-use-ido t)
+(setq org-outline-path-complete-in-steps nil)
+
 ;; My org files
 (when (string-equal (user-login-name) "macoy")
   (setq org-agenda-files (list "~/Dropbox/Org/1_Calendar.org"

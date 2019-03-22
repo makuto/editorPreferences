@@ -78,6 +78,9 @@
 ;; Switch buffers. Was backward-char
 (global-set-key (kbd "C-b") 'ido-switch-buffer)
 
+;; Open ibuffer (good for killing many buffers)
+(global-set-key (kbd "M-w") 'ibuffer)
+
 ;; Switch desktops
 (global-set-key (kbd "C-S-b") 'macoy-switch-desktop)
 
@@ -102,6 +105,16 @@
 
 ;; Toggle comment lines (same keybind as Sublime). This also works for regions
 (global-set-key (kbd "C-/") 'comment-line)
+
+(defun macoy-kill-subword ()
+  "Temporarily enable subword mode to kill camelCase subword"
+  (interactive)
+  (subword-mode 1)
+  (call-interactively 'kill-word)
+  (subword-mode 0)
+  )
+
+(global-set-key (kbd "C-S-<delete>") 'macoy-kill-subword)
 
 ;; Simpleclip cut copy paste (not sure if this is essential due to customize-group settings)
 ;; These are also set in my-keys mode with macoyCopy functions for multiple-cursors support,
