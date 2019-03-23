@@ -1,9 +1,14 @@
 
 (when (require 'simpleclip)
-  (defun macoy-create-copy-org-link-from-point (link-text)
-	"Create a link from the file and line at point and copy it to the clipboard"
-	(interactive "sLink text: ")
-	(simpleclip-set-contents (format "[[%s::%d][%s]]" buffer-file-name (line-number-at-pos) link-text))
+  ;; (defun macoy-org-create-copy-link-from-point (link-text)
+  ;; 	"Create a link from the file and line at point and copy it to the clipboard"
+  ;; 	(interactive "sLink text: ")
+  ;; 	(simpleclip-set-contents (format "[[%s::%d][%s]]" buffer-file-name (line-number-at-pos) link-text))
+  ;; 	)
+
+  (defun macoy-org-copy-file-line-link-to-clipboard ()
+	(interactive)
+	(simpleclip-set-contents (format "[[file:%s::%d][" buffer-file-name (line-number-at-pos)))
 	)
   )
 

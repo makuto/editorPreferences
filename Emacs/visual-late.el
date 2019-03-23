@@ -8,7 +8,20 @@
 ;; Whole-window transparency
 ;; The first number is transparency while active
 ;; The second number is transparency while inactive
-(set-frame-parameter (selected-frame) 'alpha '(82 70))
+(defun macoy-high-transparency ()
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(80 70)))
+(defun macoy-normal-transparency ()
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(85 70)))
+(defun macoy-low-transparency ()
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(95 85)))
+(defun macoy-no-transparency ()
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(100 100)))
+
+(macoy-normal-transparency)
 
 ;; Add a slight border to give us some breathing room on the edges
 (set-frame-parameter (selected-frame) 'internal-border-width 5)

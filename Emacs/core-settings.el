@@ -177,11 +177,6 @@
 	(interactive)
 	(simpleclip-set-contents buffer-file-name)
 	)
-
-  (defun macoy-org-copy-file-line-link-to-clipboard ()
-	(interactive)
-	(simpleclip-set-contents (format "[[file:%s::%d][" buffer-file-name (line-number-at-pos)))
-	)
   )
 
 ;; Open file in explorer
