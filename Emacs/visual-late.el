@@ -8,20 +8,39 @@
 ;; Whole-window transparency
 ;; The first number is transparency while active
 ;; The second number is transparency while inactive
-(defun macoy-high-transparency ()
-  (interactive)
-  (set-frame-parameter (selected-frame) 'alpha '(80 70)))
 (defun macoy-normal-transparency ()
   (interactive)
   (set-frame-parameter (selected-frame) 'alpha '(85 70)))
-(defun macoy-low-transparency ()
-  (interactive)
-  (set-frame-parameter (selected-frame) 'alpha '(95 85)))
 (defun macoy-no-transparency ()
   (interactive)
   (set-frame-parameter (selected-frame) 'alpha '(100 100)))
 
-(macoy-normal-transparency)
+;; Note that names need to be unique (they should be anyways)
+(setq macoy-transparency-list (list
+							   ;; '("Jam (current directory)" build-universal-jam)
+							   '(80 70)
+							   '(85 70)
+							   '(90 70)
+							   '(100 100)
+							   )
+	  )
+
+(setq macoy-transparency-index 0)
+(defun macoy-cycle-transparency (&optional index)
+  (interactive)
+  (if index
+	  (setq macoy-transparency-index index)
+	(setq macoy-transparency-index (+ macoy-transparency-index 1)))
+  ;; Loop around
+  (unless (< macoy-transparency-index (safe-length macoy-transparency-list))
+	(setq macoy-transparency-index 0))
+  (let ((transparency-settings (nth macoy-transparency-index macoy-transparency-list)))
+	(set-frame-parameter (selected-frame) 'alpha transparency-settings)
+	(message "Transparency now %s" transparency-settings)))
+
+;; Set default transparency
+(macoy-cycle-transparency 0)
+(global-set-key (kbd "<f9>") 'macoy-cycle-transparency)
 
 ;; Add a slight border to give us some breathing room on the edges
 (set-frame-parameter (selected-frame) 'internal-border-width 5)
