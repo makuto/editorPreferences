@@ -43,7 +43,7 @@
 (global-set-key (kbd "<f9>") 'macoy-cycle-transparency)
 
 ;; Add a slight border to give us some breathing room on the edges
-(set-frame-parameter (selected-frame) 'internal-border-width 5)
+(set-frame-parameter (selected-frame) 'internal-border-width 10)
 ;; Uncomment to disable the edge border
 ;; (set-frame-parameter (selected-frame) 'internal-border-width 0)
 

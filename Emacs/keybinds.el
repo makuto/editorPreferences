@@ -114,7 +114,16 @@
   (subword-mode 0)
   )
 
+(defun macoy-kill-subword-backward ()
+  "Temporarily enable subword mode to kill camelCase subword"
+  (interactive)
+  (subword-mode 1)
+  (call-interactively 'backward-kill-word)
+  (subword-mode 0)
+  )
+
 (global-set-key (kbd "C-S-<delete>") 'macoy-kill-subword)
+(global-set-key (kbd "C-S-<backspace>") 'macoy-kill-subword-backward)
 
 ;; Simpleclip cut copy paste (not sure if this is essential due to customize-group settings)
 ;; These are also set in my-keys mode with macoyCopy functions for multiple-cursors support,
