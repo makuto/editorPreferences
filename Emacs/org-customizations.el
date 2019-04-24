@@ -51,15 +51,39 @@
 (setq org-completion-use-ido t)
 (setq org-outline-path-complete-in-steps nil)
 
+;; If non-nil, the effect of TAB in a code block is as if it were
+;; issued in the language major mode buffer.
+(setq org-src-tab-acts-natively t)
+
 ;; My org files
+(setq macoy-org-dir nil)
+
 (when (string-equal (user-login-name) "macoy")
-  (setq org-agenda-files (list "~/Dropbox/Org/1_Calendar.org"
-							   "~/Dropbox/Org/0_Dump.org"))
-  )
+  (setq macoy-org-dir "~/Dropbox/Org/")
+  (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
+							   (concat macoy-org-dir "0_Dump.org"))))
 
 (when (string-equal (user-login-name) "mmadson")
-  (setq org-agenda-files (list "C:/Users/mmadson/Dropbox/Org/1_Calendar.org"
-							   "C:/Users/mmadson/Dropbox/Org/0_Dump.org"))
+  (setq macoy-org-dir "C:/Users/mmadson/Dropbox/Org/")
+  (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
+							   (concat macoy-org-dir "0_Dump.org"))))
+
+(when macoy-org-dir
+  (defun macoy-get-org-file-list ()
+	(remove "."
+			(remove ".."
+					(directory-files macoy-org-dir nil "\\.org"))))
+
+  (defun macoy-switch-macoy-org ()
+	"Use ido to list macoy-orgs to switch to"
+	(interactive)
+	(let ((selected-macoy-org
+		   (concat macoy-org-dir
+				   (ido-completing-read "Open Org: "
+										(macoy-get-org-file-list)))))
+	  (find-file selected-macoy-org)))
+
+  (global-set-key (kbd "M-p") 'macoy-switch-macoy-org)
   )
 
 ;; From https://orgmode.org/manual/Languages.html#Languages

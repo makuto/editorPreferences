@@ -253,10 +253,10 @@
 	(define-key map (kbd "C-v") 'macoyPaste)
 	(unless macoy-edebug-prefix-hack
 	 (define-key map (kbd "C-u") 'macoyCut)) ;; Actually C-x after keyboard-translate
-	;; In case you need the dumb copy paste (or multiple cursors clipboard after exiting mc)
-	(define-key map (kbd "C-S-c") 'kill-ring-save)
-	(define-key map (kbd "C-S-v") 'yank)
-	(define-key map (kbd "C-S-x") 'kill-region)
+	;; In case you need the dumb copy paste
+	;; (define-key map (kbd "C-S-c") 'kill-ring-save)
+	;; (define-key map (kbd "C-S-v") 'yank)
+	;; (define-key map (kbd "C-S-x") 'kill-region)
 	(define-key map (kbd "M-a") 'macoy-tags-query-replace)
 	(define-key map (kbd "M-j") 'pop-global-mark)
 	;; Overrides c-indent-line-or-region (this should be in C mode only, plus <tab>)
