@@ -37,7 +37,6 @@
 
 (setq macoy-build-system-default nil)
 
-;; TODO: Figure out why this doesn't work
 (defun macoy-build-system-build ()
   "Build the build system defined in `macoy-build-system-default'"
   (interactive)

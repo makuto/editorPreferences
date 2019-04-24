@@ -99,8 +99,10 @@
    )
   )
 
-;; Store recently closed files so we can easily reopen them
+;; Store recently opened files so we can easily reopen them
 (recentf-mode 1)
+;; Store more recent files
+(setq recentf-max-saved-items 100)
 
 ;; Smex: Smart M-x completion
 (when (require 'smex)
