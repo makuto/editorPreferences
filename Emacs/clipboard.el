@@ -29,7 +29,7 @@
 	  ;; (kill-region (line-beginning-position) (line-end-position))
 	  (kill-whole-line)
 	  (setq macoy-clipboard-no-selection-line-paste t))
-	
+
 	(when (use-region-p)
 	  (push (buffer-substring (region-beginning) (region-end)) macoy-multiple-cursors-buffers)
 	  (kill-region (region-beginning) (region-end))
@@ -157,7 +157,9 @@
 	(setq macoy-multiple-cursors-buffers nil)
 	(if (bound-and-true-p multiple-cursors-mode)
 		(call-interactively 'macoy-multiple-cursors-copy) ;; Was kill-ring-save
-	  (call-interactively 'macoy-nonmc-copy)))
+	  (call-interactively 'macoy-nonmc-copy))
+	(when macoy-clipboard-no-selection-line-paste
+	  (setq macoy-clipboard-no-selection-line-paste (simpleclip-get-contents))))
 
   (defun macoyCut ()
 	(interactive)
@@ -166,10 +168,19 @@
 	(setq macoy-multiple-cursors-buffers nil)
 	(if (bound-and-true-p multiple-cursors-mode)
 		(call-interactively 'macoy-multiple-cursors-cut) ;; Was kill-region
-	  (call-interactively 'macoy-nonmc-cut)))
+	  (call-interactively 'macoy-nonmc-cut))
+	(when macoy-clipboard-no-selection-line-paste
+	  (setq macoy-clipboard-no-selection-line-paste (simpleclip-get-contents))))
 
   (defun macoyPaste ()
 	(interactive)
+	;; Something was put in the clipboard that wasn't a "No Selection" copy/cut (e.g. from an
+	;; external program). Clear it so that it behaves normally
+	(when (and macoy-clipboard-no-selection-line-paste
+			   (not (string-equal (simpleclip-get-contents)
+								  macoy-clipboard-no-selection-line-paste)))
+	  (setq macoy-clipboard-no-selection-line-paste nil))
+
 	(if (bound-and-true-p multiple-cursors-mode)
 		(call-interactively 'macoy-multiple-cursors-paste) ;; Was yank
 	  (call-interactively 'macoy-simpleclip-paste)))
