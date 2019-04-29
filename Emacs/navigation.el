@@ -70,7 +70,7 @@
 
 ;; Go to char. This is like avy quick jump but instead just goes to the next one, not any onscreen
 (when (require 'iy-go-to-char)
-  (define-key iy-go-to-char-keymap (kbd "C-g") 'iy-go-to-char-done)
+   (define-key iy-go-to-char-keymap (kbd "C-g") 'iy-go-to-char-done)
   (defun macoy-iy-go-to-char-regular-mode ()
 	(interactive)
 	(global-set-key (kbd "<left>") 'left-char)
@@ -98,6 +98,6 @@
 	(global-set-key (kbd "C-n") 'right-char)
 	(global-set-key (kbd "C-S-n") 'left-char))
   
-  (when (string-equal (user-login-name) "mmadson")
-	(macoy-iy-go-to-char-extreme-mode))
+  ;; (when (string-equal (user-login-name) "mmadson")
+	;; (macoy-iy-go-to-char-extreme-mode))
   )

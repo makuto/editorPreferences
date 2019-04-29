@@ -1,33 +1,36 @@
 adaptive-wrap
-ag                 20180225.240    A front-end for ag ('the silver searcher'), the C ack replacement.
-alect-themes       20180322.1408   Configurable light, dark and black themes for Emacs 24 or later
-auto-complete      20170124.1845   Auto Completion for GNU Emacs
-avy                20180415.1259   Jump to arbitrary positions in visible text and select text quickly.
-base16-theme       20180320.2254   Collection of themes built on combinations of 16 base colors
-better-defaults    0.1.2           Fixing weird quirks and poor defaults
-clang-format       20180406.814    Format code using clang-format
-darktooth-theme    20171206.639    From the darkness... it watches
-delight
+ag
+alect-themes
+auto-complete
+avy
+base16-theme
+better-defaults
+clang-format
+darktooth-theme
 diminish
+dired-narrow
 dsvn
 engine-mode
 expand-region
-flx-ido            20180117.719    flx integration for ido
-ido-vertical-mode  0.1.1           Makes ido-mode display vertically.
+flx-ido
+ido-vertical-mode
 ivy
 ivy-xref
 iy-go-to-char
+keyfreq
 magit
-marmalade-demo     0.0.5           a demonstration elpa package
-multiple-cursors   20180406.1350   Multiple cursors for Emacs.
-powerline          20180321.1948   Rewrite of Powerline
-projectile         20180324.2226   Manage and navigate projects in Emacs easily
-simpleclip         20170803.540    Simplified access to the system clipboard
-smex               3.0             M-x interface with Ido-style fuzzy matching.
-smooth-scrolling   20161002.1249   Make emacs scroll smoothly
-sublime-themes     20170606.1144   A collection of themes based on Sublime Text
-swiper             20180402.1857   Isearch with an overview. Oh, man!
+marmalade-demo
+multiple-cursors
+powerline
+projectile
+rainbow-mode
+simpleclip
+smex
+smooth-scrolling
+sublime-themes
+swiper
+web-beautify
 web-mode
-xah-find           20180310.450    find replace in pure emacs lisp. Purpose similar to grep/sed.
-yasnippet          20180412.1548   Yet another snippet extension for Emacs.
-zenburn-theme      2.1             A low contrast color theme for Emacs.
+xah-find
+yasnippet
+zenburn-theme

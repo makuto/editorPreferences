@@ -162,8 +162,10 @@
 ;; This is sane copy paste behavior
 ;; I keep this near the top because many of my utilities rely on simpleclip
 (when (require 'simpleclip)
-  (simpleclip-mode 1)
-  )
+  (simpleclip-mode 1))
+
+;; Handle installing packages
+(load-user-file "packages.el")
 
 ;; Settings which affect the core behavior of Emacs as well as interface-changing things like ido
 ;; This also has random utilities for managing buffers and files
