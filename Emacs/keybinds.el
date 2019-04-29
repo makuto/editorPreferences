@@ -185,6 +185,9 @@
   (define-key dired-mode-map (kbd "S-<return>") 'dired-find-file)
   ;; Was dired-up-directory
   (define-key dired-mode-map (kbd "<backspace>") (lambda () (interactive) (find-alternate-file "..")))
+
+  (when (require 'dired-narrow)
+	(define-key dired-mode-map (kbd "f") 'dired-narrow-fuzzy))
   )
 
 ;; Compilation mode customizations
@@ -270,3 +273,4 @@
   :lighter " M")
 
 (my-keys-minor-mode 1)
+

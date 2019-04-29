@@ -70,6 +70,34 @@
 
 ;; Go to char. This is like avy quick jump but instead just goes to the next one, not any onscreen
 (when (require 'iy-go-to-char)
-  (global-set-key (kbd "C-n") 'iy-go-to-char)
-  (global-set-key (kbd "C-S-n") 'iy-go-to-char-backward)
+  (define-key iy-go-to-char-keymap (kbd "C-g") 'iy-go-to-char-done)
+  (defun macoy-iy-go-to-char-regular-mode ()
+	(interactive)
+	(global-set-key (kbd "<left>") 'left-char)
+	(global-set-key (kbd "<right>") 'right-char)
+	(global-set-key (kbd "C-n") 'iy-go-to-char)
+	(global-set-key (kbd "C-S-n") 'iy-go-to-char-backward))
+  (macoy-iy-go-to-char-regular-mode)
+  ;;
+  ;; Extreme keymappings
+  ;; Keys which shouldn't be for the general user because they're confusing
+  (defun macoy-iy-go-to-char-extreme-mode ()
+	(interactive)
+	(global-set-key (kbd "<left>") 'iy-go-to-char-backward)
+	(global-set-key (kbd "<right>") 'iy-go-to-char)
+	(defun macoy-iy-go-to-char-left-done ()
+	  (interactive)
+	  (iy-go-to-char-done)
+	  (left-char))
+	(defun macoy-iy-go-to-char-right-done ()
+	  (interactive)
+	  (iy-go-to-char-done)
+	  (right-char))
+	(define-key iy-go-to-char-keymap (kbd "<left>") 'macoy-iy-go-to-char-left-done)
+	(define-key iy-go-to-char-keymap (kbd "<right>") 'macoy-iy-go-to-char-right-done)
+	(global-set-key (kbd "C-n") 'right-char)
+	(global-set-key (kbd "C-S-n") 'left-char))
+  
+  (when (string-equal (user-login-name) "mmadson")
+	(macoy-iy-go-to-char-extreme-mode))
   )
