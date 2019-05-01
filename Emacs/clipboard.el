@@ -38,16 +38,16 @@
   ;; Respect macoy-clipboard-no-selection-line-paste
   (defun macoy-simpleclip-paste ()
 	(interactive)
-    (save-excursion
-	  (if macoy-clipboard-no-selection-line-paste
+	(if macoy-clipboard-no-selection-line-paste
+		(save-excursion		  
 		  (progn
 			(back-to-indentation)
 			(newline)
 			(call-interactively 'indent-for-tab-command)
 			(previous-line)
 			(call-interactively 'simpleclip-paste)
-			(call-interactively 'indent-for-tab-command))
-		(call-interactively 'simpleclip-paste))))
+			(call-interactively 'indent-for-tab-command)))
+	  (call-interactively 'simpleclip-paste)))
 
   (defun macoy-mc-paste ()
 	(interactive)
