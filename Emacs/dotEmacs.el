@@ -175,6 +175,10 @@
 ;; Various customizations for Org mode
 (load-user-file "org-customizations.el")
 
+;; Manipulate JIRAs in Org-mode
+;; These customizations are required to use org-jira with lower permissions
+(load-user-file "org-jira-customizations.el")
+
 ;; Org-drill and associated customizations
 (load-user-file "drill-customizations.el")
 

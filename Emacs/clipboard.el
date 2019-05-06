@@ -39,7 +39,7 @@
   (defun macoy-simpleclip-paste ()
 	(interactive)
 	(if macoy-clipboard-no-selection-line-paste
-		(save-excursion		  
+		(save-excursion
 		  (progn
 			(back-to-indentation)
 			(newline)

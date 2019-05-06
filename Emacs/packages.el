@@ -40,6 +40,7 @@
 		  magit
 		  marmalade-demo
 		  multiple-cursors
+		  org-jira
 		  powerline
 		  projectile
 		  rainbow-mode
