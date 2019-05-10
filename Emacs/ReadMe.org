@@ -17,3 +17,122 @@ Set the ~user-init-dir~ in your .emacs to the directory of this ReadMe.org. This
    ...then set ~codesearch-csearch-exe~ and ~codesearch-cindex-exe~ to their respective executable locations
    Search for codesearch in this file to adjust indexing settings
 
+** Customization
+Emacs shines in its ease of customization. Get used to tweaking settings and building new features. It's one of the pleasures of working with Emacs: making the perfect setup.
+
+This config is meant only as a starting place. You should tear it to pieces and make it your own, or only refer to pieces of it while building up your own config.
+
+If you take the whole config, you'll need to do a decent amount of setup work to get all features working properly. I can attest that it's well worth it once everything has been configured, so stick to it!
+
+*** "This machine only" config
+To facilitate different settings per machine (e.g. your home config and work config differences), there's a simple mechanism:
+
+#+BEGIN_SRC lisp
+;; Stuff unique to certain machines (mine here for reference)
+(when (or (string-equal (user-login-name) "macoy")
+		  (string-equal (user-login-name) "mmadson"))
+  (load-file "~/.emacs-this-machine-only.el")
+  )
+#+END_SRC
+
+Change those ~string-equal~ comparisons to your machine(s) name(s). Multiple are there in case you have a home/work machine.
+
+Create that =~/.emacs-this-machine-only.el= file and put your per-machine settings in it.
+
+
+*** Build Systems
+Look at [[build-systems.el]] ~build-universal-jam~ for an example build system:
+
+#+BEGIN_SRC lisp
+(defun build-universal-jam-clean ()
+  "Build using jam (select directory first)"
+  (interactive)
+  (message "Jam clean")
+  (let ((default-directory (read-directory-name "Directory: ")))
+	(compile
+	 "jam clean")
+	)
+  )
+
+;;
+;; Build system manager - select from multiple different compilation commands
+;;
+
+;; Note that names need to be unique (they should be anyways)
+(setq macoy-build-system-list (list
+							   '("Jam (current directory)" build-universal-jam)
+							   '("Jam Clean (current directory)" build-universal-jam-clean)
+							   )
+	  )
+#+END_SRC
+
+Simply override ~macoy-build-system-list~ with your own custom build systems.
+
+Use ~F7~ to build. ~S-F7~ allows you to decide what happens when you hit ~F7~ (it will build right after selection as well).
+
+*** Ignored Files
+For ~C-p~ (projectile), you may want to filter out some files/directories:
+
+#+BEGIN_SRC lisp
+(setq projectile-globally-ignored-files
+        (append '("*_ast.*") ;; This syntax might not be right
+                projectile-globally-ignored-files))
+  (setq projectile-globally-ignored-directories
+        (append '("AutoGen"
+				  "3rdparty"
+				  ".build"
+				  ".cquery_cached_index")
+                projectile-globally-ignored-files))
+#+END_SRC
+
+(You'll need to run ~projectile-invalidate-cache~ to see the changes after evaluating).
+
+*** Keybinds
+
+Many keybinds are set in [[keybinds.el]]. It's not exhaustive (things are set in other files too), but it's worth looking at.
+
+*** Org
+Set up your org stuff (multiple provided for reference):
+
+#+BEGIN_SRC lisp
+;; My org files
+(setq macoy-org-dir nil)
+
+(when (string-equal (user-login-name) "macoy")
+  (setq macoy-org-dir "~/Dropbox/Org/")
+  (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
+							   (concat macoy-org-dir "0_Dump.org"))))
+
+(when (string-equal (user-login-name) "mmadson")
+  (setq macoy-org-dir "C:/Users/mmadson/Dropbox/Org/")
+  (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
+							   (concat macoy-org-dir "0_Dump.org"))))
+#+END_SRC
+
+~macoy-org-dir~ makes quick org opening possible via ~M-p~.
+
+**** Org-jira
+If you want to use ~org-jira~, set your company's JIRA url:
+
+#+BEGIN_SRC lisp
+(setq jiralib-url "http://jira:8080")
+#+END_SRC
+
+*** Search
+The search functionality (e.g. provided by ~C-e~ and ~C-S-f~) is extensive and a bit complicated. I made it to handle searching rather large collections of text quickly (we're talking tens of gigabytes, full text search).
+
+You should open [[search.el]] and read through it. Many directories, regex filters, and index locations should be customized to fit your project.
+
+The tool you should use most often is ~codesearch~, which is a very fast index-based search tool. ~ag~ serves as the general purpose, non-index-based but better than grep search tool.
+
+~C-e~ serves as a quick menu to searching using any of the techniques I've added. You should add your own techniques if you e.g. have multiple separate ~codesearch~ directories.
+
+*** Source Control
+In general, you should use ~vc-~ prefixed commands or ~magit~ for handling source control, but I've provided some TortoiseSVN commands in [[source-control.el]]. You'll need to tweak them for your repository (assuming you want to).
+
+*** Tags and Autocompletion
+Like searching, tag navigation (e.g. Go To Definition-like functionality) and autocompletion is extensive and complicated.
+
+You should open [[tags-and-autocompletion.el]] and read through it, making sure your executable paths and project paths are set.
+
+- TODO: I need to make this more convenient for multiple projects...

@@ -148,6 +148,7 @@
   (projectile-mode 1)
 
   ;; Make projectile mode-line more minimal
+  ;; TODO: Make this work based on version!
   (when (string-equal (user-login-name) "macoy")
 	(defun macoy-projectile-mode-line ()
 	  (format " [%s]" (projectile-project-name))

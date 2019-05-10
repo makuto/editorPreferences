@@ -192,13 +192,13 @@
 ;; cquery language server
 ;; See https://github.com/cquery-project/cquery/wiki
 ;; Run `lsp` to enable it in a buffer
-(when (require 'cquery)
-  (setq cquery-executable "f:/gitRepos/cquery/build/Release/cquery.exe")
-  (setq cquery-project-roots '("f:/CJUNCTIONS/src" ))
-  )
+;;(when (require 'cquery)
+;;  (setq cquery-executable "f:/gitRepos/cquery/build/Release/cquery.exe")
+;;  (setq cquery-project-roots '("f:/CJUNCTIONS/src" ))
+;;  )
 
 ;; eglot language server alternative
-(when (require 'eglot)
-  (add-to-list 'eglot-server-programs
-			   '((c++ mode c-mode) . (eglot-cquery "f:/gitRepos/cquery/build/Release/cquery.exe")))
-  )
+;;(when (require 'eglot)
+;;  (add-to-list 'eglot-server-programs
+;;			   '((c++ mode c-mode) . (eglot-cquery "f:/gitRepos/cquery/build/Release/cquery.exe")))
+;;  )
