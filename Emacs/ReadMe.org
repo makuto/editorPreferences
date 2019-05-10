@@ -30,9 +30,8 @@ To facilitate different settings per machine (e.g. your home config and work con
 #+BEGIN_SRC lisp
 ;; Stuff unique to certain machines (mine here for reference)
 (when (or (string-equal (user-login-name) "macoy")
-		  (string-equal (user-login-name) "mmadson"))
-  (load-file "~/.emacs-this-machine-only.el")
-  )
+          (string-equal (user-login-name) "mmadson"))
+  (load-file "~/.emacs-this-machine-only.el"))
 #+END_SRC
 
 Change those ~string-equal~ comparisons to your machine(s) name(s). Multiple are there in case you have a home/work machine.
@@ -49,10 +48,8 @@ Look at [[build-systems.el]] ~build-universal-jam~ for an example build system:
   (interactive)
   (message "Jam clean")
   (let ((default-directory (read-directory-name "Directory: ")))
-	(compile
-	 "jam clean")
-	)
-  )
+    (compile
+     "jam clean")))
 
 ;;
 ;; Build system manager - select from multiple different compilation commands
@@ -60,10 +57,8 @@ Look at [[build-systems.el]] ~build-universal-jam~ for an example build system:
 
 ;; Note that names need to be unique (they should be anyways)
 (setq macoy-build-system-list (list
-							   '("Jam (current directory)" build-universal-jam)
-							   '("Jam Clean (current directory)" build-universal-jam-clean)
-							   )
-	  )
+                              '("Jam (current directory)" build-universal-jam)
+                              '("Jam Clean (current directory)" build-universal-jam-clean)))
 #+END_SRC
 
 Simply override ~macoy-build-system-list~ with your own custom build systems.
@@ -79,9 +74,9 @@ For ~C-p~ (projectile), you may want to filter out some files/directories:
                 projectile-globally-ignored-files))
   (setq projectile-globally-ignored-directories
         (append '("AutoGen"
-				  "3rdparty"
-				  ".build"
-				  ".cquery_cached_index")
+               "3rdparty"
+               ".build"
+               ".cquery_cached_index")
                 projectile-globally-ignored-files))
 #+END_SRC
 
@@ -101,12 +96,12 @@ Set up your org stuff (multiple provided for reference):
 (when (string-equal (user-login-name) "macoy")
   (setq macoy-org-dir "~/Dropbox/Org/")
   (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
-							   (concat macoy-org-dir "0_Dump.org"))))
+                         (concat macoy-org-dir "0_Dump.org"))))
 
 (when (string-equal (user-login-name) "mmadson")
   (setq macoy-org-dir "C:/Users/mmadson/Dropbox/Org/")
   (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
-							   (concat macoy-org-dir "0_Dump.org"))))
+                         (concat macoy-org-dir "0_Dump.org"))))
 #+END_SRC
 
 ~macoy-org-dir~ makes quick org opening possible via ~M-p~.
