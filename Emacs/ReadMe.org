@@ -4,18 +4,22 @@
 Note that I recommend you cherry pick features you want instead of trying to use the entire config. This is better because you'll know all the features available to you.
 
 ** Setup
-Copy the contents of ~dotEmacs.el~ to \~/.emacs
-Set the ~user-init-dir~ in your .emacs to the directory of this ReadMe.org. This will load my config files straight from this repository.
-1. Install all packages in ~emacsPackages.txt~
-2. Add ~macoyCopy~, ~macoyCut~, and ~macoyPaste~ to ~mc/cmds-to-run-once~ and restart Emacs
-3. For magit on windows, fix credentials for server folder:
+Setting this up isn't very convenient yet, unfortunately.
+
+Note that [[packages.el]] will auto-install several packages which this config requires.
+
+1. Copy the contents of ~dotEmacs.el~ to =~/.emacs=
+2. Set the ~user-init-dir~ in your .emacs to the directory of this ReadMe.org. This will load my config files straight from this repository.
+3. Add ~macoyCopy~, ~macoyCut~, and ~macoyPaste~ to ~mc/cmds-to-run-once~ and restart Emacs
+4. For ~magit~ on Windows, fix credentials for server folder (may not be necessary, only do if you get errors using ~magit~):
        https://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
-4. Setup magit credentials:
+5. Setup ~magit~ credentials (unnecessary if you have SSL support):
        https://stackoverflow.com/questions/22580873/how-can-i-configure-magit-to-use-my-github-user-name
-5. If you want to use codesearch (fancy ultra fast indexed code searching), install it:
+6. If you want to use codesearch (fancy ultra fast indexed code searching), install it:
        https://github.com/google/codesearch
    ...then set ~codesearch-csearch-exe~ and ~codesearch-cindex-exe~ to their respective executable locations
    Search for codesearch in this file to adjust indexing settings
+7. Look over the *Customization* section for getting everything working properly per-machine.
 
 ** Customization
 Emacs shines in its ease of customization. Get used to tweaking settings and building new features. It's one of the pleasures of working with Emacs: making the perfect setup.
