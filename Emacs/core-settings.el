@@ -153,17 +153,12 @@
 
   ;; Make projectile mode-line more minimal
   ;; TODO: Make this work based on version!
-  (when (string-equal (user-login-name) "macoy")
-	(defun macoy-projectile-mode-line ()
-	  (format " [%s]" (projectile-project-name))
-	  )
-	(setq projectile-mode-line-function 'macoy-projectile-mode-line)
+  (defun macoy-projectile-mode-line ()
+	(format " [%s]" (projectile-project-name))
 	)
-
-  (when (string-equal (user-login-name) "mmadson")
-	;; Older version syntax
-	(setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
-	)
+  (setq projectile-mode-line-function 'macoy-projectile-mode-line)
+  ;; Older version syntax
+  ;; (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
   )
 ;;
 ;; File-related shortcuts

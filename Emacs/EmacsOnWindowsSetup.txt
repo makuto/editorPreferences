@@ -1,5 +1,5 @@
 #EmacsSetup
-1. Download https://drive.google.com/open?id=19KVTioQZE8o3UxtSb2M5CugBbWKRRwl1
+1. Download https://drive.google.com/open?id=19KVTioQZE8o3UxtSb2M5CugBbWKRRwl1 (this is my --with-modules Emacs 27 build)
 2. Extract it
 3. Install git: https://git-scm.com/download/win
 4. Run `git clone https://github.com/makuto/editorPreferences` (I like it in C:/editorPreferences)
@@ -8,3 +8,20 @@
 7. Open Users/your user name here/AppData/Roaming/.emacs
 8. Edit the line which says `(setq user-init-dir "~/.emacs.d/macoy")` to point to your editorPreferences dir: `(setq user-init-dir "C:/editorPreferences")`
 9. Restart Emacs
+
+External Dependencies
+1. Install chocolately: https://chocolatey.org/install
+2. Install ag: `choco install ag` (for file search)
+3. Download codesearch: https://github.com/junkblocker/codesearch/releases/download/v5/codesearch_v5_windows_amd64.zip
+
+External dependencies setup example
+```
+(setq codesearch-csearch-exe "C:/Users/mmadson/MacoyPrograms/Emacs27_Win64_WithDeps/codesearch/csearch.exe")
+(setq codesearch-cindex-exe "C:/Users/mmadson/MacoyPrograms/Emacs27_Win64_WithDeps/codesearch/cindex.exe")
+(setq codesearch-dir-to-index "D:/srcTip")
+(setq codesearch-index-file "~/.csearchindex")
+(setq codesearch-cindex-args (list "-reset" "-exclude" "D:/srcTip/csearchIgnorePatterns"))
+(setq codesearch-temp-file "~/.temp-codesearch.txt")
+
+;; (setq ag-executable "")
+```
