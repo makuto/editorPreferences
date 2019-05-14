@@ -93,12 +93,12 @@
   (set-face-background 'svn-mark-face (face-background 'region))
   )
 
-;; TODO: Colors to differentiate between groups
+;; TODO: Colors to differentiate between groups; foregrounds
 (when (require 're-builder)
   (set-face-background 'reb-match-0 (face-background 'region))
-  (set-face-background 'reb-match-1 (face-background 'region))
-  (set-face-background 'reb-match-2 (face-background 'region))
-  (set-face-background 'reb-match-3 (face-background 'region))
+  (set-face-background 'reb-match-1 "#c15759")
+  (set-face-background 'reb-match-2 "#fbbd5c")
+  (set-face-background 'reb-match-3 "#ff605d")
   )
 
 ;; Make sure diff-mode colors are theme-appropriate:
@@ -134,6 +134,25 @@
   (set-face-attribute 'magit-diff-removed nil
 					  :foreground (face-foreground 'diff-added)
 					  :background "#381e1e")
+  )
+
+;; Get rid of the strange light gray background
+(when (require 'vc-annotate)
+  ;; (setq 'vc-annotate-background "#55")
+  ;; (set-face-attribute 'vc-annotate-face-7CB8BB nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-8CD0D3 nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-8FB28F nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-93E0E3 nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-94BFF3 nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-9FC59F nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-AFD8AF nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-BC8383 nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-BFEBBF nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-CC9393 nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-D0BF8F nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-DC8CC3 nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-DFAF8F nil :background nil)
+  ;; (set-face-attribute 'vc-annotate-face-F0DFAF nil :background nil)
   )
 
 ;; Org faces customization

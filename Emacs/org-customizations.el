@@ -61,11 +61,13 @@
 (when (string-equal (user-login-name) "macoy")
   (setq macoy-org-dir "~/Dropbox/Org/")
   (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
+							   (concat macoy-org-dir "JapaneseLessons.org")
 							   (concat macoy-org-dir "0_Dump.org"))))
 
 (when (string-equal (user-login-name) "mmadson")
   (setq macoy-org-dir "C:/Users/mmadson/Dropbox/Org/")
   (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
+							   (concat macoy-org-dir "JapaneseLessons.org")
 							   (concat macoy-org-dir "0_Dump.org"))))
 
 (when macoy-org-dir

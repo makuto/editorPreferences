@@ -145,6 +145,20 @@
 (define-key occur-mode-map (kbd "p") 'occur-prev)
 
 ;; Move to beginning/end of function
+;; TODO: This is a little too disorienting. It should only recenter if the line
+;; is near the bottom or top (i.e. the function scrolled the window, losing your place)
+(defun macoy-beginning-of-defun-and-recenter ()
+  (interactive)
+  (call-interactively 'beginning-of-defun)
+  (recenter))
+(defun macoy-end-of-defun-and-recenter ()
+  (interactive)
+  (call-interactively 'end-of-defun)
+  (recenter))
+;; (global-set-key (kbd "M-<up>") 'macoy-beginning-of-defun-and-recenter)
+;; (global-set-key (kbd "M-<down>") 'macoy-end-of-defun-and-recenter)
+;; (global-set-key (kbd "C-<prior>") 'macoy-beginning-of-defun-and-recenter)
+;; (global-set-key (kbd "C-<next>") 'macoy-end-of-defun-and-recenter)
 (global-set-key (kbd "M-<up>") 'beginning-of-defun)
 (global-set-key (kbd "M-<down>") 'end-of-defun)
 (global-set-key (kbd "C-<prior>") 'beginning-of-defun)
@@ -199,6 +213,10 @@
   (define-key reb-mode-map (kbd "C-<up>") 'reb-prev-match)
   (define-key reb-mode-map (kbd "C-<down>") 'reb-next-match)
   )
+
+ ;; Saving this for later. The weird syntax is because C-m is normally non-printable line feed
+;; This doesn't actually work!
+;; (global-set-key [?\C-m] 'newline)
 
 ;;
 ;; Make bindings work with org-mode

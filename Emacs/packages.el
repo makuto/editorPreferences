@@ -39,6 +39,7 @@
 		  expand-region
 		  flx-ido
 		  ido-vertical-mode
+		  ido-completing-read+
 		  ivy
 		  ivy-xref
 		  iy-go-to-char

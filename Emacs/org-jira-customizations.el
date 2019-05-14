@@ -7,6 +7,10 @@
 (when (require 'org-jira)
   (setq jiralib-url "http://jira:8080")
   
+  ;; This doesn't fix the issue with org-jira-progress-issue. What made the required things?
+  ;; (when (require 'ido-completing-read+)
+	;; (add-to-list 'ido-cr+-function-blacklist 'org-jira-progress-issue))
+  
   ; Debug commands
   ;; (setq org-jira-verbosity 'debug)
   ;; (setq request-log-level 'debug)
@@ -19,11 +23,14 @@
   (files--ensure-directory org-jira-working-dir)
 
 ;; Overload this function to work with lower permissions (i.e. not set reporter)
+  ;; (TODO) We'll also add labels, which weren't in the original for some reason
+  ;; Need to do something like org-jira-build-components-list
 (defun org-jira-update-issue-details (issue-id filename &rest rest)
   "Update the details of issue ISSUE-ID in FILENAME.  REST will contain optional input."
   (ensure-on-issue-id-with-filename issue-id filename
     ;; Set up a bunch of values from the org content
     (let* ((org-issue-components (org-jira-get-issue-val-from-org 'components))
+		   ;; (org-issue-labels (org-jira-get-issue-val-from-org 'labels))
            (org-issue-description (s-trim (org-jira-get-issue-val-from-org 'description)))
            (org-issue-priority (org-jira-get-issue-val-from-org 'priority))
            (org-issue-type (org-jira-get-issue-val-from-org 'type))
@@ -48,6 +55,7 @@
                     (or (org-jira-build-components-list
                          project-components
                          org-issue-components) []))
+				   ;; (cons 'labels org-issue-labels)
                    (cons 'priority (org-jira-get-id-name-alist org-issue-priority
                                                        (jiralib-get-priorities)))
                    (cons 'description org-issue-description)

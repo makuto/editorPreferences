@@ -121,6 +121,10 @@
 
   (setq ido-everywhere t)
   
+  ;; No really, do ido everywhere
+  (when (require 'ido-completing-read+)
+	(ido-ubiquitous-mode 1))
+
   ;; Use ido for recentf file selection
   ;; From https://masteringemacs.org/article/find-files-faster-recent-files-package
   (defun ido-recentf-open ()
@@ -179,3 +183,10 @@
   (if default-directory
       (browse-url-of-file (expand-file-name default-directory))
     (error "No `default-directory' to open")))
+
+;; Open marked path
+(defun macoy-open-marked-path-file ()
+  "Open the path in region."
+  (interactive)
+  (when (use-region-p)
+	(find-file (buffer-substring (region-beginning) (region-end)))))

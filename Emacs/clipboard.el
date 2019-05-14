@@ -58,16 +58,16 @@
 	(unless macoy-multiple-cursors-buffers
 	  (call-interactively 'macoy-simpleclip-paste))
 	(when macoy-multiple-cursors-buffers
-	  (save-excursion
-		(if macoy-clipboard-no-selection-line-paste
-			(progn
+	  (if macoy-clipboard-no-selection-line-paste
+		  (progn
+			(save-excursion
 			  (back-to-indentation)
 			  (newline)
 			  (call-interactively 'indent-for-tab-command)
 			  (previous-line)
 			  (insert (nth macoy-mc-buffer-index macoy-multiple-cursors-buffers))
-			  (call-interactively 'indent-for-tab-command))
-		  (insert (nth macoy-mc-buffer-index macoy-multiple-cursors-buffers))))
+			  (call-interactively 'indent-for-tab-command)))
+		(insert (nth macoy-mc-buffer-index macoy-multiple-cursors-buffers)))
 	  ;; Set up next cursor buffer index
 	  ;; Ensure we don't go out of range of the buffers
 	  ;; Sublime's behavior is to just paste all buffers at all marks, so our solution is different here
