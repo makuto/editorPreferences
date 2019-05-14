@@ -1,0 +1,10 @@
+#EmacsSetup
+1. Download https://drive.google.com/open?id=19KVTioQZE8o3UxtSb2M5CugBbWKRRwl1
+2. Extract it
+3. Install git: https://git-scm.com/download/win
+4. Run `git clone https://github.com/makuto/editorPreferences` (I like it in C:/editorPreferences)
+5. Run Emacs: `Emacs27_Win64_WithDeps/Emacs27/bin/runemacs.exe`
+6. Copy the default settings: `cp editorPreferences/Emacs/dotEmacs.el Users/your user name here/AppData/Roaming/.emacs`
+7. Open Users/your user name here/AppData/Roaming/.emacs
+8. Edit the line which says `(setq user-init-dir "~/.emacs.d/macoy")` to point to your editorPreferences dir: `(setq user-init-dir "C:/editorPreferences")`
+9. Restart Emacs

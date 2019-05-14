@@ -1,5 +1,7 @@
 ;; Handle installing packages
 
+(require 'seq)
+
 ;; Enable MELPA
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -13,6 +15,10 @@
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 ;; TODO: Test if melpa still works
 ;; (package-initialize)
+
+(defun macoy-package-install (package)
+			(message "Installing %s" package)
+		(package-install package))
 
 ;; Install uninstalled packages
 (let* ((package--builtins nil)
@@ -38,7 +44,6 @@
 		  iy-go-to-char
 		  keyfreq
 		  magit
-		  marmalade-demo
 		  multiple-cursors
 		  org-jira
 		  powerline
@@ -56,7 +61,9 @@
 		  zenburn-theme
 		  )))
   (ignore-errors
-    (let ((packages (remove-if 'package-installed-p packages)))
+	(message "Checking for packages to install...")
+    (let ((packages (seq-remove 'package-installed-p packages)))
       (when packages
+			(message "Installing packages...")
         (package-refresh-contents)
-        (mapc 'package-install packages)))))
+        (mapc 'macoy-package-install packages)))))
