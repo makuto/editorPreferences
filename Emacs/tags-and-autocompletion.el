@@ -92,7 +92,8 @@
   ;; tags-completion-table() early-outs if the table has already been created
   ;; This is problematic if TAGS has changed
   ;; Clearing it here ensures the table won't get out of sync
-  (setq tags-completion-table nil)
+  (when tags-completion-table
+	(setq tags-completion-table nil))
   (tags-completion-table)
   
   (message "Refreshing ido tags list")

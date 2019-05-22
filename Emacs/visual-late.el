@@ -183,3 +183,5 @@
   ;; TODO: This needs to be in a hook somewhere for org mode. It doesn't work currently
   (diminish 'org-indent-mode)
   )
+
+(setq list-matching-lines-face nil)

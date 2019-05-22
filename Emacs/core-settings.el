@@ -1,3 +1,6 @@
+;; After having troubles with Windows 10 writing CRLF, I'm going to try this
+;; Always prefer UTF-8
+(prefer-coding-system 'utf-8)
 
 ;; Some settings from http://ergoemacs.org/emacs/emacs_make_modern.html
 
@@ -34,6 +37,8 @@
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 
+;; Don't warn on large files (I have very big TAGS)
+(setq large-file-warning-threshold 90000000)
 
 ;; stop creating those backup~ files
 (setq make-backup-files nil)
@@ -146,6 +151,7 @@
   (setq projectile-globally-ignored-directories
         (append '("AutoGen"
 				  "3rdparty"
+				  "obj140"
 				  ".build"
 				  ".cquery_cached_index")
                 projectile-globally-ignored-files))

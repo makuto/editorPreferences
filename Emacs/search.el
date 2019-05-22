@@ -70,7 +70,7 @@ If there's a string at point, offer that as a default."
 														'macoy-codesearch-search-src)))
 	;; Codesearch data
 	(define-key map (kbd "d") (lambda () (interactive) (macoy-select-do-search
-														'macoy-codesearch-search-with-filter-directory "C:/Magic/data")))
+														'macoy-codesearch-search-with-filter-directory "D:/Magic/data")))
 	;; Swiper all
 	(define-key map (kbd "s") (lambda () (interactive) (macoy-select-do-search
 														'swiper-all)))

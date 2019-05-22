@@ -108,18 +108,39 @@
   ;; Not enabled globally because it looks a bit too ugly for my tastes; I can toggle it when needed
   ;;(global-whitespace-mode 0)
   (setq whitespace-style '(tab-mark space-mark))
+  ;; whitespace-trailing
+  ;; whitespace-indentation
+  (set-face-foreground 'whitespace-indentation (face-background 'match))
+  (set-face-background 'whitespace-indentation (face-foreground 'match))
+  ;; (setq whitespace-style '(face indentation::tab trailing))
   (setq whitespace-line-column 100)
   (setq whitespace-newline nil)
-  )
 
-(defun macoy-toggle-whitespace-mode ()
-  (interactive)
-  (if (bound-and-true-p whitespace-mode)
-	  (whitespace-mode 0)
-	(whitespace-mode)
-	)
+  ;; Attempt at a global mode which only shows bad setups. Almost works, but Elisp isn't good
+  ;; (setq macoy-whitespace-style-minimal '(face indentation trailing))
+  ;; (setq macoy-whitespace-style-verbose '(tab-mark space-mark))
+  
+  ;; (global-whitespace-mode 1)
+  ;; (setq whitespace-style macoy-whitespace-style-minimal)
+
+  ;; (setq macoy-whitespace-verbose nil)
+  ;; (defun macoy-toggle-whitespace-mode ()
+  ;; 	(interactive)
+  ;; 	;; Toggle off and on to redraw buffer (could probably just call the function which does this...)
+  ;; 	(whitespace-mode 0)
+  ;; 	(setq macoy-whitespace-verbose (not macoy-whitespace-verbose))
+  ;; 	(if macoy-whitespace-verbose
+  ;; 		(setq whitespace-style macoy-whitespace-style-verbose)
+  ;; 	  (setq whitespace-style macoy-whitespace-style-minimal))
+  ;; 	(whitespace-mode 1))
+
+  (defun macoy-toggle-whitespace-mode ()
+    (interactive)
+    (if (bound-and-true-p whitespace-mode)
+  		(whitespace-mode 0)
+  	  (whitespace-mode)))
+  (global-set-key (kbd "S-<f9>") 'macoy-toggle-whitespace-mode)
   )
-(global-set-key (kbd "S-<f9>") 'macoy-toggle-whitespace-mode)
 
 ;;
 ;; Auto Theming
