@@ -44,6 +44,7 @@
 		  ivy-xref
 		  iy-go-to-char
 		  keyfreq
+		  lua-mode
 		  magit
 		  multiple-cursors
 		  org-jira

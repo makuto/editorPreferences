@@ -73,7 +73,7 @@
 ;; Powerline: nicer status bar
 ;;
 (require 'powerline)
-(setq powerline-default-separator 'butt)
+(setq powerline-default-separator 'slant)
 (setq powerline-display-hud nil)
 (setq powerline-display-buffer-size nil)
 (setq powerline-display-mule-info nil)

@@ -8,28 +8,28 @@
   (interactive)
   (message "Checking for modifications")
   (start-process "CheckForModifications" nil
-				 "tortoiseproc" "/command:repostatus" "/path:F:\\CJUNCTIONS\\src"))
+				 "tortoiseproc" "/command:repostatus" "/path:D:\\srcTip"))
 
 (defun tortoise-svn-show-log-src ()
   "Open the TortoiseSVN Log window"
   (interactive)
   (message "SVN Log")
   (start-process "SVNLog" nil
-				 "tortoiseproc" "/command:log" "/path:F:\\CJUNCTIONS\\src"))
+				 "tortoiseproc" "/command:log" "/path:D:\\srcTip"))
 
 (defun tortoise-svn-update-src ()
   "Open the TortoiseSVN Update window"
   (interactive)
   (message "SVN Update")
   (start-process "SVNUpdate" nil
-				 "tortoiseproc" "/command:update" "/path:F:\\CJUNCTIONS\\src"))
+				 "tortoiseproc" "/command:update" "/path:D:\\srcTip"))
 
 (defun tortoise-svn-create-patch-src ()
   "Open the TortoiseSVN Create Patch window"
   (interactive)
   (message "SVN Create Patch")
   (start-process "SVNCreatePatch" nil
-				 "tortoiseproc" "/command:createpatch" "/noview" "/path:F:\\CJUNCTIONS\\src"))
+				 "tortoiseproc" "/command:createpatch" "/noview" "/path:D:\\srcTip"))
 
 ;; dsvn SVN frontend
 (autoload 'svn-status "dsvn" "Run `svn status'." t)
@@ -40,9 +40,7 @@
   (interactive)
   (if (projectile-project-p)
 	  (svn-status (projectile-project-root))
-	(call-interactively 'svn-status)
-	)
-  )
+	(call-interactively 'svn-status)))
 
 (global-set-key (kbd "<f6>") 'macoy-svn-status)
 (global-set-key (kbd "S-<f6>") 'vc-print-root-log)
@@ -58,11 +56,8 @@
 
   ;; magit
   (when (string-equal (buffer-name) "COMMIT_EDITMSG")
-	(call-interactively 'with-editor-finish)
-	)
+	(call-interactively 'with-editor-finish))
   
   ;; dsvn
   (when (derived-mode-p 'log-edit-mode)
-	(call-interactively 'log-edit-done)
-	)
-  )
+	(call-interactively 'log-edit-done)))

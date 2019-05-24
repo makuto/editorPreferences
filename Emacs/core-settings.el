@@ -84,11 +84,22 @@
   (mapcar
    (lambda (buffer-to-kill)
 	 (when (get-buffer buffer-to-kill)
-		(kill-buffer buffer-to-kill))
-	 )
-   macoy-buffers-to-kill
-   )
-  )
+		(kill-buffer buffer-to-kill)))
+   macoy-buffers-to-kill))
+
+(defun macoy-bury-buffer-anywhere (buffer-or-name)
+  "Bury all windows showing BUFFER-OR-NAME.
+BUFFER-OR-NAME may be a buffer or the name of an existing buffer
+and defaults to the current buffer. For example, 
+(macoy-bury-buffer-anywhere \"*Compile-Log*\") 
+would dismiss the compile log, if it was visible"
+  (let ((buffer (window-normalize-buffer buffer-or-name))
+		;; Handle the "inverted" meaning of the FRAME argument wrt other
+		;; `window-list-1' based function.
+		(all-frames t))
+    (dolist (window (window-list-1 nil nil all-frames))
+      (when (eq (window-buffer window) buffer)
+		(switch-to-prev-buffer window)))))
 
 ;; Store recently opened files so we can easily reopen them
 (recentf-mode 1)
