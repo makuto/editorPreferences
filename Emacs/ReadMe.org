@@ -11,12 +11,9 @@ Note that [[packages.el]] will auto-install several packages which this config r
 1. Copy the contents of ~dotEmacs.el~ to =~/.emacs=
 2. Set the ~user-init-dir~ in your .emacs to the directory of this ReadMe.org. This will load my config files straight from this repository.
 3. Add ~macoyCopy~, ~macoyCut~, and ~macoyPaste~ to ~mc/cmds-to-run-once~ and restart Emacs
-4. For ~magit~ on Windows, fix credentials for server folder (may not be necessary, only do if you get errors using ~magit~):
-       https://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
-5. Setup ~magit~ credentials (unnecessary if you have SSL support):
-       https://stackoverflow.com/questions/22580873/how-can-i-configure-magit-to-use-my-github-user-name
-6. If you want to use codesearch (fancy ultra fast indexed code searching), install it:
-       https://github.com/google/codesearch
+4. For ~magit~ on Windows, [[https://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start][fix credentials for server folder]] (may not be necessary, only do if you get errors using ~magit~):
+5. [[https://stackoverflow.com/questions/22580873/how-can-i-configure-magit-to-use-my-github-user-name][Setup ~magit~ credentials]] (unnecessary if you have SSL support):
+6. If you want to use codesearch (fancy ultra fast indexed code searching), get the [[https://github.com/junkblocker/codesearch][updated branch]], or use the [[https://github.com/google/codesearch][old Google branch]] (missing index-time filtering features)
    ...then set ~codesearch-csearch-exe~ and ~codesearch-cindex-exe~ to their respective executable locations
    Search for codesearch in this file to adjust indexing settings
 7. Look over the *Customization* section for getting everything working properly per-machine.

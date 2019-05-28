@@ -43,10 +43,12 @@
 		  (progn
 			(back-to-indentation)
 			(newline)
-			(call-interactively 'indent-for-tab-command)
+			(when (not (eq 'org-mode major-mode))(call-interactively 'indent-for-tab-command))
 			(previous-line)
 			(call-interactively 'simpleclip-paste)
-			(call-interactively 'indent-for-tab-command)))
+			;; For some reason there is sometimes leftover whitespace after
+			(delete-trailing-whitespace (line-beginning-position) (line-end-position))
+			(when (not (eq 'org-mode major-mode))(call-interactively 'indent-for-tab-command))))
 	  (call-interactively 'simpleclip-paste)))
 
   (defun macoy-mc-paste ()
@@ -63,10 +65,12 @@
 			(save-excursion
 			  (back-to-indentation)
 			  (newline)
-			  (call-interactively 'indent-for-tab-command)
+			  (when (not (eq 'org-mode major-mode))(call-interactively 'indent-for-tab-command))
 			  (previous-line)
 			  (insert (nth macoy-mc-buffer-index macoy-multiple-cursors-buffers))
-			  (call-interactively 'indent-for-tab-command)))
+			  ;; For some reason there is sometimes leftover whitespace after
+			  (delete-trailing-whitespace (line-beginning-position) (line-end-position))
+			  (when (not (eq 'org-mode major-mode))(call-interactively 'indent-for-tab-command))))
 		(insert (nth macoy-mc-buffer-index macoy-multiple-cursors-buffers)))
 	  ;; Set up next cursor buffer index
 	  ;; Ensure we don't go out of range of the buffers

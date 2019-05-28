@@ -6,16 +6,14 @@
   (newline)
   (call-interactively 'indent-for-tab-command)
   (previous-line)
-  (back-to-indentation)
-  )
+  (back-to-indentation))
 
 (defun macoy-add-edit-newline-after ()
   "Create a new line after the current line and go to it"
   (interactive)
   (end-of-visual-line)
   (newline)
-  (call-interactively 'indent-for-tab-command)
-  )
+  (call-interactively 'indent-for-tab-command))
 
 (global-set-key (kbd "C-<return>") 'macoy-add-edit-newline-after)
 (global-set-key (kbd "S-<return>") 'macoy-add-edit-newline-before)
@@ -30,8 +28,7 @@
 (defun macoy-insert-tab ()
   "Make it possible to easily input raw tabs instead of having to do C-q <tab>"
   (interactive)
-  (insert "	")
-  )
+  (insert "	"))
 
 ;; Backtab is the same as S-<tab>
 (global-set-key (kbd "<backtab>") 'macoy-insert-tab)
@@ -56,8 +53,7 @@
   (interactive)
   ;; From Macoy's navigation.el
   (macoy-save-place)
-  (call-interactively 'mark-whole-buffer)
-  )
+  (call-interactively 'mark-whole-buffer))
 
 ;; Select All. was move-beginning-of-line
 (global-set-key (kbd "C-a") 'macoy-mark-whole-buffer)
@@ -111,16 +107,14 @@
   (interactive)
   (subword-mode 1)
   (call-interactively 'kill-word)
-  (subword-mode 0)
-  )
+  (subword-mode 0))
 
 (defun macoy-kill-subword-backward ()
   "Temporarily enable subword mode to kill camelCase subword"
   (interactive)
   (subword-mode 1)
   (call-interactively 'backward-kill-word)
-  (subword-mode 0)
-  )
+  (subword-mode 0))
 
 (global-set-key (kbd "C-S-<delete>") 'macoy-kill-subword)
 (global-set-key (kbd "C-S-<backspace>") 'macoy-kill-subword-backward)
@@ -226,8 +220,7 @@
   "The same as `org-insert-heading-respect-content' only do it before current heading"
   (interactive)
   (call-interactively 'org-previous-visible-heading)
-  (call-interactively 'org-insert-heading-respect-content)
-  )
+  (call-interactively 'org-insert-heading-respect-content))
 
 ;; Note that org keybinds are kept in org-customizations.el
 
