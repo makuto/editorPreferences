@@ -1,0 +1,7 @@
+[lp-tab]>[rctrl]
+[mp-kpshf]>[tab]
+[rp-kpent]>[rshift]
+{lctrl}{scroll}>{next}
+{lshift}{lctrl}{scroll}>{prev}
+{lctrl}{pause}>{play}
+{mp-kpshf}>{-lalt}{enter}{+lalt}
