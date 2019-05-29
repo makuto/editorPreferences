@@ -143,6 +143,17 @@
   )
 
 ;;
+;; Narrow/widen
+;;
+(defun macoy-toggle-narrow ()
+  (interactive)
+  (if (buffer-narrowed-p)
+	  (widen)
+	(narrow-to-defun)))
+
+(global-set-key (kbd "C-S-<f9>") 'macoy-toggle-narrow)
+
+;;
 ;; Auto Theming
 ;;
 
