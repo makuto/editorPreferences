@@ -8,8 +8,7 @@
 
   (defun macoy-org-copy-file-line-link-to-clipboard ()
 	(interactive)
-	(simpleclip-set-contents (format "[[file:%s::%d][" buffer-file-name (line-number-at-pos)))
-	)
+	(simpleclip-set-contents (format "[[file:%s::%d][" buffer-file-name (line-number-at-pos))))
   )
 
 (with-eval-after-load 'org
@@ -62,12 +61,14 @@
   (setq macoy-org-dir "~/Dropbox/Org/")
   (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
 							   (concat macoy-org-dir "JapaneseLessons.org")
+							   (concat macoy-org-dir "Auri.org")
 							   (concat macoy-org-dir "0_Dump.org"))))
 
 (when (string-equal (user-login-name) "mmadson")
   (setq macoy-org-dir "C:/Users/mmadson/Dropbox/Org/")
   (setq org-agenda-files (list (concat macoy-org-dir "1_Calendar.org")
 							   (concat macoy-org-dir "JapaneseLessons.org")
+							   (concat macoy-org-dir "Auri.org")
 							   (concat macoy-org-dir "0_Dump.org"))))
 
 (when macoy-org-dir
@@ -85,8 +86,7 @@
 										(macoy-get-org-file-list)))))
 	  (find-file selected-macoy-org)))
 
-  (global-set-key (kbd "M-p") 'macoy-switch-macoy-org)
-  )
+  (global-set-key (kbd "M-p") 'macoy-switch-macoy-org))
 
 ;; From https://orgmode.org/manual/Languages.html#Languages
 ;; Because I was too lazy to find the actual internal list
@@ -137,8 +137,7 @@
   (interactive)
   (insert (format "#+BEGIN_SRC %s\n\n#+END_SRC"
 				  (ido-completing-read "Language: " macoy-org-code-block-languages)))
-  (forward-line -1)
-  )
+  (forward-line -1))
 
 (when (require 'simpleclip)
   (defun macoy-org-copy-code-block ()
@@ -152,8 +151,14 @@
 									   (buffer-name)
 									   (line-number-at-pos (region-beginning))
 									   (ido-completing-read "Language: " macoy-org-code-block-languages)
-									   (buffer-substring (region-beginning) (region-end)))
-							   )
-	  )
-	)
-  )
+									   (buffer-substring (region-beginning) (region-end)))))))
+
+;;
+;; Clocking
+;;
+(setq org-clock-history-length 10)
+
+;; For selecting most recent clock via ido
+(require 'org-mru-clock)
+(global-set-key (kbd "<f8>") 'org-mru-clock-in)
+(global-set-key (kbd "S-<f8>") 'org-clock-out)

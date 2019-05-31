@@ -48,6 +48,7 @@
 		  magit
 		  multiple-cursors
 		  org-jira
+		  org-mru-clock
 		  powerline
 		  projectile
 		  rainbow-mode
