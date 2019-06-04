@@ -162,7 +162,9 @@
   ;; This is used for the date output in org-schedule
   (set-face-foreground 'secondary-selection (face-foreground 'region))
   (set-face-background 'secondary-selection (face-background 'region))
-
+  ;; This is normally font-lock-comment-face, which is not very readable
+  (set-face-foreground 'org-level-4 (face-foreground 'font-lock-doc-face))
+  (set-face-foreground 'outline-4 (face-foreground 'font-lock-doc-face))
   ;; I'm not sure why I had to do this, but make 100% sure links are underlined
   (set-face-underline 'org-link t)
   )

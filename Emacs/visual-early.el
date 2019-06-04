@@ -28,8 +28,7 @@
 (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 2))))
 ;; 4k monitor demands extra thicc cursor
 (when (string-equal (user-login-name) "macoy")
-  (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 3))))
-  )
+  (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 3)))))
 
 ;; Scrolling
 ;; https://www.emacswiki.org/emacs/SmoothScrolling
@@ -139,8 +138,7 @@
     (if (bound-and-true-p whitespace-mode)
   		(whitespace-mode 0)
   	  (whitespace-mode)))
-  (global-set-key (kbd "S-<f9>") 'macoy-toggle-whitespace-mode)
-  )
+  (global-set-key (kbd "S-<f9>") 'macoy-toggle-whitespace-mode))
 
 ;;
 ;; Narrow/widen
@@ -161,13 +159,11 @@
 (when (string-equal (user-login-name) "mmadson")
   (setq macoy-auto-theme-schemer2-bin "c:/Users/mmadson/go/bin/schemer2.exe")
   (setq macoy-auto-theme-script-dir "f:/gitRepos/auto-base16-theme")
-  (setq macoy-auto-theme-output-file "c:/Users/mmadson/AppData/Roaming/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el")
-  )
+  (setq macoy-auto-theme-output-file "c:/Users/mmadson/AppData/Roaming/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el"))
 (when (string-equal (user-login-name) "macoy")
   (setq macoy-auto-theme-schemer2-bin "schemer2")
   (setq macoy-auto-theme-script-dir "~/Development/code/repositories/auto-base16-theme")  
-  (setq macoy-auto-theme-output-file "~/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el")
-  )
+  (setq macoy-auto-theme-output-file "~/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el"))
 
 (defun macoy-generate-auto-theme ()
   "Create a base16 auto-theme using AutoBase16Theme.py based on the image selected."
@@ -176,9 +172,7 @@
   (let ((default-directory macoy-auto-theme-script-dir))
 	(compile
 	 (format "%s -format img::colors -in \"%s\" -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el %s"
-			 macoy-auto-theme-schemer2-bin (read-file-name "Image: ") macoy-auto-theme-output-file))
-	)
-  )
+			 macoy-auto-theme-schemer2-bin (read-file-name "Image: ") macoy-auto-theme-output-file))))
 
 ;; Reference Windows command:
 ;;c:/Users/mmadson/go/bin/schemer2.exe -format img::colors -in C:/Users/mmadson/Downloads/Wallpapers/32\ -\ fHFDkjY.jpg -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el c:/Users/mmadson/AppData/Roaming/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el
