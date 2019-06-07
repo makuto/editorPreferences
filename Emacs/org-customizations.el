@@ -54,6 +54,9 @@
 ;; issued in the language major mode buffer.
 (setq org-src-tab-acts-natively t)
 
+;; Non-nil means on links RET will follow the link.
+(setq org-return-follows-link t)
+
 ;; My org files
 (setq macoy-org-dir nil)
 

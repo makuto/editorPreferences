@@ -66,6 +66,15 @@
 	)
 
   (global-set-key (kbd "M-c") 'macoy-quick-jump-copy-paste)
+
+  (setq macoy-avy-workman nil)
+  (defun macoy-toggle-avy-keys ()
+	"Toggle avy prompts for layout"
+	(interactive)
+	(setq macoy-avy-workman (not macoy-avy-workman))
+	(if macoy-avy-workman
+		(setq avy-keys '(?a ?s ?h ?t ?n ?e ?o ?i ?g))
+	  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
   )
 
 ;; Go to char. This is like avy quick jump but instead just goes to the next one, not any onscreen

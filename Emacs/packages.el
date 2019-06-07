@@ -45,6 +45,7 @@
 		  iy-go-to-char
 		  keyfreq
 		  lua-mode
+		  markdown-mode
 		  magit
 		  multiple-cursors
 		  org-jira
