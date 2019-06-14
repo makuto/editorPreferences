@@ -171,8 +171,7 @@ would dismiss the compile log, if it was visible"
   ;; Make projectile mode-line more minimal
   ;; TODO: Make this work based on version!
   (defun macoy-projectile-mode-line ()
-	(format " [%s]" (projectile-project-name))
-	)
+	(format " [%s]" (projectile-project-name)))
   (setq projectile-mode-line-function 'macoy-projectile-mode-line)
   ;; Older version syntax
   ;; (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
@@ -195,6 +194,8 @@ would dismiss the compile log, if it was visible"
   (if default-directory
       (browse-url-of-file (expand-file-name default-directory))
     (error "No `default-directory' to open")))
+
+(global-set-key (kbd "<f10>") 'browse-file-directory)
 
 ;; Open marked path
 (defun macoy-open-marked-path-file ()
