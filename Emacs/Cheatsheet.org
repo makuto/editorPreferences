@@ -1,0 +1,69 @@
+* Macoy's Emacs Cheatsheet
+It might seem intimidating, but you have to remember that Emacs is (IMO) the most powerful and easily modifiable editor, and you pay for that.
+
+If you end up not liking it, it's probably not for you, and that's okay! I just have a lot of fun with it and think other people might as well.
+
+** Terminology
+- "Window" is the term for split panes in Emacs. "Frame" is the term for the actual (OS-provided) window.
+- "Kill" is often used instead of "delete" or "close"
+- "Buffer" is used instead of "file". This is because A) files are on disk, buffers are in memory, and B) things can be a buffer that aren't from files (e.g. ~magit~ is a git interface which is an interactive buffer created in code)
+- "Face" is the characters displayed. "Font locks" are what color faces (your theme changes font lock colors)
+** Useful Commands
+*Run commands via C-S-p*.
+
+| ~list-packages~ | Install packages. These are plugins which add functionality |
+| ~magit~         | Manage Git repository. Commit, stage, etc.                  |
+| ~compile~       | Run a command to compile                                    |
+| ~recompile~     | Run the same compile command you did last ~compile~         |
+
+If you want a new theme, support for a different programming language, or new functionality, check for packages which add it.
+
+*** Misc. commands
+
+| ~sort-lines~             | Nice for ordering header files. Comes in handy for random things |
+| ~delete-duplicate-lines~ | Also comes in handy for random things                            |
+| ~set-input-method~       | Useful when typing other languages                               |
+
+** Keybinds
+All binds in Emacs are re-bindable. It has the most flexible and powerful keybinding systems of any program I've interacted with.
+
+Notation:
+- ~C-g~ means "CTRL-g"
+- ~C-S-g~ means "CTRL-Shift-g"
+- ~M-g~ means "Alt-g" /(it used to mean "Meta", which was a key on certain old keyboards. Remember, Emacs is one of the oldest Open Source programs still in active use, so it has a lot of history!)/
+*** *The Most Important Keys*
+**** ~C-g~: Quit/cancel operation/exit menu
+This is like Escape in other programs (don't press Esc in Emacs though). If Emacs locks up on a long operation, you can try C-g to stop it
+**** ~C-h~: Help
+There is so much to Emacs that it would be impossible to make one cheatsheet that covers it all. Luckily, Emacs is pretty well-documented, and all the documentation is built in to the editor. Help lets you access that.
+
+Hit ~C-h~. It will prompt you for another key. *Type '?' to see all the help options*. 
+
+Here are some useful help keys (press after C-h):
+| k | Tells you what a key does in the current Mode. For example, if you hit ~C-h k C-s~ in most file editing modes, help will tell you that "C-s runs the command save-buffer"           |
+| m | Tells you about the buffer's current modes. This has descriptions and keybindings. The Major Mode is the primary behavior, while Minor modes augment that behavior and add features |
+| f | Describes what a function does and lets you go to its definition                                                                                                                    |
+| v | Describes what a variable represents, what its value is, and lets you go to its definition                                                                                          |
+*** Window Management
+"Window" is the term for split panes in Emacs. "Frame" is the term for the actual (OS-provided) window.
+
+These keybinds resemble web browser tab management keybinds.
+
+| C-S-t | Split window horizontally                   |
+| M-t   | Split window vertically                     |
+| C-S-w | Remove current window split (merge windows) |
+*** Buffer Management
+Buffers are like tabs in conventional programs.
+
+| C-w   | Kill (close) buffer. Select from a list where the first choice is always the current buffer |
+| C-b   | Switch buffers. This is like clicking a tab to view a different file                        |
+| C-o   | Open file                                                                                   |
+| C-S-t | Open recent file                                                                            |
+| q     | On buffers which aren't files (e.g. Diffs, Magit, Help), hit this to minimize the buffer    |
+
+In order to manage whole groups of buffers, Emacs has "desktops". They save a list of all your open buffers so you can switch easily between collections of them. These are similar to Sublime's "workspaces".
+
+| M-d   | Create new desktop with current buffers |
+| C-S-b | Switch desktops                         |
+
+Note that at startup your old desktop will not be loaded, but it will be the first in the list when you run ~C-S-b~.
