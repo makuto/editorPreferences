@@ -11,12 +11,17 @@ If you end up not liking it, it's probably not for you, and that's okay! I just 
 ** Useful Commands
 *Run commands via C-S-p*.
 
-| ~list-packages~ | Install packages. These are plugins which add functionality |
-| ~magit~         | Manage Git repository. Commit, stage, etc.                  |
-| ~compile~       | Run a command to compile                                    |
-| ~recompile~     | Run the same compile command you did last ~compile~         |
+| ~list-packages~     | Install packages. These are plugins which add functionality                |
+| ~compile~           | Run a command to compile                                                   |
+| ~recompile~         | Run the same compile command you did last ~compile~                        |
 
 If you want a new theme, support for a different programming language, or new functionality, check for packages which add it.
+*** Version Control
+| ~magit~             | Manage Git repository. Commit, stage, etc.                                 |
+| ~vc-print-log~      | See the log (version control history) for the file                         |
+| ~vc-print-root-log~ | See the log (version control history) for the repository                   |
+| ~vc-diff~           | Compare your working version of the file with the repository version       |
+| ~vc-root-diff~      | Compare your working version of the repository with the repository version |
 
 *** Misc. commands
 
