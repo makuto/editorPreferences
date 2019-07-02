@@ -167,6 +167,13 @@
   (set-face-foreground 'outline-4 (face-foreground 'font-lock-doc-face))
   ;; I'm not sure why I had to do this, but make 100% sure links are underlined
   (set-face-underline 'org-link t)
+  ;; Don't use the default block face for code
+  (setq org-src-block-faces '(("C" 'default)
+							  ("python" 'default)
+							  ("C++" 'default)
+							  ("emacs-lisp" 'default)
+							  ("lisp" 'default)
+							  ("sh" 'default)))
   )
 
 ;; Hide these modes completely (for a more minimal look)
