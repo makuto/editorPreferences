@@ -38,6 +38,7 @@
 		  engine-mode
 		  expand-region
 		  flx-ido
+		  htmlize
 		  ido-vertical-mode
 		  ido-completing-read+
 		  ivy
