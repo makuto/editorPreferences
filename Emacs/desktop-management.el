@@ -6,6 +6,9 @@
 ;;  care too much about losing our frame configurations so this is okay
 (setq desktop-restore-frames nil)
 
+;; Lazy load buffers instead of loading them all at once (which takes too long)
+(setq desktop-restore-eager 4)
+
 ;; Used to know whether or not to show the last selected desktop at the top of the desktop list
 (setq macoy-has-ever-selected-desktop-this-session nil)
 

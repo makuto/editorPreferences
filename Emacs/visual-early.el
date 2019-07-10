@@ -105,8 +105,12 @@
 ;; Show whitespace
 (when (require 'whitespace)
   ;; Not enabled globally because it looks a bit too ugly for my tastes; I can toggle it when needed
-  ;;(global-whitespace-mode 0)
+  (global-whitespace-mode 0)
   (setq whitespace-style '(tab-mark space-mark))
+
+  ;; (global-whitespace-mode 1)
+  ;; (setq whitespace-style '(space-mark))
+  
   ;; whitespace-trailing
   ;; whitespace-indentation
   (set-face-foreground 'whitespace-indentation (face-background 'match))
@@ -114,6 +118,14 @@
   ;; (setq whitespace-style '(face indentation::tab trailing))
   (setq whitespace-line-column 100)
   (setq whitespace-newline nil)
+
+  ;; (set-face-foreground 'whitespace-indentation (face-foreground 'font-lock-comment-face))
+
+ ;; Doesn't work
+  ;; (set-face-foreground 'whitespace-tab (face-foreground 'font-lock-comment-face))
+  ;; Use | for tabs
+  ;; (setq whitespace-display-mappings
+  ;; '((tab-mark 9 [124 9] [92 9])))
 
   ;; Attempt at a global mode which only shows bad setups. Almost works, but Elisp isn't good
   ;; (setq macoy-whitespace-style-minimal '(face indentation trailing))
@@ -124,20 +136,20 @@
 
   ;; (setq macoy-whitespace-verbose nil)
   ;; (defun macoy-toggle-whitespace-mode ()
-  ;; 	(interactive)
-  ;; 	;; Toggle off and on to redraw buffer (could probably just call the function which does this...)
-  ;; 	(whitespace-mode 0)
-  ;; 	(setq macoy-whitespace-verbose (not macoy-whitespace-verbose))
-  ;; 	(if macoy-whitespace-verbose
-  ;; 		(setq whitespace-style macoy-whitespace-style-verbose)
-  ;; 	  (setq whitespace-style macoy-whitespace-style-minimal))
-  ;; 	(whitespace-mode 1))
+  ;;    (interactive)
+  ;;    ;; Toggle off and on to redraw buffer (could probably just call the function which does this...)
+  ;;    (whitespace-mode 0)
+  ;;    (setq macoy-whitespace-verbose (not macoy-whitespace-verbose))
+  ;;    (if macoy-whitespace-verbose
+  ;;        (setq whitespace-style macoy-whitespace-style-verbose)
+  ;;      (setq whitespace-style macoy-whitespace-style-minimal))
+  ;;    (whitespace-mode 1))
 
   (defun macoy-toggle-whitespace-mode ()
     (interactive)
     (if (bound-and-true-p whitespace-mode)
-  		(whitespace-mode 0)
-  	  (whitespace-mode)))
+        (whitespace-mode 0)
+      (whitespace-mode)))
   (global-set-key (kbd "S-<f9>") 'macoy-toggle-whitespace-mode))
 
 ;;
@@ -146,8 +158,8 @@
 (defun macoy-toggle-narrow ()
   (interactive)
   (if (buffer-narrowed-p)
-	  (widen)
-	(narrow-to-defun)))
+      (widen)
+    (narrow-to-defun)))
 
 (global-set-key (kbd "C-S-<f9>") 'macoy-toggle-narrow)
 
@@ -170,9 +182,9 @@
   (interactive)
 
   (let ((default-directory macoy-auto-theme-script-dir))
-	(compile
-	 (format "%s -format img::colors -in \"%s\" -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el %s"
-			 macoy-auto-theme-schemer2-bin (read-file-name "Image: ") macoy-auto-theme-output-file))))
+    (compile
+     (format "%s -format img::colors -in \"%s\" -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el %s"
+             macoy-auto-theme-schemer2-bin (read-file-name "Image: ") macoy-auto-theme-output-file))))
 
 ;; Reference Windows command:
 ;;c:/Users/mmadson/go/bin/schemer2.exe -format img::colors -in C:/Users/mmadson/Downloads/Wallpapers/32\ -\ fHFDkjY.jpg -out colors.txt && python3 AutoBase16Theme.py emacs-base16-theme-template.el c:/Users/mmadson/AppData/Roaming/.emacs.d/elpa/base16-theme-20180320.2254/base16-my-auto-theme.el

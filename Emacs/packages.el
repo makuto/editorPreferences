@@ -17,58 +17,58 @@
 ;; (package-initialize)
 
 (defun macoy-package-install (package)
-			(message "Installing %s" package)
-		(package-install package))
+  (message "Installing %s" package)
+  (package-install package))
 
 ;; Install uninstalled packages
 (let* ((package--builtins nil)
        (packages
         '(adaptive-wrap
-		  ag
-		  alect-themes
-		  auto-complete
-		  avy
-		  base16-theme
-		  better-defaults
-		  clang-format
-		  darktooth-theme
-		  diminish
-		  dired-narrow
-		  dsvn
-		  engine-mode
-		  expand-region
-		  flx-ido
-		  htmlize
-		  ido-vertical-mode
-		  ido-completing-read+
-		  ivy
-		  ivy-xref
-		  iy-go-to-char
-		  keyfreq
-		  lua-mode
-		  markdown-mode
-		  magit
-		  multiple-cursors
-		  org-jira
-		  org-mru-clock
-		  powerline
-		  projectile
-		  rainbow-mode
-		  simpleclip
-		  smex
-		  smooth-scrolling
-		  sublime-themes
-		  swiper
-		  web-beautify
-		  web-mode
-		  xah-find
-		  yasnippet
-		  zenburn-theme
-		  )))
+          ag
+          alect-themes
+          auto-complete
+          avy
+          base16-theme
+          better-defaults
+          clang-format
+          darktooth-theme
+          diminish
+          dired-narrow
+          dsvn
+          engine-mode
+          expand-region
+          flx-ido
+          htmlize
+          ido-vertical-mode
+          ido-completing-read+
+          ivy
+          ivy-xref
+          iy-go-to-char
+          keyfreq
+          lua-mode
+          markdown-mode
+          magit
+          multiple-cursors
+          org-jira
+          org-mru-clock
+          powerline
+          projectile
+          rainbow-mode
+          simpleclip
+          smex
+          smooth-scrolling
+          sublime-themes
+          swiper
+          web-beautify
+          web-mode
+          xah-find
+          yasnippet
+          zenburn-theme
+          )))
   (ignore-errors
-	(message "Checking for packages to install...")
+    (message "Checking for packages to install...")
     (let ((packages (seq-remove 'package-installed-p packages)))
       (when packages
-			(message "Installing packages...")
+        (message "Installing packages...")
         (package-refresh-contents)
         (mapc 'macoy-package-install packages)))))

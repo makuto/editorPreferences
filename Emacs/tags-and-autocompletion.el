@@ -11,9 +11,8 @@
 ;; Refresh and load tags
 ;; TODO: Use projectile refresh ctags instead
 (if (eq system-type 'gnu/linux)
-	(setq ctags-path "ctags")
-  (setq ctags-path "C:/programsMacoy/ctags58/ctags.exe")
-  )
+    (setq ctags-path "ctags")
+  (setq ctags-path "C:/programsMacoy/ctags58/ctags.exe"))
 
 (defun generateTags ()
   "Create tags file"
@@ -21,31 +20,29 @@
   ;;(let ((default-directory "F:/CJUNCTIONS/src/")))
   (message "Running CTags")
   (let ((ctagsProc (start-process "CTags" "*CTags-out*" ctags-path "-e" "-f"
-				 ;; Output location
-				 (concat (projectile-project-root) "TAGS")
+                                  ;; Output location
+                                  (concat (projectile-project-root) "TAGS")
 
-				 ;; Additional arguments
-				 "--verbose" "--recurse=yes" "--languages=C,C++,Python"
-				 
-				 ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
-				 ;;  not on Windows)
-				 "--exclude=/home/macoy/Development/code/3rdParty/repositories/blender/doc"
+                                  ;; Additional arguments
+                                  "--verbose" "--recurse=yes" "--languages=C,C++,Python"
+                                  
+                                  ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
+                                  ;;  not on Windows)
+                                  "--exclude=/home/macoy/Development/code/3rdParty/repositories/blender/doc"
 
-				 ;; Includes
-				 (projectile-project-root) ;; HOME_ONLY
-				 ;; "F:/CJUNCTIONS/src/Core"
-				 )))
-	(set-process-sentinel ctagsProc
-						  (lambda (ctagsProc _string)
-							(call-interactively 'macoy-ido-find-tag-refresh))))
-)
+                                  ;; Includes
+                                  (projectile-project-root) ;; HOME_ONLY
+                                  ;; "F:/CJUNCTIONS/src/Core"
+                                  )))
+    (set-process-sentinel ctagsProc
+                          (lambda (ctagsProc _string)
+                            (call-interactively 'macoy-ido-find-tag-refresh)))))
 
 (defun loadTagsFromParent ()
   (let ((my-tags-file (locate-dominating-file default-directory "TAGS")))
     (when my-tags-file
       (message "Loading tags file: %s" my-tags-file)
-      (visit-tags-table my-tags-file)))
-  )
+      (visit-tags-table my-tags-file))))
 
 ;; Use Ivy to select xref results
 (require 'ivy-xref)
@@ -54,11 +51,11 @@
 ;; This isn't really necessary because attempting a goto definition will automatically do this
 ;;(global-set-key (kbd "C-<f5>") (lambda () (interactive) (loadTagsFromParent)))
 (global-set-key (kbd "C-<f5>")
-				(lambda ()
-				  (interactive)
-				  ;; Note that these are both subprocesses so they will run at the same time
-				  (generateTags)
-				  (macoy-codesearch-index-default)))
+                (lambda ()
+                  (interactive)
+                  ;; Note that these are both subprocesses so they will run at the same time
+                  (generateTags)
+                  (macoy-codesearch-index-default)))
 
 ;; Tags keybinding
 (global-set-key (kbd "<f12>") 'xref-find-definitions)
@@ -93,15 +90,15 @@
   ;; This is problematic if TAGS has changed
   ;; Clearing it here ensures the table won't get out of sync
   (when tags-completion-table
-	(setq tags-completion-table nil))
+    (setq tags-completion-table nil))
   (tags-completion-table)
   
   (message "Refreshing ido tags list")
   ;; Reset to remove "empty" value as well as avoid duplicates
   (setq macoy-tag-names nil)
   (mapcar (lambda (x)
-			(push (prin1-to-string x t) macoy-tag-names))
-		  tags-completion-table)
+            (push (prin1-to-string x t) macoy-tag-names))
+          tags-completion-table)
   (message "Refreshing ido tags list done"))
 
 (defun macoy-ido-find-tag ()
@@ -125,7 +122,7 @@
 
 (defvar ac-source-macoy-ido-tags
   '(;;(init . macoy-ido-find-tag-refresh) ;; Commented because it runs every time (unnecessary)
-	(candidates . macoy-tag-names)
+    (candidates . macoy-tag-names)
     (cache)))
 
 ;; Autocomplete from precompiled tags list (normal tags source is too slow)
@@ -135,8 +132,11 @@
 (setq-default ac-sources '(
                            ac-source-yasnippet
                            ac-source-words-in-same-mode-buffers
-						   ac-source-macoy-ido-tags
+                           ac-source-macoy-ido-tags
                            ))
+
+;; (setq ac-candidate-limit nil)
+;; (setq ac-auto-show-menu nil)
 
 ;; Alternate find file in project thing using tags
 ;; If projectile isn't doing the trick, use tags instead
@@ -144,27 +144,26 @@
 (defun macoy-ido-find-file-in-tag-files ()
   (interactive)
   (save-excursion
-	(let ((enable-recursive-minibuffers t))
-	  (visit-tags-table-buffer))
-	(find-file
-	 (expand-file-name
-	  (ido-completing-read
-	   "Project file: " (tags-table-files) nil t)))))
+    (let ((enable-recursive-minibuffers t))
+      (visit-tags-table-buffer))
+    (find-file
+     (expand-file-name
+      (ido-completing-read
+       "Project file: " (tags-table-files) nil t)))))
 
 ;; Find references via tags-search. This is my find-references replacement
 (defun macoy-tags-search ()
   "Pick tag with `macoy-ido-find-tag' then run `tags-search' (or search marked)"
   (interactive)
   (if (use-region-p)
-	  (tags-search (buffer-substring (region-beginning) (region-end)))
-	(tags-search (ido-completing-read "Tag: " macoy-tag-names))
-	))
+      (tags-search (buffer-substring (region-beginning) (region-end)))
+    (tags-search (ido-completing-read "Tag: " macoy-tag-names))))
 
 ;; Hippie Expand/DAbbrev settings
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-all-buffers))
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 (global-set-key (kbd "C-SPC") 'hippie-expand)
-  
+
 ;; Find references
 (global-set-key (kbd "C-\\") 'macoy-tags-search)
 (global-set-key (kbd "C-|") 'tags-loop-continue)
@@ -172,19 +171,16 @@
 
 (defun macoy-tags-query-replace-marked (replacement)
   (interactive (list
-				(read-string (format "Replace %s with: "
-									 (buffer-substring (region-beginning) (region-end))))))
+                (read-string (format "Replace %s with: "
+                                     (buffer-substring (region-beginning) (region-end))))))
   
-  (tags-query-replace (buffer-substring (region-beginning) (region-end)) replacement)
-  )
+  (tags-query-replace (buffer-substring (region-beginning) (region-end)) replacement))
 
 (defun macoy-tags-query-replace ()
   (interactive)
   (if (use-region-p)
-	  (call-interactively 'macoy-tags-query-replace-marked (buffer-substring (region-beginning) (region-end)))
-	(call-interactively 'tags-query-replace)
-	)
-  )
+      (call-interactively 'macoy-tags-query-replace-marked (buffer-substring (region-beginning) (region-end)))
+    (call-interactively 'tags-query-replace)))
 
 ;;
 ;; Language Servers (the nuclear option)
@@ -201,5 +197,5 @@
 ;; eglot language server alternative
 ;;(when (require 'eglot)
 ;;  (add-to-list 'eglot-server-programs
-;;			   '((c++ mode c-mode) . (eglot-cquery "f:/gitRepos/cquery/build/Release/cquery.exe")))
+;;             '((c++ mode c-mode) . (eglot-cquery "f:/gitRepos/cquery/build/Release/cquery.exe")))
 ;;  )

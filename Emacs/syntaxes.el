@@ -67,3 +67,9 @@
   ;; Function list
   nil
   )
+
+(when (require 'lua-mode)
+  (setq lua-indent-level 4))
+
+(when (require 'smart-tabs-mode
+  (smart-tabs-insinuate 'c 'c++)))

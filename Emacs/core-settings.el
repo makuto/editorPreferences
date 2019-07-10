@@ -57,34 +57,34 @@
   (interactive)
   ;; TODO: Make sure dependent buffers aren't broken when this happens!
   (setq macoy-buffers-to-kill (list
-							   "*Backtrace*"
-							   "*CTags-out*"
-							   "*Calc Trail*"
-							   "*Calculator*"
-							   "*Codesearch*"
-							   "*Codesearch-Index*"
-							   "*Compile-Log*"
-							   "*Completions*"
-							   "*Diff*"
-							   "*Ediff Registry*"
-							   "*Gimme-checkout*"
-							   "*Gimme-GetLatest*"
-							   "*Help*"
-							   "*Packages*"
-							   "*ag search*"
-							   "*compilation*"
-							   "*log-edit-files*"
-							   "*svn output*"
-							   "*vc-change-log*"
-							   "*vc-diff*"
-							   "*xref*"
-							   "*Macoy-Select-Search*"
-							   "*Occur*"
-							   ))
+                               "*Backtrace*"
+                               "*CTags-out*"
+                               "*Calc Trail*"
+                               "*Calculator*"
+                               "*Codesearch*"
+                               "*Codesearch-Index*"
+                               "*Compile-Log*"
+                               "*Completions*"
+                               "*Diff*"
+                               "*Ediff Registry*"
+                               "*Gimme-checkout*"
+                               "*Gimme-GetLatest*"
+                               "*Help*"
+                               "*Packages*"
+                               "*ag search*"
+                               "*compilation*"
+                               "*log-edit-files*"
+                               "*svn output*"
+                               "*vc-change-log*"
+                               "*vc-diff*"
+                               "*xref*"
+                               "*Macoy-Select-Search*"
+                               "*Occur*"
+                               ))
   (mapcar
    (lambda (buffer-to-kill)
-	 (when (get-buffer buffer-to-kill)
-		(kill-buffer buffer-to-kill)))
+     (when (get-buffer buffer-to-kill)
+       (kill-buffer buffer-to-kill)))
    macoy-buffers-to-kill))
 
 (defun macoy-bury-buffer-anywhere (buffer-or-name)
@@ -94,12 +94,12 @@ and defaults to the current buffer. For example,
 (macoy-bury-buffer-anywhere \"*Compile-Log*\") 
 would dismiss the compile log, if it was visible"
   (let ((buffer (window-normalize-buffer buffer-or-name))
-		;; Handle the "inverted" meaning of the FRAME argument wrt other
-		;; `window-list-1' based function.
-		(all-frames t))
+        ;; Handle the "inverted" meaning of the FRAME argument wrt other
+        ;; `window-list-1' based function.
+        (all-frames t))
     (dolist (window (window-list-1 nil nil all-frames))
       (when (eq (window-buffer window) buffer)
-		(switch-to-prev-buffer window)))))
+        (switch-to-prev-buffer window)))))
 
 ;; Store recently opened files so we can easily reopen them
 (recentf-mode 1)
@@ -127,27 +127,27 @@ would dismiss the compile log, if it was visible"
 
   ;; Ido flx settings: make ido have fuzzy sublime-like matching
   (when (require 'flx-ido)
-	(ido-mode 1)
-	(ido-everywhere 1)
-	(flx-ido-mode 1)
-	;; disable ido faces to see flx highlights.
-	(setq ido-enable-flex-matching t)
-	(setq ido-use-faces nil)
-	)
+    (ido-mode 1)
+    (ido-everywhere 1)
+    (flx-ido-mode 1)
+    ;; disable ido faces to see flx highlights.
+    (setq ido-enable-flex-matching t)
+    (setq ido-use-faces nil)
+    )
 
   (setq ido-everywhere t)
   
   ;; No really, do ido everywhere
   (when (require 'ido-completing-read+)
-	(ido-ubiquitous-mode 1))
+    (ido-ubiquitous-mode 1))
 
   ;; Use ido for recentf file selection
   ;; From https://masteringemacs.org/article/find-files-faster-recent-files-package
   (defun ido-recentf-open ()
-	"Use `ido-completing-read' to \\[find-file] a recent file"
-	(interactive)
-	(find-file (ido-completing-read "Find recent file: " recentf-list))
-	)
+    "Use `ido-completing-read' to \\[find-file] a recent file"
+    (interactive)
+    (find-file (ido-completing-read "Find recent file: " recentf-list))
+    )
   (global-set-key (kbd "C-S-t") 'ido-recentf-open)
   )
 
@@ -161,17 +161,17 @@ would dismiss the compile log, if it was visible"
                 projectile-globally-ignored-files))
   (setq projectile-globally-ignored-directories
         (append '("AutoGen"
-				  "3rdparty"
-				  "obj140"
-				  ".build"
-				  ".cquery_cached_index")
+                  "3rdparty"
+                  "obj140"
+                  ".build"
+                  ".cquery_cached_index")
                 projectile-globally-ignored-files))
   (projectile-mode 1)
 
   ;; Make projectile mode-line more minimal
   ;; TODO: Make this work based on version!
   (defun macoy-projectile-mode-line ()
-	(format " [%s]" (projectile-project-name)))
+    (format " [%s]" (projectile-project-name)))
   (setq projectile-mode-line-function 'macoy-projectile-mode-line)
   ;; Older version syntax
   ;; (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
@@ -182,9 +182,8 @@ would dismiss the compile log, if it was visible"
 
 (when (require 'simpleclip)
   (defun macoy-copy-buffer-filename-to-clipboard ()
-	(interactive)
-	(simpleclip-set-contents buffer-file-name)
-	)
+    (interactive)
+    (simpleclip-set-contents buffer-file-name))
   )
 
 ;; Open file in explorer
@@ -202,4 +201,32 @@ would dismiss the compile log, if it was visible"
   "Open the path in region."
   (interactive)
   (when (use-region-p)
-	(find-file (buffer-substring (region-beginning) (region-end)))))
+    (find-file (buffer-substring (region-beginning) (region-end)))))
+
+;;
+;; Tabs and indentation
+;;
+
+;; Delete tabs instead of converting them to spaces
+(setq backward-delete-char-untabify-method nil)
+;; From https://dougie.io/emacs/indentation (with some modifications
+;; Two callable functions for enabling/disabling tabs in Emacs
+(defun disable-tabs ()
+  (interactive)
+  (setq indent-tabs-mode nil))
+
+(defun enable-tabs ()
+  (interactive)
+  ;; (local-set-key (kbd "TAB") 'tab-to-tab-stop)
+  (setq indent-tabs-mode t)
+  (setq tab-width 4))
+
+;; Hooks to Enable Tabs
+(add-hook 'c-mode-hook 'enable-tabs)
+(add-hook 'c++-mode-hook 'enable-tabs)
+(add-hook 'lua-mode-hook 'enable-tabs)
+
+;; Hooks to Disable Tabs
+(add-hook 'lisp-mode-hook 'disable-tabs)
+(add-hook 'emacs-lisp-mode-hook 'disable-tabs)
+(add-hook 'python-mode-hook 'disable-tabs)
