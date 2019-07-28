@@ -55,6 +55,7 @@
           projectile
           rainbow-mode
           simpleclip
+          smart-tabs-mode
           smex
           smooth-scrolling
           sublime-themes
