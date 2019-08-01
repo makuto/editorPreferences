@@ -120,6 +120,11 @@
   (set-face-attribute 'ediff-fine-diff-B nil :background "#2c4a27")
   )
 
+(when (require 'smerge-mode)
+  (set-face-attribute 'smerge-refined-added nil :background "#2c4a27")
+  (set-face-attribute 'smerge-refined-removed nil :background "#4a2727")
+  )
+
 ;; Make magit's diff look similar/the same as diff-mode
 (when (require 'magit)
   (set-face-attribute 'magit-diff-added-highlight nil
@@ -194,3 +199,5 @@
   )
 
 (setq list-matching-lines-face nil)
+
+(set-face-foreground 'escape-glyph (face-foreground 'font-lock-warning-face))

@@ -59,7 +59,10 @@
 
 ;; Tags keybinding
 (global-set-key (kbd "<f12>") 'xref-find-definitions)
+(global-set-key (kbd "M-S-g") 'xref-find-definitions)
 (global-set-key (kbd "M-g") 'xref-find-definitions-other-window)
+(global-set-key (kbd "C-;") 'xref-find-definitions-other-window)
+(global-set-key (kbd "C-:") 'xref-find-definitions)
 (global-set-key (kbd "S-<f12>") 'xref-find-apropos)
 (global-set-key (kbd "C-S-d") 'macoy-ido-find-tag)
 
