@@ -17,26 +17,26 @@
 
 ;; Note that names need to be unique (they should be anyways)
 (setq macoy-transparency-list (list
-							   ;; '("Jam (current directory)" build-universal-jam)
-							   '(80 70)
-							   '(85 70)
-							   '(90 70)
-							   '(100 100)
-							   )
-	  )
+                               ;; '("Jam (current directory)" build-universal-jam)
+                               '(70 60)
+                               '(80 70)
+                               '(85 70)
+                               '(90 70)
+                               '(100 100)
+                               ))
 
 (setq macoy-transparency-index 0)
 (defun macoy-cycle-transparency (&optional index)
   (interactive)
   (if index
-	  (setq macoy-transparency-index index)
-	(setq macoy-transparency-index (+ macoy-transparency-index 1)))
+      (setq macoy-transparency-index index)
+    (setq macoy-transparency-index (+ macoy-transparency-index 1)))
   ;; Loop around
   (unless (< macoy-transparency-index (safe-length macoy-transparency-list))
-	(setq macoy-transparency-index 0))
+    (setq macoy-transparency-index 0))
   (let ((transparency-settings (nth macoy-transparency-index macoy-transparency-list)))
-	(set-frame-parameter (selected-frame) 'alpha transparency-settings)
-	(message "Transparency now %s" transparency-settings)))
+    (set-frame-parameter (selected-frame) 'alpha transparency-settings)
+    (message "Transparency now %s" transparency-settings)))
 
 ;; Set default transparency
 (macoy-cycle-transparency 0)
@@ -128,17 +128,17 @@
 ;; Make magit's diff look similar/the same as diff-mode
 (when (require 'magit)
   (set-face-attribute 'magit-diff-added-highlight nil
-					  :foreground (face-foreground 'diff-added)
-					  :background "#2c4a27")
+                      :foreground (face-foreground 'diff-added)
+                      :background "#2c4a27")
   (set-face-attribute 'magit-diff-removed-highlight nil
-					  :foreground (face-foreground 'diff-added)
-					  :background "#4a2727")
+                      :foreground (face-foreground 'diff-added)
+                      :background "#4a2727")
   (set-face-attribute 'magit-diff-added nil
-					  :foreground (face-foreground 'diff-added)
-					  :background "#21381e")
+                      :foreground (face-foreground 'diff-added)
+                      :background "#21381e")
   (set-face-attribute 'magit-diff-removed nil
-					  :foreground (face-foreground 'diff-added)
-					  :background "#381e1e")
+                      :foreground (face-foreground 'diff-added)
+                      :background "#381e1e")
   )
 
 ;; Get rid of the strange light gray background
@@ -174,11 +174,11 @@
   (set-face-underline 'org-link t)
   ;; Don't use the default block face for code
   (setq org-src-block-faces '(("C" 'default)
-							  ("python" 'default)
-							  ("C++" 'default)
-							  ("emacs-lisp" 'default)
-							  ("lisp" 'default)
-							  ("sh" 'default)))
+                              ("python" 'default)
+                              ("C++" 'default)
+                              ("emacs-lisp" 'default)
+                              ("lisp" 'default)
+                              ("sh" 'default)))
   )
 
 ;; Hide these modes completely (for a more minimal look)

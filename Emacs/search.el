@@ -70,7 +70,7 @@ If there's a string at point, offer that as a default."
 														'macoy-codesearch-search-src)))
 	;; Codesearch data
 	(define-key map (kbd "d") (lambda () (interactive) (macoy-select-do-search
-														'macoy-codesearch-search-with-filter-directory "D:/Magic/data")))
+														'macoy-codesearch-search-with-filter-directory macoy-codesearch-search-data-dir)))
 	;; Swiper all
 	(define-key map (kbd "s") (lambda () (interactive) (macoy-select-do-search
 														'swiper-all)))
@@ -160,6 +160,7 @@ If there's a string at point, offer that as a default."
   (setq codesearch-dir-to-index "f:/CJUNCTIONS/src")
   (setq codesearch-index-file "~/.csearchindex")
   (setq codesearch-temp-file "c:/.temp-codesearch.txt")
+  (setq macoy-codesearch-search-data-dir "D:/Magic/data")
   )
   
 (when (string-equal (user-login-name) "macoy")
@@ -168,6 +169,7 @@ If there's a string at point, offer that as a default."
   (setq codesearch-dir-to-index "/home/macoy/Development/code/repositories")
   (setq codesearch-index-file "~/.csearchindex")
   (setq codesearch-temp-file "~/.temp-codesearch.txt")
+  (setq macoy-codesearch-search-data-dir nil)
   )
 
 ;; TODO: Rename compilation buffer and add a finished message?

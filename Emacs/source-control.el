@@ -61,3 +61,7 @@
   ;; dsvn
   (when (derived-mode-p 'log-edit-mode)
 	(call-interactively 'log-edit-done)))
+
+(defun macoy-dsvn-diff-marked ()
+  (interactive)
+  (svn-diff-file t))
