@@ -42,11 +42,12 @@
   (defun macoy-clang-format-paragraph ()
     "Format the block/paragraph"
     (interactive)
-    (save-excursion
+    (save-mark-and-excursion
       (unless (use-region-p)
         (mark-paragraph))
       (when (use-region-p)
-        (call-interactively 'clang-format-region))))
+        (call-interactively 'clang-format-region)))
+    (deactivate-mark))
 
   (defun macoy-clang-format-function ()
     "Format the function"

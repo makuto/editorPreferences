@@ -160,7 +160,7 @@ If there's a string at point, offer that as a default."
   (setq codesearch-dir-to-index "f:/CJUNCTIONS/src")
   (setq codesearch-index-file "~/.csearchindex")
   (setq codesearch-temp-file "c:/.temp-codesearch.txt")
-  (setq macoy-codesearch-search-data-dir "D:/Magic/data")
+  ;; (setq macoy-codesearch-search-data-dir "D:/Magic/data")
   )
   
 (when (string-equal (user-login-name) "macoy")
@@ -248,8 +248,7 @@ If there's a string at point, offer that as a default."
 	  (compilation-start (format "%s -n -i \"%s\""
 								 codesearch-csearch-exe
 								 ;; (regexp-quote pattern) ;; This doesn't work because more escape(\) chars are added
-								 pattern
-								 codesearch-temp-file)
+								 pattern)
 						 #'macoy-codesearch-mode
 						 `(lambda (mode-name) , "*Codesearch*")
 						 )
