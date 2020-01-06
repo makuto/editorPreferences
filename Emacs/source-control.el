@@ -2,34 +2,45 @@
 ;;
 ;; Source control
 ;;
+(setq tortoise-svn-repository-path "D:/src")
+
+(defun macoy-unix-path-to-windows-path (str)
+  (replace-regexp-in-string "/" "\\\\" str))
+
+(defun macoy-tortoise-svn-make-path (str)
+  (format "/path:%s" (macoy-unix-path-to-windows-path str)))
 
 (defun tortoise-svn-check-for-modifications-src ()
   "Open the TortoiseSVN Check for Modifications window"
   (interactive)
   (message "Checking for modifications")
   (start-process "CheckForModifications" nil
-				 "tortoiseproc" "/command:repostatus" "/path:D:\\srcTip"))
+				 "tortoiseproc" "/command:repostatus"
+                 (macoy-tortoise-svn-make-path tortoise-svn-repository-path)))
 
 (defun tortoise-svn-show-log-src ()
-  "Open the TortoiseSVN Log window"
+  "Open the TortoliseSVN Log window"
   (interactive)
   (message "SVN Log")
   (start-process "SVNLog" nil
-				 "tortoiseproc" "/command:log" "/path:D:\\srcTip"))
+				 "tortoiseproc" "/command:log"
+                 (macoy-tortoise-svn-make-path tortoise-svn-repository-path)))
 
 (defun tortoise-svn-update-src ()
   "Open the TortoiseSVN Update window"
   (interactive)
   (message "SVN Update")
   (start-process "SVNUpdate" nil
-				 "tortoiseproc" "/command:update" "/path:D:\\srcTip"))
+				 "tortoiseproc" "/command:update"
+                 (macoy-tortoise-svn-make-path tortoise-svn-repository-path)))
 
 (defun tortoise-svn-create-patch-src ()
   "Open the TortoiseSVN Create Patch window"
   (interactive)
   (message "SVN Create Patch")
   (start-process "SVNCreatePatch" nil
-				 "tortoiseproc" "/command:createpatch" "/noview" "/path:D:\\srcTip"))
+				 "tortoiseproc" "/command:createpatch" "/noview"
+                 (macoy-tortoise-svn-make-path tortoise-svn-repository-path)))
 
 ;; dsvn SVN frontend
 (autoload 'svn-status "dsvn" "Run `svn status'." t)

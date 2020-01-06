@@ -77,6 +77,9 @@
 ;; Modes and customizations of modes for different syntaxes
 (load-user-file "syntaxes.el")
 
+;; Support for other languages (not programming languages) (mostly Japanese)
+(load-user-file "language.el")
+
 ;; Customizations related to source control stuff like DSVN, Magit, etc.
 (load-user-file "source-control.el")
 

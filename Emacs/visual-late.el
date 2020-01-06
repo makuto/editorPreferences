@@ -121,8 +121,14 @@
   )
 
 (when (require 'smerge-mode)
-  (set-face-attribute 'smerge-refined-added nil :background "#2c4a27")
-  (set-face-attribute 'smerge-refined-removed nil :background "#4a2727")
+  ;; (set-face-attribute 'smerge-refined-added nil :background "#2c4a27")
+  (set-face-attribute 'smerge-refined-added nil :background "#182916")
+  (set-face-attribute 'smerge-refined-removed nil :background "#2c1717")
+  (set-face-attribute 'smerge-refined-changed nil :background "#2c4a27")
+  (set-face-attribute 'smerge-markers nil :background (face-background 'match))
+  (set-face-attribute 'smerge-base nil :background "#482300")
+  (set-face-attribute 'smerge-upper nil :background "#4f2929")
+  (set-face-attribute 'smerge-lower nil :background "#233c20")
   )
 
 ;; Make magit's diff look similar/the same as diff-mode

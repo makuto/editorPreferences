@@ -18,3 +18,22 @@
       (set-window-configuration conf)
       (switch-to-buffer "*Occur*")
       (local-set-key (kbd "q") 'bury-buffer))))
+
+;; From https://www.emacswiki.org/emacs/UsingEdict
+;; (defun macoy-find-translation-japanese-internal (word)
+;;   "Find the region in the EDICT file."
+;;   (interactive "s言葉: ")
+;;   (let ((str (buffer-substring-no-properties start end))
+;; 	(conf (current-window-configuration)))
+;;     (if (and macoy-kanjidict-location (= (length str) 1))
+;; 	(find-file  macoy-kanjidict-location)
+;;       (find-file macoy-edict-location))
+;;     (goto-char (point-min))
+;;     (when (occur str)
+;;       (set-window-configuration conf)
+;;       (switch-to-buffer "*Occur*")
+;;       (local-set-key (kbd "q") 'bury-buffer))))
+;; (defun macoy-find-translation-japanese ()
+;;   (interactive)
+;;  (set-input-method 'japanese)
+;;   (call-interactively 'macoy-find-translation-japanese))

@@ -76,6 +76,9 @@
 (setq powerline-display-hud nil)
 (setq powerline-display-buffer-size nil)
 (setq powerline-display-mule-info nil)
+;; (set-face-attribute 'mode-line nil :height 110)
+;; (setq powerline-text-scale-factor 1.3)
+;; (setq powerline-height 25)
 (powerline-default-theme)
 ;; powerline-default-theme
 ;; powerline-center-theme
