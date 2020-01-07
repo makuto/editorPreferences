@@ -96,11 +96,13 @@
 ;; Visual customizations which are okay to occur before the theme has been set in custom-set-variables
 (load-user-file "visual-early.el")
 
+;; Make it easier to switch which tags and search index files are used
+(load-user-file "index-management.el")
+
 ;; Stuff unique to certain machines (mine here for reference)
 (when (or (string-equal (user-login-name) "macoy")
 		  (string-equal (user-login-name) "mmadson"))
-  (load-file "~/.emacs-this-machine-only.el")
-  )
+  (load-file "~/.emacs-this-machine-only.el"))
 
 ;;
 ;; Hand-written by Macoy end
