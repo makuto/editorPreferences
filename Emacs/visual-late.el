@@ -128,8 +128,16 @@
   (set-face-attribute 'smerge-markers nil :background (face-background 'match))
   (set-face-attribute 'smerge-base nil :background "#482300")
   (set-face-attribute 'smerge-upper nil :background "#4f2929")
-  (set-face-attribute 'smerge-lower nil :background "#233c20")
-  )
+  (set-face-attribute 'smerge-lower nil :background "#233c20"))
+
+(when (require 'web-mode)
+  ;; TODO: Customize colors (see http://web-mode.org/ "Syntax highlighting")
+  ;; (set-face-foreground 'web-mode-html-attr-custom-face (face-foreground 'font-lock-variable-name-face))
+  ;; (set-face-foreground 'web-mode-html-attr-name-face (face-foreground 'font-lock-variable-name-face))
+  (set-face-foreground 'web-mode-html-attr-custom-face (face-foreground 'default))
+  (set-face-foreground 'web-mode-html-attr-name-face (face-foreground 'default))
+  (set-face-foreground 'web-mode-html-tag-bracket-face (face-foreground 'default))
+  (set-face-foreground 'web-mode-html-tag-face (face-foreground 'font-lock-function-name-face)))
 
 ;; Make magit's diff look similar/the same as diff-mode
 (when (require 'magit)

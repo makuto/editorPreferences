@@ -6,17 +6,8 @@
 ;; This is for better syntax highlighting when editing templated web files (e.g. files with Nunjucks)
 ;; Only enabled at work because I only need web mode for template stuff
 (when (require 'web-mode)
-  ;; TODO: Customize colors (see http://web-mode.org/ "Syntax highlighting")
-  
   ;; I like to manually enable rainbow-mode if I want to see colors (this might not work...)
   (setq web-mode-enable-css-colorization nil)
-
-  ;; (set-face-foreground 'web-mode-html-attr-custom-face (face-foreground 'font-lock-variable-name-face))
-  ;; (set-face-foreground 'web-mode-html-attr-name-face (face-foreground 'font-lock-variable-name-face))
-  (set-face-foreground 'web-mode-html-attr-custom-face (face-foreground 'default))
-  (set-face-foreground 'web-mode-html-attr-name-face (face-foreground 'default))
-  (set-face-foreground 'web-mode-html-tag-bracket-face (face-foreground 'default))
-  (set-face-foreground 'web-mode-html-tag-face (face-foreground 'font-lock-function-name-face))
 
   ;; Associate web files with web-mode
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
