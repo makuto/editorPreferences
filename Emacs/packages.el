@@ -31,6 +31,7 @@
           base16-theme
           better-defaults
           clang-format
+          csharp-mode
           darktooth-theme
           diminish
           dired-narrow
