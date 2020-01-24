@@ -8,13 +8,16 @@
 ;; Don't prompt me to load tags
 (setq tags-revert-without-query 1)
 
+;; This sets tags-table-list in macoy-ido-find-tag-refresh
+(setq macoy-tags-files nil)
+
 ;; Refresh and load tags
 ;; TODO: Use projectile refresh ctags instead
 (if (eq system-type 'gnu/linux)
     (setq ctags-path "ctags")
   (setq ctags-path "C:/programsMacoy/ctags58/ctags.exe"))
 
-(defun generateTags ()
+(defun generateTags-ProjectileRoot ()
   "Create tags file"
   ;; Doesn't do anything for start-process
   ;;(let ((default-directory "F:/CJUNCTIONS/src/")))
@@ -36,6 +39,7 @@
                                   )))
     (set-process-sentinel ctagsProc
                           (lambda (ctagsProc _string)
+                            (add-to-list 'macoy-tags-files (format "%s/TAGS" projectile-project-root))
                             (call-interactively 'macoy-ido-find-tag-refresh)))))
 
 (defun loadTagsFromParent ()
@@ -54,7 +58,7 @@
                 (lambda ()
                   (interactive)
                   ;; Note that these are both subprocesses so they will run at the same time
-                  (generateTags)
+                  (generateTags-ProjectileRoot)
                   (macoy-codesearch-index-default)))
 
 ;; Tags keybinding
@@ -75,11 +79,11 @@
 (setq ac-auto-start 3)
 
 ;; Custom fuzzy completion stuff
-(defun macoy-ido-example ()
-  "Test ido custom"
-  (interactive)
-  (setq mylist (list "red" "blue" "yellow" "clear" "i-dont-know"))
-  (ido-completing-read "What, ... is your favorite color? " mylist))
+;; (defun macoy-ido-example ()
+;;   "Test ido custom"
+;;   (interactive)
+;;   (setq mylist (list "red" "blue" "yellow" "clear" "i-dont-know"))
+;;   (ido-completing-read "What, ... is your favorite color? " mylist))
 
 ;; Fuzzy find tag like Sublime's C-S-r
 ;; Also used for auto-completion
@@ -89,13 +93,15 @@
   "Refresh ido tag list"
   (interactive)
   (message "Refreshing tags table")
+  (setq tags-table-list macoy-tags-files)
+  (message "%s" tags-table-list)
   ;; tags-completion-table() early-outs if the table has already been created
   ;; This is problematic if TAGS has changed
   ;; Clearing it here ensures the table won't get out of sync
   (when tags-completion-table
     (setq tags-completion-table nil))
   (tags-completion-table)
-  
+
   (message "Refreshing ido tags list")
   ;; Reset to remove "empty" value as well as avoid duplicates
   (setq macoy-tag-names nil)

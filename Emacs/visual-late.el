@@ -22,8 +22,7 @@
                                '(80 70)
                                '(85 70)
                                '(90 70)
-                               '(100 100)
-                               ))
+                               '(100 100)))
 
 (setq macoy-transparency-index 0)
 (defun macoy-cycle-transparency (&optional index)
@@ -153,6 +152,9 @@
   (set-face-attribute 'magit-diff-removed nil
                       :foreground (face-foreground 'diff-added)
                       :background "#381e1e")
+
+  (set-face-foreground 'magit-diff-context (face-foreground 'font-lock-comment-face))
+  (set-face-foreground 'magit-diff-context-highlight (face-foreground 'font-lock-comment-face))
   )
 
 ;; Get rid of the strange light gray background
@@ -212,6 +214,16 @@
   (diminish 'org-indent-mode)
   )
 
+;; Hide search term highlight in Occur (I think)
 (setq list-matching-lines-face nil)
 
 (set-face-foreground 'escape-glyph (face-foreground 'font-lock-warning-face))
+
+;; Bad whitespace display
+(setq-default show-trailing-whitespace t)
+;; Ensure whitespace isn't shown in e.g. ido vertical (the ido-specific hooks didn't do the trick)
+(add-hook 'minibuffer-inactive-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'compilation-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+
+(set-face-foreground 'trailing-whitespace (face-foreground 'font-lock-comment-delimiter-face))
+(set-face-background 'trailing-whitespace (face-foreground 'font-lock-comment-delimiter-face))

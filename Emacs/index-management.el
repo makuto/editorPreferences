@@ -4,7 +4,8 @@
 
 ;; Index management: determine which index files to use for things like tags, codesearch, etc.
 (defun macoy-set-index-directories (&optional code-dir data-dir)
-  "Change which directories Codesearch, tags, and other utilities create their indexes for"
+  "Change which directories Codesearch, tags, and other utilities create their indexes for.
+Note that this does not perform any indexing."
   (interactive)
   (setq macoy-active-code-dir
         (if code-dir
@@ -30,5 +31,3 @@
   (setq codesearch-cindex-args
         (list "-reset" "-exclude" (format "%s/csearchIgnorePatterns" macoy-active-code-dir)))
   (setq macoy-codesearch-search-data-dir macoy-active-data-search-dir))
-
-;; TODO: Make codesearch support multiple index files. Is that possible?

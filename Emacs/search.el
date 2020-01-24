@@ -122,7 +122,7 @@ If there's a string at point, offer that as a default."
   (if (projectile-project-p)
       (setq ag-arguments '("--smart-case" "--stats" "-G"
                            "(\\.txt|\\.org|\\.cpp|\\.c|\\.h|\\.inl|\\.html|\\.css|\\.lua|\\.js|\\.py|\\.cdm|\\.el)"
-                           "--ignore" "AutoGen"))
+                           "--ignore" ".*AutoGen.*"))
     (setq ag-arguments '("--smart-case" "--stats")))
   (if (and pattern directory)
       (ag pattern directory)
