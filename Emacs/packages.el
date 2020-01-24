@@ -25,14 +25,12 @@
        (packages
         '(adaptive-wrap
           ag
-          alect-themes
           auto-complete
           avy
           base16-theme
           better-defaults
           clang-format
           csharp-mode
-          darktooth-theme
           diminish
           dired-narrow
           dsvn
@@ -50,7 +48,7 @@
           markdown-mode
           magit
           multiple-cursors
-          org-jira
+          ;; org-jira
           org-mru-clock
           powerline
           projectile
@@ -59,11 +57,10 @@
           smart-tabs-mode
           smex
           smooth-scrolling
-          sublime-themes
-          swiper
+          ;; sublime-themes
+          swiper ;; TODO Remove
           web-beautify
           web-mode
-          xah-find
           yasnippet
           zenburn-theme
           )))
