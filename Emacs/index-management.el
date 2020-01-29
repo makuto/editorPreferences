@@ -19,7 +19,7 @@ Note that this does not perform any indexing."
           ;; Strip the trailing '/'
           (substring (read-directory-name
                       (format "Data index directory (was %s): " macoy-active-data-dir)) 0 -1)))
-  
+
   ;; Follow up by updating things which rely on this statically
   (setq tortoise-svn-repository-path macoy-active-code-dir)
   (setq macoy-active-code-dir-gitbash (macoy-windows-path-to-gitbash-path macoy-active-code-dir))
@@ -30,4 +30,6 @@ Note that this does not perform any indexing."
   ;; TODO Make this an add-to-list conditionally on exclude
   (setq codesearch-cindex-args
         (list "-reset" "-exclude" (format "%s/csearchIgnorePatterns" macoy-active-code-dir)))
-  (setq macoy-codesearch-search-data-dir macoy-active-data-search-dir))
+  (setq macoy-codesearch-search-data-dir macoy-active-data-search-dir)
+  (message "Set to %s (code) and %s (data). No indexing performed"
+           macoy-active-code-dir macoy-active-data-dir))

@@ -110,6 +110,16 @@
           tags-completion-table)
   (message "Refreshing ido tags list done"))
 
+(defun macoy-reset-tags ()
+  (interactive)
+  (setq tags-table-list macoy-tags-files)
+  ;; tags-completion-table() early-outs if the table has already been created
+  ;; This is problematic if TAGS has changed
+  ;; Clearing it here ensures the table won't get out of sync
+  (when tags-completion-table
+    (setq tags-completion-table nil))
+  (tags-completion-table))
+
 (defun macoy-ido-find-tag ()
   "Find a tag using ido"
   (interactive)
