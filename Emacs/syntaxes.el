@@ -81,3 +81,6 @@
 ;;                         '(("\\(\\w+\\)\\s-*\("
 ;;                            (1 font-lock-string-face)))
 ;;                         )
+
+(when (require 'csharp-mode)
+  (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode)))

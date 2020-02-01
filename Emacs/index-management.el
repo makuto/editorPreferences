@@ -33,3 +33,30 @@ Note that this does not perform any indexing."
   (setq macoy-codesearch-search-data-dir macoy-active-data-search-dir)
   (message "Set to %s (code) and %s (data). No indexing performed"
            macoy-active-code-dir macoy-active-data-dir))
+
+
+;;
+;; Switching between established branches
+;;
+
+(setq macoy-index-branch-list (list
+							   '("My example branch" (list "D:/MyCodeBranch" "D:/MyDataBranch"))
+                               '("My example branch 2" (list "D:/MyCodeBranch2" "D:/MyDataBranch2"))
+							   ))
+
+(defun macoy-index-branch-select ()
+  "Select collections of index directories using Ido"
+  (interactive)
+;; Use Ido to pick the build system
+  (let ((index-branch-ido-list nil) (selected-index-branch nil))
+	;; Build a list of only the names of build systems
+	(dolist (index-branch macoy-index-branch-list index-branch-ido-list)
+	  (add-to-list 'index-branch-ido-list (car index-branch)))
+	;; Let the user select the build system using Ido
+	(setq selected-index-branch (ido-completing-read "Branch set: " index-branch-ido-list))
+	(dolist (index-branch macoy-index-branch-list)
+	  (when (string-equal selected-index-branch (car index-branch))
+        ;; There's probably a more idiomatic way to do this
+		(macoy-set-index-directories
+                 (nth 1 (nth 1 index-branch))
+                 (nth 2 (nth 1 index-branch)))))))
