@@ -41,7 +41,24 @@
 (setq large-file-warning-threshold 90000000)
 
 ;; stop creating those backup~ files
+;; TODO: Use https://www.emacswiki.org/emacs/BackupEachSave etc. instead (the below code doesn't
+;; save a backup every time you save the buffer)
 (setq make-backup-files nil)
+;; (setq make-backup-files t)
+;; (when make-backup-files
+;;   (setq
+;;    ; Backup version-controlled files
+;;    vc-make-backup-files t
+;;    ; don't clobber symlinks
+;;    backup-by-copying t
+;;    backup-directory-alist
+;;    ; don't litter my fs tree
+;;     '(("." . "~/.macoy-emacs-backups/"))
+;;    delete-old-versions t
+;;    kept-new-versions 6
+;;    kept-old-versions 2
+;;    ; use versioned backups
+;;    version-control t))
 
 ;; stop creating those #auto-save# files
 (setq auto-save-default nil)

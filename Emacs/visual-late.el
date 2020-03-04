@@ -224,6 +224,7 @@
 ;; Ensure whitespace isn't shown in e.g. ido vertical (the ido-specific hooks didn't do the trick)
 (add-hook 'minibuffer-inactive-mode-hook (lambda () (setq show-trailing-whitespace nil)))
 (add-hook 'compilation-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'eshell-mode-hook (lambda () (setq show-trailing-whitespace nil)))
 
 (set-face-foreground 'trailing-whitespace (face-foreground 'font-lock-comment-delimiter-face))
 (set-face-background 'trailing-whitespace (face-foreground 'font-lock-comment-delimiter-face))
