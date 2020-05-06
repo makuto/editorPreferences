@@ -64,11 +64,13 @@
   nil
   )
 
-(when (require 'lua-mode)
-  (setq lua-indent-level 4))
+;; Disable due to Emacs 28 not supported
+(when (version< emacs-version "28")
+  (when (require 'lua-mode)
+    (setq lua-indent-level 4)))
 
-(when (require 'smart-tabs-mode
-               (smart-tabs-insinuate 'c 'c++)))
+;; (when (require 'smart-tabs-mode
+               ;; (smart-tabs-insinuate 'c 'c++)))
 
 
 ;; Highlight function calls
@@ -84,3 +86,6 @@
 
 (when (require 'csharp-mode)
   (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode)))
+
+(when (require 'glsl-mode)
+  (add-to-list 'auto-mode-alist '("\\.shader?\\'" . glsl-mode)))

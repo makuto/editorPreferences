@@ -37,6 +37,7 @@
           engine-mode
           expand-region
           flx-ido
+          glsl-mode
           htmlize
           ido-vertical-mode
           ido-completing-read+

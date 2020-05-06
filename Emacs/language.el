@@ -37,3 +37,9 @@
 ;;   (interactive)
 ;;  (set-input-method 'japanese)
 ;;   (call-interactively 'macoy-find-translation-japanese))
+
+(defun macoy-search-region-sanseido-japanese (start end)
+  (interactive "r")
+  (let ((str (buffer-substring-no-properties start end)))
+    (eww (format "https://www.sanseido.biz/User/Dic/Index.aspx?TWords=%s&st=0&DORDER=&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox"
+                 str))))

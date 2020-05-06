@@ -19,6 +19,7 @@
 
 (defun generateTags-ProjectileRoot ()
   "Create tags file"
+  (interactive)
   ;; Doesn't do anything for start-process
   ;;(let ((default-directory "F:/CJUNCTIONS/src/")))
   (message "Running CTags")
@@ -32,6 +33,7 @@
                                   ;; Annoyingly there doesn't seem to be wildcard matching for folders (at least
                                   ;;  not on Windows)
                                   "--exclude=/home/macoy/Development/code/3rdParty/repositories/blender/doc"
+                                  "--exclude=/home/macoy/Development/code/repositories/spargus-vehicle-prototype/bullet3/build_cmake"
 
                                   ;; Includes
                                   (projectile-project-root) ;; HOME_ONLY
