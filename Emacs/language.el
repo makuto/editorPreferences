@@ -2,6 +2,7 @@
 (setq macoy-kanjidict-location nil)
 
 (add-to-list 'auto-coding-alist '("edict\\'" . euc-jp))
+(add-to-list 'auto-coding-alist '("edict2\\'" . euc-jp))
 (add-to-list 'auto-coding-alist '("kanjidic\\'" . euc-jp))
 
 ;; From https://www.emacswiki.org/emacs/UsingEdict

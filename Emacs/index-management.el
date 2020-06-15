@@ -60,3 +60,11 @@ Note that this does not perform any indexing."
 		(macoy-set-index-directories
                  (nth 1 (nth 1 index-branch))
                  (nth 2 (nth 1 index-branch)))))))
+
+(defun macoy-print-active-branch ()
+  (interactive)
+  (message (concat
+            "Code:         %s\n"
+            "Data:         %s\n"
+            "Build system: %s\n")
+           macoy-active-code-dir macoy-active-data-dir (nth 0 macoy-build-system-default) ))
