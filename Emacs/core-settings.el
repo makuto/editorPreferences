@@ -201,6 +201,11 @@ would dismiss the compile log, if it was visible"
   (defun macoy-copy-buffer-filename-to-clipboard ()
     (interactive)
     (simpleclip-set-contents buffer-file-name))
+
+  ;; TODO
+  ;; (defun macoy-browse-copy-path ()
+  ;;   (interactive)
+  ;;   (simpleclip-set-contents (ido-find-file)))
   )
 
 ;; Open file in explorer

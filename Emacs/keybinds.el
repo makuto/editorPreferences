@@ -241,6 +241,10 @@
 (with-eval-after-load 'magit
   (define-key magit-mode-map (kbd "C-<tab>") nil))
 
+(with-eval-after-load 'slime
+  ;; Jump to org file is more important!
+  (define-key slime-mode-indirect-map (kbd "M-p") nil))
+
 
 ;;
 ;; Multiple cursors

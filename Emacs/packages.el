@@ -51,6 +51,7 @@
           multiple-cursors
           ;; org-jira
           org-mru-clock
+          php-mode
           powerline
           projectile
           rainbow-mode
