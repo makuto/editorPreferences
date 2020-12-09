@@ -255,9 +255,9 @@ would dismiss the compile log, if it was visible"
 
 ;; Requires Guake
 ;; Thanks https://dougie.io/emacs/open-directory-in-terminal-app/
-(defun open-terminal-in-workdir ()
+(defun macoy-open-terminal-in-current-dir ()
   (interactive)
   (call-process-shell-command
    (concat "guake --show --new-tab=" default-directory) nil 0))
 
-(global-set-key (kbd "<f12>") 'open-terminal-in-workdir)
+(global-set-key (kbd "<f12>") 'macoy-open-terminal-in-current-dir)
