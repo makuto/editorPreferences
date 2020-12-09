@@ -252,3 +252,12 @@ would dismiss the compile log, if it was visible"
 (add-hook 'lisp-mode-hook 'disable-tabs)
 (add-hook 'emacs-lisp-mode-hook 'disable-tabs)
 (add-hook 'python-mode-hook 'disable-tabs)
+
+;; Requires Guake
+;; Thanks https://dougie.io/emacs/open-directory-in-terminal-app/
+(defun open-terminal-in-workdir ()
+  (interactive)
+  (call-process-shell-command
+   (concat "guake --show --new-tab=" default-directory) nil 0))
+
+(global-set-key (kbd "<f12>") 'open-terminal-in-workdir)
