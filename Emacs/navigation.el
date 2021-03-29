@@ -78,7 +78,7 @@
   )
 
 ;; Go to char. This is like avy quick jump but instead just goes to the next one, not any onscreen
-(when (require 'iy-go-to-char)
+(when (load-file "iy-go-to-char/iy-go-to-char.el")
    (define-key iy-go-to-char-keymap (kbd "C-g") 'iy-go-to-char-done)
   (defun macoy-iy-go-to-char-regular-mode ()
 	(interactive)
@@ -106,7 +106,7 @@
 	(define-key iy-go-to-char-keymap (kbd "<right>") 'macoy-iy-go-to-char-right-done)
 	(global-set-key (kbd "C-n") 'right-char)
 	(global-set-key (kbd "C-S-n") 'left-char))
-  
+
   ;; (when (string-equal (user-login-name) "mmadson")
 	;; (macoy-iy-go-to-char-extreme-mode))
   )

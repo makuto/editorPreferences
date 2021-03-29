@@ -28,7 +28,6 @@ simpleclip
 smex
 smooth-scrolling
 sublime-themes
-swiper
 web-beautify
 web-mode
 xah-find

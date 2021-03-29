@@ -1,0 +1,3 @@
+[submodule "Emacs/iy-go-to-char"]
+	path = Emacs/iy-go-to-char
+	url = https://github.com/doitian/iy-go-to-char

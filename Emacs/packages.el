@@ -43,7 +43,7 @@
           ido-completing-read+
           ivy
           ivy-xref
-          iy-go-to-char
+          ;;iy-go-to-char ;; Now provided by submodule
           keyfreq
           lua-mode
           markdown-mode
@@ -59,8 +59,6 @@
           smart-tabs-mode
           smex
           smooth-scrolling
-          ;; sublime-themes
-          swiper ;; TODO Remove
           web-beautify
           web-mode
           yasnippet
