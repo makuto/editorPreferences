@@ -69,7 +69,8 @@
   (write-region (region-beginning) (region-end) macoy-commit-message-backup t)
 
   ;; magit
-  (when (string-equal (buffer-name) "COMMIT_EDITMSG")
+  (when (or (string-equal (buffer-name) "COMMIT_EDITMSG")
+            (string-equal (buffer-name) "MERGE_MSG"))
 	(call-interactively 'with-editor-finish))
   
   ;; dsvn
