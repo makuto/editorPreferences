@@ -23,6 +23,7 @@ Note that this does not perform any indexing."
   ;; Follow up by updating things which rely on this statically
   (setq tortoise-svn-repository-path macoy-active-code-dir)
   (setq macoy-active-code-dir-gitbash (macoy-windows-path-to-gitbash-path macoy-active-code-dir))
+  (setq macoy-active-code-dir-escaped (macoy-unix-path-to-windows-path macoy-active-code-dir))
   (setq macoy-active-data-dir-escaped (macoy-unix-path-to-windows-path macoy-active-data-dir))
   ;; Narrow the search a bit
   (setq macoy-active-data-search-dir (format "%s/data" macoy-active-data-dir))

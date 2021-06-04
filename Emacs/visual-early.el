@@ -100,8 +100,7 @@
 (defun macoy-toggle-wrapping ()
   "Toggle line wrapping for the current buffer"
   (interactive)
-  (toggle-truncate-lines)
-  )
+  (toggle-truncate-lines))
 
 (global-set-key (kbd "C-<f9>") 'macoy-toggle-wrapping)
 
