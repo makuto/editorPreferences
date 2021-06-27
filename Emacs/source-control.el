@@ -53,9 +53,7 @@
 	  (svn-status (projectile-project-root))
 	(call-interactively 'svn-status)))
 
-(if (string-equal (user-login-name) "mmadson")
-    (global-set-key (kbd "<f6>") 'macoy-svn-status)
-  (global-set-key (kbd "<f6>") 'magit))
+(global-set-key (kbd "<f6>") 'magit)
 
 (global-set-key (kbd "S-<f6>") 'vc-print-root-log)
 
