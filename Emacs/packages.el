@@ -2,6 +2,9 @@
 
 (require 'seq)
 
+;; Hack to get Melpa to work on Windows
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 ;; Enable MELPA
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))

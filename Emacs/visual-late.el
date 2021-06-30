@@ -25,6 +25,7 @@
                                '(100 100)))
 
 (setq macoy-transparency-index 2)
+
 (defun macoy-cycle-transparency (&optional index)
   (interactive)
   (if index
@@ -37,8 +38,8 @@
     (set-frame-parameter (selected-frame) 'alpha transparency-settings)
     (message "Transparency now %s" transparency-settings)))
 
-;; Set default transparency
-(macoy-cycle-transparency 0)
+;; Set default transparency (-1 because 1 will be added due to the "cycle" thing)
+(macoy-cycle-transparency (- macoy-transparency-index 1))
 (global-set-key (kbd "<f9>") 'macoy-cycle-transparency)
 
 ;; Add a slight border to give us some breathing room on the edges
