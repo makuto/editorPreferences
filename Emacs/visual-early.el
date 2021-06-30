@@ -27,12 +27,13 @@
 ;; Set cursor to I-beam
 (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 2))))
 ;; 4k monitor demands extra thicc cursor
-(when (string-equal (user-login-name) "macoy")
+(when (or (string-equal (user-login-name) "macoy")
+          (string-equal (user-login-name) "Macoy.Madson"))
   (modify-all-frames-parameters (list (cons 'cursor-type '(bar . 3)))))
 
 ;; Scrolling
 ;; https://www.emacswiki.org/emacs/SmoothScrolling
-(setq mouse-wheel-scroll-amount '(2 ((shift) . 2))) ;; Two lines at a time    
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 2))) ;; Two lines at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 
 ;; When the cursor scrolls off the screen, this makes the window scroll by a dozen or so lines
@@ -112,7 +113,7 @@
 
   ;; (global-whitespace-mode 1)
   ;; (setq whitespace-style '(space-mark))
-  
+
   ;; whitespace-trailing
   ;; whitespace-indentation
   (set-face-foreground 'whitespace-indentation (face-background 'match))
@@ -132,7 +133,7 @@
   ;; Attempt at a global mode which only shows bad setups. Almost works, but Elisp isn't good
   ;; (setq macoy-whitespace-style-minimal '(face indentation trailing))
   ;; (setq macoy-whitespace-style-verbose '(tab-mark space-mark))
-  
+
   ;; (global-whitespace-mode 1)
   ;; (setq whitespace-style macoy-whitespace-style-minimal)
 

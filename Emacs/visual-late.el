@@ -24,7 +24,7 @@
                                '(90 70)
                                '(100 100)))
 
-(setq macoy-transparency-index 0)
+(setq macoy-transparency-index 2)
 (defun macoy-cycle-transparency (&optional index)
   (interactive)
   (if index

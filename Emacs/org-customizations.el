@@ -166,4 +166,5 @@
 (global-set-key (kbd "<f8>") 'org-mru-clock-in)
 (global-set-key (kbd "S-<f8>") 'org-clock-out)
 
-(setq org-ellipsis " 🗀")
+(setq org-ellipsis "...")
+(set-face-underline 'org-link t)
