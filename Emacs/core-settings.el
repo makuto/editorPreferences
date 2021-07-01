@@ -261,3 +261,52 @@ would dismiss the compile log, if it was visible"
    (concat "guake --show --new-tab=" default-directory) nil 0))
 
 (global-set-key (kbd "<f12>") 'macoy-open-terminal-in-current-dir)
+
+;;
+;; Utilities
+;;
+
+;; TODO copy macoy-run-executable by allowing the setting of a nil default. The user can then
+;; trigger selection when detecting a selection hasn't been made in this instance yet.
+(defmacro macoy-create-select-system (select-func-name
+                                      output-var-name
+                                      select-prompt
+                                      options-list-name
+                                      options)
+  "Use Ido to select from a list of options and set a variable."
+
+  ;; Example usage. Note that no external variables need to be defined.
+  ;; After evaluated, run macoy-cmake-project-select to see the dialog, and use
+  ;; macoy-cmake-project in the function which does the operation.
+  ;; Note that the second list element in the options list may be any type, including list.
+  ;; The output-var will be the second list element (it drops the first element, the name)
+  ;;
+  ;; (message
+  ;;  "%s"
+  ;;  (macroexpand
+  ;;   '(macoy-create-select-system
+  ;;     macoy-cmake-project-select
+  ;;     macoy-cmake-project
+  ;;     "Run CMake on: "
+  ;;     macoy-cmake-projects (list (list "Indus Debug" "indus_debug")
+  ;;                                (list "Indus Release" "indus_release")
+  ;;                                (list "Indus ToolFramework" "indus_toolframework")))))
+
+  `(progn
+     (setq ,options-list-name ,options)
+
+     (setq ,output-var-name (nth 1 (nth 0 ,options-list-name)))
+
+     (defun ,select-func-name ()
+       (interactive)
+       (let ((ido-select-list nil)
+             (selected-option-name nil))
+         ;; Build a list of only the names of build systems
+         (dolist (option-name ,options-list-name ido-select-list)
+           (add-to-list 'ido-select-list (car option-name)))
+         ;; Let the user select the build system using Ido
+         (setq selected-option-name
+               (ido-completing-read ,select-prompt ido-select-list))
+         (dolist (option ,options-list-name)
+           (when (string-equal selected-option-name (car option))
+             (setq ,output-var-name (nth 1 option))))))))
