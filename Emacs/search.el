@@ -388,13 +388,14 @@ If there's a string at point, offer that as a default."
   ;; From https://emacs.stackexchange.com/questions/7148/get-all-regexp-matches-in-buffer-as-a-list
   (defun regex-matches-to-list (regexp string)
     "Get a list of all regexp matches in a string"
-    (save-match-data
+    (reverse
+     (save-match-data
       (let ((pos 0)
             matches)
         (while (string-match regexp string pos)
           (push (match-string 0 string) matches)
           (setq pos (match-end 0)))
-        matches)))
+        matches))))
 
   ;; (with-current-buffer "*Everything*"
   ;; (find-file (ido-completing-read "Test: " (regex-matches-to-list "\\(.:\\\\.*\\)" (buffer-string)))))
