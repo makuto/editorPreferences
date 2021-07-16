@@ -43,14 +43,20 @@ If there's a string at point, offer that as a default."
   (apply search-function macoy-select-search-search after-search-args))
 
 ;; TODO: Make generic system (e.g. refresh cache selector)
-(setq macoy-select-search-key-descriptions "Select search:
+(setq macoy-select-search-key-descriptions
+      (format "Select search:
 \ta - Ag (in same directory as file, no filter)
 \tb - Ag (browse for directory, no filter)
 \tf - Ag (browse for directory, with project filter)
+
 \tc - Codesearch (with filter)
 \td - Codesearch Data (with filter)
-\ts - Swiper search all buffers
-\ti - Internet search (DuckDuckGo)")
+
+%s
+
+\ti - Internet search (DuckDuckGo)"
+              (if (eq system-type 'windows-nt) "\te - Everything (filenames only)"
+                "")))
 
 ;; TODO: Add ag no filter and ag filter
 (defvar macoy-select-search-minor-mode-map
@@ -71,11 +77,16 @@ If there's a string at point, offer that as a default."
     (define-key map (kbd "d") (lambda () (interactive) (macoy-select-do-search
                                                         'macoy-codesearch-search-with-filter-directory macoy-codesearch-search-data-dir)))
     ;; Swiper all
-    (define-key map (kbd "s") (lambda () (interactive) (macoy-select-do-search
-                                                        'swiper-all)))
+    ;; (define-key map (kbd "s") (lambda () (interactive) (macoy-select-do-search
+                                                        ;; 'swiper-all)))
     ;; Internet search
     (define-key map (kbd "i") (lambda () (interactive) (macoy-select-do-search
                                                         'engine/search-duckduckgo)))
+
+    ;; VoidTools Everything
+    (when (eq system-type 'windows-nt)
+      (define-key map (kbd "e") (lambda () (interactive) (macoy-select-do-search
+                                                          'macoy-search-everything))))
 
     (define-key map (kbd "q") (lambda () (interactive) (kill-buffer macoy-select-search-buf-name)))
     map)
@@ -349,3 +360,37 @@ If there's a string at point, offer that as a default."
     :keybinding "d")
 
   (global-set-key (kbd "M-l") 'engine/search-duckduckgo))
+
+
+;;
+;; VoidTools Everything (not FOSS, unfortunately)
+;;
+
+(when (eq system-type 'windows-nt)
+  (setq everything-executable nil)
+
+  ;; Refer to ag.el for customization
+  (define-compilation-mode macoy-everything-mode "Everything"
+    "Everything results compilation mode"
+    ;; This is so you can delete results with C-S-k. This doesn't break n and p which is cool
+    (read-only-mode 0)
+    (make-local-variable 'compilation-error-regexp-alist)
+    ;; (setq compilation-error-regexp-alist
+    ;; '("\\(.:\\\\.*\\)" 1 2 3))
+    (setq compilation-error-regexp-alist
+          '(("\\(.:\\\\.*\\)" 1)))
+    (setq compilation-error-regexp-systems-list (list 'everything-error-regex)))
+
+  (define-key macoy-everything-mode-map (kbd "p") #'compilation-previous-error)
+  (define-key macoy-everything-mode-map (kbd "n") #'compilation-next-error)
+  (define-key macoy-everything-mode-map (kbd "f") 'macoy-filter-buffer)
+
+  (defun macoy-search-everything (search)
+    (interactive (list (macoy-read-from-minibuffer "Search string")))
+    (if (not everything-executable)
+        (message "Please set everything-executable to the location of es.exe (available at https://www.voidtools.com/downloads/)")
+      (compilation-start (format "%s \"%s\""
+                                 everything-executable
+                                 search)
+                         #'macoy-everything-mode
+                         `(lambda (mode-name) , "*Everything*")))))

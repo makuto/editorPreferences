@@ -112,6 +112,7 @@
           tags-completion-table)
   (message "Refreshing ido tags list done"))
 
+;; TODO: Read visit-tags-table-buffer and figure out what the hell is going on
 (defun macoy-reset-tags ()
   (interactive)
   (setq tags-table-list macoy-tags-files)
@@ -120,7 +121,8 @@
   ;; Clearing it here ensures the table won't get out of sync
   (when tags-completion-table
     (setq tags-completion-table nil))
-  (tags-completion-table))
+  (tags-completion-table)
+  (visit-tags-table (first macoy-tags-files))) ;; Assume only one tags file (probably wrong?)
 
 (defun macoy-ido-find-tag ()
   "Find a tag using ido"
