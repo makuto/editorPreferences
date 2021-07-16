@@ -78,7 +78,7 @@ If there's a string at point, offer that as a default."
                                                         'macoy-codesearch-search-with-filter-directory macoy-codesearch-search-data-dir)))
     ;; Swiper all
     ;; (define-key map (kbd "s") (lambda () (interactive) (macoy-select-do-search
-                                                        ;; 'swiper-all)))
+    ;; 'swiper-all)))
     ;; Internet search
     (define-key map (kbd "i") (lambda () (interactive) (macoy-select-do-search
                                                         'engine/search-duckduckgo)))
@@ -165,7 +165,7 @@ If there's a string at point, offer that as a default."
   (setq codesearch-cindex-exe "c:/Users/mmadson/go/bin/cindex.exe")
   (setq codesearch-dir-to-index "f:/CJUNCTIONS/src")
   (setq codesearch-temp-file "c:/.temp-codesearch.txt"))
-  ;; (setq macoy-codesearch-search-data-dir "D:/Magic/data"))
+;; (setq macoy-codesearch-search-data-dir "D:/Magic/data"))
 
 (when (string-equal (user-login-name) "macoy")
   (setq codesearch-csearch-exe "csearch")
@@ -201,13 +201,13 @@ If there's a string at point, offer that as a default."
   ;;    (delete-file codesearch-index-file))
   ;; We won't use this way for now so that we can run two indexes at the same time
   (macoy-codesearch-index-directory codesearch-dir-to-index))
-  ;; (let ((codesearch-proc (apply 'start-process
-  ;;                               (append (list "CodesearchIndex" "*Codesearch-Index*" codesearch-cindex-exe)
-  ;;                                       codesearch-cindex-args
-  ;;                                       (list codesearch-dir-to-index)))))
-  ;;   (set-process-sentinel codesearch-proc
-  ;;                         (lambda (codesearch-proc _string)
-  ;;                           (message "Codesearch finished building index")))))
+;; (let ((codesearch-proc (apply 'start-process
+;;                               (append (list "CodesearchIndex" "*Codesearch-Index*" codesearch-cindex-exe)
+;;                                       codesearch-cindex-args
+;;                                       (list codesearch-dir-to-index)))))
+;;   (set-process-sentinel codesearch-proc
+;;                         (lambda (codesearch-proc _string)
+;;                           (message "Codesearch finished building index")))))
 
 ;; TODO: There is no way to undo after doing this; you have to repeat the search
 (defun macoy-filter-buffer ()
@@ -367,7 +367,7 @@ If there's a string at point, offer that as a default."
 ;;
 
 (when (eq system-type 'windows-nt)
-  (setq everything-executable nil)
+  (setq macoy-everything-executable nil)
 
   ;; Refer to ag.el for customization
   (define-compilation-mode macoy-everything-mode "Everything"
@@ -385,12 +385,37 @@ If there's a string at point, offer that as a default."
   (define-key macoy-everything-mode-map (kbd "n") #'compilation-next-error)
   (define-key macoy-everything-mode-map (kbd "f") 'macoy-filter-buffer)
 
+  ;; From https://emacs.stackexchange.com/questions/7148/get-all-regexp-matches-in-buffer-as-a-list
+  (defun regex-matches-to-list (regexp string)
+    "Get a list of all regexp matches in a string"
+    (save-match-data
+      (let ((pos 0)
+            matches)
+        (while (string-match regexp string pos)
+          (push (match-string 0 string) matches)
+          (setq pos (match-end 0)))
+        matches)))
+
+  ;; (with-current-buffer "*Everything*"
+  ;; (find-file (ido-completing-read "Test: " (regex-matches-to-list "\\(.:\\\\.*\\)" (buffer-string)))))
+
+  (defun macoy-search-everything-finished (buffer msg)
+    (when (and
+           (string-match "^finished" msg)
+           (string= (buffer-name buffer) "*everything-ido-after*"))
+      (progn
+        ;; Compilation succeeded, so we might as well hide the results (who cares?)
+        (with-current-buffer "*everything-ido-after*"
+          (find-file (ido-completing-read "Open: " (regex-matches-to-list "\\(.:\\\\.*\\)" (buffer-string)))))
+        (macoy-bury-buffer-anywhere "*everything-ido-after*"))))
+
   (defun macoy-search-everything (search)
     (interactive (list (macoy-read-from-minibuffer "Search string")))
-    (if (not everything-executable)
-        (message "Please set everything-executable to the location of es.exe (available at https://www.voidtools.com/downloads/)")
+    (if (not macoy-everything-executable)
+        (message "Please set macoy-everything-executable to the location of es.exe (available at https://www.voidtools.com/downloads/)")
+      (add-hook 'compilation-finish-functions 'macoy-search-everything-finished)
       (compilation-start (format "%s \"%s\""
-                                 everything-executable
+                                 macoy-everything-executable
                                  search)
                          #'macoy-everything-mode
-                         `(lambda (mode-name) , "*Everything*")))))
+                         `(lambda (mode-name) , "*everything-ido-after*")))))
