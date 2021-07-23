@@ -405,10 +405,11 @@ If there's a string at point, offer that as a default."
            (string-match "^finished" msg)
            (string= (buffer-name buffer) "*everything-ido-after*"))
       (progn
-        ;; Compilation succeeded, so we might as well hide the results (who cares?)
-        (with-current-buffer "*everything-ido-after*"
-          (find-file (ido-completing-read "Open: " (regex-matches-to-list "\\(.:\\\\.*\\)" (buffer-string)))))
-        (macoy-bury-buffer-anywhere "*everything-ido-after*"))))
+        (let ((results (regex-matches-to-list "\\(.:\\\\.*\\)" (buffer-string))))
+          (when results
+            (with-current-buffer "*everything-ido-after*"
+              (find-file (ido-completing-read "Open: " results)))
+            (macoy-bury-buffer-anywhere "*everything-ido-after*"))))))
 
   (defun macoy-search-everything (search)
     (interactive (list (macoy-read-from-minibuffer "Search string")))
