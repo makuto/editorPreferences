@@ -70,10 +70,13 @@
   (when (or (string-equal (buffer-name) "COMMIT_EDITMSG")
             (string-equal (buffer-name) "MERGE_MSG"))
 	(call-interactively 'with-editor-finish))
-  
+
   ;; dsvn
   (when (derived-mode-p 'log-edit-mode)
-	(call-interactively 'log-edit-done)))
+	(call-interactively 'log-edit-done))
+
+  (when (derived-mode-p 'p4-form-mode)
+	(call-interactively 'p4-form-commit)))
 
 (defun macoy-dsvn-diff-marked ()
   (interactive)
