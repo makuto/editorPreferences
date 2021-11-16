@@ -3,7 +3,7 @@
 ;; Build systems
 ;;
 
-;; These jam systems are here more for reference than for actual use by anyone other than me
+;; These jam systems are here more for reference than for actual use
 (defun build-universal-jam ()
   "Build using jam (select directory first)"
   (interactive)
