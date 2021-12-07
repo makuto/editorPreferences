@@ -207,7 +207,9 @@ static char *gnus-pointer[] = {
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ubuntu Mono" :foundry "outline" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Ubuntu Mono" :foundry "outline" :slant normal :weight normal :height 120 :width normal))))
+ '(markdown-pre-face ((t (:family "Ubuntu Mono" :foundry "outline" :slant normal :weight normal :height 120 :width normal))))
+ '(markdown-code-face ((t (:family "Ubuntu Mono" :foundry "outline" :slant normal :weight normal :height 120 :width normal)))))
 
 ;;
 ;; Macoy late visual customizations (put here to play nice with themes)
