@@ -195,7 +195,8 @@
                               ("C++" 'default)
                               ("emacs-lisp" 'default)
                               ("lisp" 'default)
-                              ("sh" 'default)))
+                              ("sh" 'default)
+                              ("cakelisp" 'default)))
   )
 
 ;; Hide these modes completely (for a more minimal look)
